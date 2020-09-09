@@ -101,11 +101,11 @@
               <span v-else class="d-block my-4" v-html="user.description"></span>
             </div>
             <ProfileMetadata>
-              <template v-slot:userLectures>
-                <span v-if="lectures.length" class="d-block about-title">My Lectures</span>
-                <v-slide-group class="pa-4" show-arrows v-if="lectures.length">
-                  <v-slide-item v-for="lecture in lectures" :key="lecture.id">
-                    <UserLecture :lecture="lecture" />
+              <template v-slot:userArticles>
+                <span v-if="articles.length" class="d-block about-title">My Articles</span>
+                <v-slide-group class="pa-4" show-arrows v-if="articles.length">
+                  <v-slide-item v-for="article in articles" :key="article.id">
+                    <UserArticle :article="article" />
                   </v-slide-item>
                 </v-slide-group>
               </template>
@@ -118,24 +118,24 @@
 </template>
 
 <script>
-import UserLecture from "@/components/Card-Recommended";
+import UserArticle from "@/components/Card-Recommended";
 import ProfileMetadata from "@/views/Users/ProfileMetadata";
-import LectureService from "@/services/LectureService";
+import ArticleService from "@/services/ArticleService";
 import UserService from "@/services/UserService";
 import Header from "@/components/Header/Header";
 export default {
   components: {
     Header,
-    UserLecture,
+    UserArticle,
     ProfileMetadata
   },
   data: () => ({
     user: null,
-    lectures: []
+    articles: []
   }),
   mounted() {
     this.getUser();
-    this.getUserLectures();
+    this.getUserArticles();
   },
   watch: {
     $route: "getAll"
@@ -143,7 +143,7 @@ export default {
   methods: {
     async getAll() {
       this.getUser();
-      this.getUserLectures();
+      this.getUserArticles();
     },
     async getUser() {
       try {
@@ -154,10 +154,10 @@ export default {
         console.log(err);
       }
     },
-    async getUserLectures() {
+    async getUserArticles() {
       try {
-        const response = await LectureService.user(this.$route.params.id);
-        this.lectures = response.data;
+        const response = await ArticleService.user(this.$route.params.id);
+        this.articles = response.data;
       } catch (err) {
         console.log(err);
       }

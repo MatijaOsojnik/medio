@@ -156,7 +156,7 @@
 
 <script>
 import Header from "@/components/Header/Header";
-import LectureService from "@/services/LectureService.js";
+import ArticleService from "@/services/ArticleService.js";
 import Footer from "@/components/Footer/Footer";
 export default {
   components: {
@@ -164,15 +164,15 @@ export default {
     Footer,
   },
   data: () => ({
-    lectures: null,
+    articles: null,
   }),
   created() {
-    this.getLectures();
+    this.getArticles();
   },
   methods: {
-    async getLectures() {
-      const response = await LectureService.index();
-      this.lectures = response.data;
+    async getArticles() {
+      const response = await ArticleService.index();
+      this.Articles = response.data;
     },
   },
 };

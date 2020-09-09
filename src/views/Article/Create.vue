@@ -54,9 +54,9 @@
                     </div>
                   </v-form>
                   <div>
-                    <v-expansion-panels class="my-5" v-if="lecture.Tips.length">
+                    <v-expansion-panels class="my-5" v-if="article.Tips.length">
                       <v-expansion-panel
-                        v-for="(tip, index) in lecture.Tips"
+                        v-for="(tip, index) in article.Tips"
                         :key="index"
                         class="my-3"
                       >
@@ -133,9 +133,9 @@
                     />
                   </v-form>
                   <div>
-                    <v-expansion-panels class="my-3" v-if="lecture.Sentences.length">
+                    <v-expansion-panels class="my-3" v-if="article.Sentences.length">
                       <v-expansion-panel
-                        v-for="(sentence, index) in lecture.Sentences"
+                        v-for="(sentence, index) in article.Sentences"
                         :key="index"
                         class="mb-3"
                       >
@@ -181,13 +181,13 @@
                     <label for="title">Title</label>
                     <v-text-field
                       id="title"
-                      label="Enter a title for your lecture"
+                      label="Enter a title for your article"
                       maxlength="30"
                       :rules="[rules.min]"
                       counter
                       solo
                       aria-autocomplete="false"
-                      v-model="lecture.title"
+                      v-model="article.title"
                     />
 
                     <label for="shortDescription">Short Description</label>
@@ -199,15 +199,15 @@
                       clearable
                       counter
                       maxlength="60"
-                      hint="This description will be used on the Lecture card before the user clicks on it."
+                      hint="This description will be used on the Article card before the user clicks on it."
                       aria-autocomplete="false"
-                      v-model="lecture.short_description"
+                      v-model="article.short_description"
                     />
                     <label for="description">Description</label>
                     <div style="margin: 0.5rem 0 2rem">
                       <tiptap-vuetify
                         id="description"
-                        v-model="lecture.description"
+                        v-model="article.description"
                         :rules="[rules.description]"
                         placeholder="Write your description here."
                         maxlength="300"
@@ -221,7 +221,7 @@
                       label="Enter Thumbnail URL"
                       solo
                       aria-autocomplete="false"
-                      v-model="lecture.thumbnail_url"
+                      v-model="article.thumbnail_url"
                     />
 
                     <label for="category">Category</label>
@@ -229,7 +229,7 @@
                       id="category"
                       :items="categories"
                       label="Select Category"
-                      v-model="lecture.category_id"
+                      v-model="article.category_id"
                       item-text="name"
                       item-value="id"
                       solo
@@ -243,8 +243,8 @@
                     </v-alert>
                   </v-scroll-x-transition>
                   <v-scroll-x-transition>
-                    <v-alert type="success" mode="out-in" v-if="successfulLecturePost">
-                      <span>You successfuly posted a lecture</span>
+                    <v-alert type="success" mode="out-in" v-if="successfulArticlePost">
+                      <span>You successfuly posted a article</span>
                     </v-alert>
                   </v-scroll-x-transition>
                 </v-card-text>
@@ -254,7 +254,7 @@
                     :disabled="waitBeforeClick"
                     block
                     large
-                    @click="createLecture"
+                    @click="createArticle"
                   >COMPLETE</v-btn>
                 </v-card-actions>
               </v-card>
@@ -267,7 +267,7 @@
 </template>
 
 <script>
-import LectureService from "@/services/LectureService";
+import ArticleService from "@/services/ArticleService";
 import CategoryService from "@/services/CategoryService";
 import {
   TiptapVuetify,
@@ -311,7 +311,7 @@ export default {
       pronounciation_url: ``,
       is_sentence: true
     },
-    lecture: {
+    article: {
       title: ``,
       short_description: ``,
       description: ``,
@@ -321,7 +321,7 @@ export default {
       Tips: []
     },
     waitBeforeClick: false,
-    successfulLecturePost: false,
+    successfulArticlePost: false,
     errors: [],
     categories: [],
     extensions: [
@@ -361,14 +361,14 @@ export default {
         }, 3000);
         return;
       }
-      this.lecture.Tips.push(this.tip);
+      this.article.Tips.push(this.tip);
       this.tip = {
         title: ``,
         content: ``
       };
     },
     removeTip(index) {
-      this.lecture.Tips.splice(index, 1);
+      this.article.Tips.splice(index, 1);
     },
     addSentence() {
       const areAllFieldsFilledIn = Object.keys(this.sentence).every(
@@ -382,7 +382,7 @@ export default {
         }, 3000);
         return;
       }
-      this.lecture.Sentences.push(this.sentence);
+      this.article.Sentences.push(this.sentence);
       this.sentence = {
         slovene_sentence: ``,
         english_sentence: ``,
@@ -390,12 +390,12 @@ export default {
       };
     },
     removeSentence(index) {
-      this.lecture.Sentences.splice(index, 1);
+      this.article.Sentences.splice(index, 1);
     },
-    async createLecture() {
+    async createArticle() {
       this.waitBeforeClick = true;
-      const areAllFieldsFilledIn = Object.keys(this.lecture).every(
-        key => !!this.lecture[key]
+      const areAllFieldsFilledIn = Object.keys(this.article).every(
+        key => !!this.article[key]
       );
       if (!areAllFieldsFilledIn) {
         this.errors.push("Please fill in all the fields.");
@@ -407,14 +407,14 @@ export default {
       }
       try {
         const userId = this.$route.params.id;
-        const response = await LectureService.post(this.lecture, userId);
+        const response = await ArticleService.post(this.article, userId);
         if (response) {
-          this.successfulLecturePost = true;
+          this.successfulArticlePost = true;
           setTimeout(() => {
-            this.successfulLecturePost = false;
+            this.successfulArticlePost = false;
             this.waitBeforeClick = false;
             this.$router.push({
-              name: "lectures"
+              name: "articles"
             });
           }, 3000);
         }
@@ -435,7 +435,7 @@ export default {
       if (this.$store.state.user) {
         if (this.$route.params.id != this.$store.state.user.id) {
           this.$router.push({
-            name: "lectures"
+            name: "articles"
           });
         }
       }

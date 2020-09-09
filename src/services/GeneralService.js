@@ -7,8 +7,8 @@ export default {
     getRoles() {
         return axios.get('roles')
     },
-    postHistory(userId, lectureId) {
-        return axios.post(`history/${lectureId}/${userId}`)
+    postHistory(userId, articleId) {
+        return axios.post(`history/${articleId}/${userId}`)
     },
     getHistory(userId) {
         return axios.get(`history/${userId}`)

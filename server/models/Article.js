@@ -21,16 +21,5 @@ module.exports = (sequelize, DataTypes) => {
         }
     }, {});
 
-        const Category = sequelize.models.Category;
-
-    Article.belongsTo(Category, {
-        foreignKey: 'category_id',
-        targetKey: 'id'
-    });
-    Category.hasMany(Article, {
-        foreignKey: 'category_id',
-        sourceKey: 'id'
-    });
-
     return Article;
 }

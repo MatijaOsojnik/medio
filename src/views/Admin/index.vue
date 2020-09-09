@@ -31,9 +31,9 @@ export default {
         title: "USERS"
       },
       {
-        link: "admin-lectures",
+        link: "admin-articles",
         icon: "mdi-animation-play",
-        title: "LECTURES"
+        title: "ARTICLES"
       },
       {
         link: "admin-categories",

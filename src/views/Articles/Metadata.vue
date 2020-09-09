@@ -1,6 +1,6 @@
 <template>
   <div>
-    <slot name="completed-lectures">
+    <slot name="completed-articles">
       <span class="heading ma-4 d-block">Looks like this list is empty..</span>
     </slot>
   </div>

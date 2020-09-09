@@ -1,32 +1,32 @@
 <template>
-  <LectureMetadata>
-    <template v-slot:lecture>
-      <v-row class="ma-sm-6 ma-xl-0 ma-lg-0 ma-md-0" v-if="lecture">
+  <ArticleMetadata>
+    <template v-slot:article>
+      <v-row class="ma-sm-6 ma-xl-0 ma-lg-0 ma-md-0" v-if="article">
         <v-col class="col-xl-8 col-lg-8 col-md-8 col-sm-12 col-12">
-          <h1 class="display-3" style="margin-top: 1rem;">{{lecture.title}}</h1>
+          <h1 class="display-3" style="margin-top: 1rem;">{{article.title}}</h1>
           <span class="d-block mt-2">
             By
             <router-link
-              v-if="lecture.Users[0]"
-              :to="{path: `/users/${lecture.Users[0].display_name.toLowerCase()}/${lecture.Users[0].id}/profile`}"
+              v-if="article.Users[0]"
+              :to="{path: `/users/${article.Users[0].display_name.toLowerCase()}/${article.Users[0].id}/profile`}"
             >
-              <span class="font-weight-bold">{{lecture.Users[0].display_name}}</span>
+              <span class="font-weight-bold">{{article.Users[0].display_name}}</span>
             </router-link>
             <span v-else class="font-weight-bold">Unknown</span>
           </span>
-          <router-link v-if="isOwner" :to="{name: 'lecture-edit', params: {id: $route.params.id}}">
+          <router-link v-if="isOwner" :to="{name: 'article-edit', params: {id: $route.params.id}}">
             <v-btn style="margin: 1.5rem 0;" icon>
               <v-icon medium color="black">mdi-pencil</v-icon>
             </v-btn>
           </router-link>
-          <router-link v-if="isOwner || adminPermissions" :to="{name: 'lectures'}">
-            <v-btn style="margin: 1.5rem 0;" icon @click="deleteLecture">
+          <router-link v-if="isOwner || adminPermissions" :to="{name: 'articles'}">
+            <v-btn style="margin: 1.5rem 0;" icon @click="deleteArticle">
               <v-icon medium color="black">mdi-delete-forever</v-icon>
             </v-btn>
           </router-link>
           <div style="margin: 1rem 0" class="d-flex flex-column justify-space-around">
             <div>
-              <div v-html="lecture.description"></div>
+              <div v-html="article.description"></div>
             </div>
           </div>
         </v-col>
@@ -35,7 +35,7 @@
         >
           <v-card max-width="350px" max-height="400px">
             <v-img
-              :src="imageError ? require('@/assets/blue-error-background.jpg') : lecture.thumbnail_url"
+              :src="imageError ? require('@/assets/blue-error-background.jpg') : article.thumbnail_url"
               height="250px"
               width="350px"
               @error="imageLoadError"
@@ -43,11 +43,11 @@
             <v-card-text>
               <div class="d-flex justify-space-around align-center">
                 <div>
-                  <span class="d-block lecture-count font-weight-bold">{{lecture.Tips.length}}</span>
+                  <span class="d-block article-count font-weight-bold">{{article.Tips.length}}</span>
                   <span class="subtitle">Useful tips</span>
                 </div>
                 <div>
-                  <span class="d-block lecture-count font-weight-bold">{{lecture.Sentences.length}}</span>
+                  <span class="d-block article-count font-weight-bold">{{article.Sentences.length}}</span>
                   <span class="subtitle">Interactive exercises</span>
                 </div>
               </div>
@@ -55,7 +55,7 @@
             <v-card-actions class="justify-center">
               <v-hover v-slot:default="{ hover }">
                 <router-link
-                  :to="$store.state.isUserLoggedIn ? {name: 'lecture-action'} : {name: 'register'}"
+                  :to="$store.state.isUserLoggedIn ? {name: 'article-action'} : {name: 'register'}"
                 >
                   <v-btn :class="`${hover ? 'cta-btn-hover' : 'cta-btn-active'}`" class="mb-3">Get Started</v-btn>
                 </router-link>
@@ -66,65 +66,65 @@
       </v-row>
     </template>
     <template v-slot:similar>
-      <v-slide-group class="pa-4" show-arrows v-if="categoryLectures.length">
-        <v-slide-item v-for="lecture in categoryLectures" :key="lecture.id">
-          <CardRecommended :lecture="lecture" />
+      <v-slide-group class="pa-4" show-arrows v-if="categoryArticles.length">
+        <v-slide-item v-for="article in categoryArticles" :key="article.id">
+          <CardRecommended :article="article" />
         </v-slide-item>
       </v-slide-group>
     </template>
     <template v-slot:other>
-      <v-slide-group class="pa-4" show-arrows v-if="differentLectures.length">
-        <v-slide-item v-for="lecture in differentLectures" :key="lecture.id">
-          <CardRecommended :lecture="lecture" />
+      <v-slide-group class="pa-4" show-arrows v-if="differentArticles.length">
+        <v-slide-item v-for="article in differentArticles" :key="article.id">
+          <CardRecommended :article="article" />
         </v-slide-item>
       </v-slide-group>
     </template>
-  </LectureMetadata>
+  </ArticleMetadata>
 </template>
 
 <script>
-import LectureService from "@/services/LectureService.js";
-import LectureMetadata from "@/views/Lecture/Metadata.vue";
+import ArticleService from "@/services/ArticleService.js";
+import ArticleMetadata from "@/views/Article/Metadata.vue";
 import CardRecommended from "@/components/Card-Recommended";
 export default {
   components: {
-    LectureMetadata,
+    ArticleMetadata,
     CardRecommended
   },
   data: () => ({
-    lecture: null,
+    article: null,
     permissions: false,
     isOwner: false,
     adminPermissions: false,
     imageError: false,
-    categoryLectures: [],
-    differentLectures: []
+    categoryArticles: [],
+    differentArticles: []
   }),
   created() {
-    this.getLecture();
+    this.getArticle();
     this.checkRoles();
   },
   watch: {
     // call again the method if the route changes
-    $route: "getLecture"
+    $route: "getArticle"
   },
   methods: {
-    async getLecture() {
+    async getArticle() {
       try {
-        const lectureId = this.$route.params.id;
-        const responseLecture = await LectureService.show(lectureId);
-        const responseSimilarLectures = await LectureService.showSimilar(
-          responseLecture.data.category_id,
-          lectureId
+        const articleId = this.$route.params.id;
+        const responseArticle = await ArticleService.show(articleId);
+        const responseSimilarArticles = await ArticleService.showSimilar(
+          responseArticle.data.category_id,
+          articleId
         );
-        const responseDifferentLectures = await LectureService.showDifferent(
-          responseLecture.data.category_id,
-          lectureId
+        const responseDifferentArticles = await ArticleService.showDifferent(
+          responseArticle.data.category_id,
+          articleId
         );
         if (this.$store.state.user) {
-          if (responseLecture.data.Users[0]) {
+          if (responseArticle.data.Users[0]) {
             if (
-              responseLecture.data.Users[0].id === this.$store.state.user.id
+              responseArticle.data.Users[0].id === this.$store.state.user.id
             ) {
               this.isOwner = true;
             } else {
@@ -132,19 +132,19 @@ export default {
             }
           }
         }
-        this.lecture = responseLecture.data;
-        this.categoryLectures = responseSimilarLectures.data;
-        this.differentLectures = responseDifferentLectures.data;
+        this.article = responseArticle.data;
+        this.categoryArticles = responseSimilarArticles.data;
+        this.differentArticles = responseDifferentArticles.data;
         this.imageError = false;
       } catch (err) {
         console.log(err);
       }
     },
-    async deleteLecture() {
+    async deleteArticle() {
       try {
-        const lectureId = this.$route.params.id;
+        const articleId = this.$route.params.id;
         if (this.isOwner || this.adminPermissions) {
-          await LectureService.delete(lectureId);
+          await ArticleService.delete(articleId);
         }
       } catch (err) {
         console.log(err);
@@ -192,7 +192,7 @@ export default {
 .back-link:hover {
   color: #303841;
 }
-.lecture-count {
+.article-count {
   color: black;
   font-size: 20px;
 }

@@ -1,7 +1,7 @@
 <template>
   <v-hover v-slot:default="{ hover }">
     <v-card
-      :to="{path: `/lectures/${lecture.id}`}"
+      :to="{path: `/articles/${article.id}`}"
       width="300px"
       height="320px"
       raised
@@ -10,13 +10,13 @@
       <div>
         <v-list-item>
           <router-link
-            v-if="lecture.Users[0]"
-            :to="{path: `/users/${lecture.Users[0].display_name.toLowerCase()}/${lecture.Users[0].id}/profile`}"
+            v-if="article.Users[0]"
+            :to="{path: `/users/${article.Users[0].display_name.toLowerCase()}/${article.Users[0].id}/profile`}"
           >
             <v-list-item-avatar>
               <v-img
-                v-if="lecture.Users.length > 0 && lecture.Users[0].icon_url"
-                :src="lecture.Users[0].icon_url"
+                v-if="article.Users.length > 0 && article.Users[0].icon_url"
+                :src="article.Users[0].icon_url"
               ></v-img>
               <v-img v-else src="@/assets/blue-error-background.jpg"></v-img>
             </v-list-item-avatar>
@@ -25,14 +25,14 @@
             <v-img src="@/assets/blue-error-background.jpg"></v-img>
           </v-list-item-avatar>
           <v-list-item-content>
-            <v-list-item-title class="title">{{lecture.title}}</v-list-item-title>
-            <v-list-item-subtitle v-if="lecture.Users[0]">
+            <v-list-item-title class="title">{{article.title}}</v-list-item-title>
+            <v-list-item-subtitle v-if="article.Users[0]">
               By
               <router-link
-                v-if="lecture.Users[0]"
-                :to="{path: `/users/${lecture.Users[0].display_name.toLowerCase()}/${lecture.Users[0].id}/profile`}"
+                v-if="article.Users[0]"
+                :to="{path: `/users/${article.Users[0].display_name.toLowerCase()}/${article.Users[0].id}/profile`}"
               >
-                <span class="font-weight-bold">{{lecture.Users[0].display_name}}</span>
+                <span class="font-weight-bold">{{article.Users[0].display_name}}</span>
               </router-link>
             </v-list-item-subtitle>
             <v-list-item-subtitle v-else>
@@ -42,7 +42,7 @@
         </v-list-item>
 
         <v-img
-          :src="imageError ? require('@/assets/blue-error-background.jpg') : lecture.thumbnail_url"
+          :src="imageError ? require('@/assets/blue-error-background.jpg') : article.thumbnail_url"
           height="175"
           class="darker-img"
           @error="imageLoadError"
@@ -61,8 +61,8 @@
         </v-img>
 
         <v-card-text>
-          <span style="display: block;">{{lecture.short_description}}</span>
-          <div v-if="$router.history.current['name'] === 'user-lectures'">
+          <span style="display: block;">{{article.short_description}}</span>
+          <div v-if="$router.history.current['name'] === 'user-articles'">
             <v-btn
               absolute
               dark
@@ -71,7 +71,7 @@
               bottom
               left
               color="white"
-              :to="{path: `/lectures/${lecture.id}/edit`}"
+              :to="{path: `/articles/${article.id}/edit`}"
             >
               <v-icon>mdi-pencil</v-icon>
             </v-btn>
@@ -89,7 +89,7 @@ export default {
     imageError: false
   }),
   props: {
-    lecture: Object
+    article: Object
   },
   methods: {
     async imageLoadError() {

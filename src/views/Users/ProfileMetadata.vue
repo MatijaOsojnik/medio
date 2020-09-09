@@ -1,8 +1,8 @@
 <template>
     <div>
-      <slot name="userLectures">
-        <span class="title ma-4 d-block">My lectures</span>
-        <span class="heading ma-4 d-block">Looks like I haven't made any lectures yet..</span>
+      <slot name="userArticles">
+        <span class="title ma-4 d-block">My articles</span>
+        <span class="heading ma-4 d-block">Looks like I haven't made any articles yet..</span>
       </slot>
     </div>
 </template>
@@ -22,7 +22,7 @@ export default {
 .back-link:hover {
   color: #303841;
 }
-.lecture-count {
+.article-count {
   display: inline-block;
   font-size: 16px;
 }

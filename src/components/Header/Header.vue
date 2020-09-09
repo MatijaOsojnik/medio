@@ -15,7 +15,7 @@
       bottom
       transition="scale-transition"
       :close-on-content-click="false"
-      v-if="$router.history.current['path'] === '/lectures' || !$store.state.isUserLoggedIn"
+      v-if="$router.history.current['path'] === '/articles' || !$store.state.isUserLoggedIn"
     >
       <template v-slot:activator="{ on }">
         <v-btn
@@ -33,7 +33,7 @@
         <v-container fluid>
           <span class="subtitle ma-2 d-block font-weight-bold text-center">Featured</span>
           <div class="d-flex justify-center align-center flex-column ma-3">
-            <v-btn depressed small text block :to="{name: `lectures`}">All Lectures</v-btn>
+            <v-btn depressed small text block :to="{name: `articles`}">All Articles</v-btn>
           </div>
           <v-divider />
           <span class="subtitle ma-2 d-block font-weight-bold text-center">Categories</span>
@@ -47,7 +47,7 @@
               small
               text
               block
-              :to="{path: `/lectures/categories/${category.id}`}"
+              :to="{path: `/articles/categories/${category.id}`}"
             >{{category.name}}</v-btn>
           </div>
         </v-container>
@@ -88,7 +88,7 @@ export default {
     },
     async toPath() {
       this.$router.push({
-        path: `/lectures`
+        path: `/articles`
       });
     }
   }

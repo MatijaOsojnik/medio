@@ -4,7 +4,7 @@
       <v-flex xs12 justify="center" align="center">
         <v-card class="ma-12 mx-auto" max-width="1000px">
           <v-toolbar flat color="#617BE3" dark>
-            <v-toolbar-title>Become A Lecturer</v-toolbar-title>
+            <v-toolbar-title>Become A Writer</v-toolbar-title>
           </v-toolbar>
           <v-card-text>
             <v-scroll-x-transition>
@@ -58,13 +58,13 @@
               />
             </v-form>
             <!-- <v-scroll-x-transition>
-              <v-alert type="success" mode="out-in" v-if="successfulLecturerSubmit">
+              <v-alert type="success" mode="out-in" v-if="successfulArticlerSubmit">
                 <span>You successfuly sent an email</span>
               </v-alert>
             </v-scroll-x-transition>-->
           </v-card-text>
           <v-card-actions>
-            <v-btn color="#f0f0f0" block large @click="createLecture">Contact</v-btn>
+            <v-btn color="#f0f0f0" block large @click="createArticle">Contact</v-btn>
           </v-card-actions>
         </v-card>
       </v-flex>
@@ -89,7 +89,7 @@ export default {
       min: v => v.length >= 8 || "Min 8 characters"
     },
     waitBeforeClick: false,
-    successfulLecturePost: false,
+    successfulArticlePost: false,
     errors: [],
     categories: []
   }),

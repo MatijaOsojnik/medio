@@ -74,17 +74,17 @@ module.exports = (app) => {
     app.put('/api/users/:userId', UserControllerPolicy.update, UsersController.put)
     app.delete('/api/users/:userId', UsersController.delete)
 
-    // LECTURE ROUTES
+    // ARTICLE ROUTES
     app.get('/api/articles', ArticlesController.index)
-    app.get('/api/articles/:lectureId', ArticlesController.show)
+    app.get('/api/articles/:articleId', ArticlesController.show)
     app.get('/api/articles/users/:userId', ArticlesController.user)
     app.get('/api/articles/categories/:categoryId', ArticlesController.showCategories)
-    app.get('/api/articles/categories/similar/:categoryId/:lectureId', ArticlesController.showSimilar)
-    app.get('/api/articles/categories/other/:categoryId/:lectureId', ArticlesController.showDifferent)
+    app.get('/api/articles/categories/similar/:categoryId/:articleId', ArticlesController.showSimilar)
+    app.get('/api/articles/categories/other/:categoryId/:articleId', ArticlesController.showDifferent)
 
-    app.put('/api/articles/:lectureId', ArticleControllerPolicy.update, ArticlesController.put)
+    app.put('/api/articles/:articleId', ArticleControllerPolicy.update, ArticlesController.put)
     app.post('/api/articles/:userId', ArticleControllerPolicy.update, ArticlesController.post)
-    app.delete('/api/articles/:lectureId', ArticlesController.delete)
+    app.delete('/api/articles/:articleId', ArticlesController.delete)
 
     // CATEGORY ROUTES
     app.get('/api/categories', CategoriesController.index)

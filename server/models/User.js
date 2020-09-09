@@ -73,9 +73,11 @@ module.exports = (sequelize, DataTypes) => {
     }
 
     const Role = sequelize.models.Role;
+    const Publication = sequelize.models.Publication
     const Article = sequelize.models.Article;
     const History = sequelize.models.History;
-
+    const Category = sequelize.models.Category;
+    const Tag = sequelize.models.Tag;
 
     Role.belongsToMany(User, {
         through: 'RoleUsers'
@@ -85,10 +87,10 @@ module.exports = (sequelize, DataTypes) => {
     });
 
     Article.belongsToMany(User, {
-        through: 'LectureUsers'
+        through: 'ArticleUsers'
     })
     User.belongsToMany(Article, {
-        through: 'LectureUsers'
+        through: 'ArticleUsers'
     })
 
     History.belongsTo(User, {
@@ -96,9 +98,39 @@ module.exports = (sequelize, DataTypes) => {
         targetKey: 'id'
     });
     History.belongsTo(Article, {
-        foreignKey: 'lecture_id',
+        foreignKey: 'article_id',
         targetKey: 'id'
     });
-    
+
+    Article.belongsTo(Category, {
+        foreignKey: 'category_id',
+        targetKey: 'id'
+    });
+    Category.hasMany(Article, {
+        foreignKey: 'category_id',
+        sourceKey: 'id'
+    });
+
+    Publication.belongsToMany(User, {
+        through: 'PublicationUsers'
+    });
+    User.belongsToMany(Publication, {
+        through: 'PublicationUsers'
+    });
+
+    Publication.belongsToMany(Article, {
+        through: 'ArticlePublications'
+    });
+    Article.belongsToMany(Publication, {
+        through: 'ArticlePublications'
+    });
+
+    Tag.belongsToMany(Article, {
+        through: 'ArticleTags'
+    })
+    Article.belongsToMany(Tag, {
+        through: 'ArticleTags'
+    })
+
     return User;
 }

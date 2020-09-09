@@ -3,7 +3,7 @@ import Vuex from 'vuex'
 import createPersistedState from 'vuex-persistedstate'
 
 import categories from './modules/categories'
-import lectures from './modules/lectures'
+import articles from './modules/articles'
 
 Vue.use(Vuex)
 
@@ -11,7 +11,7 @@ export default new Vuex.Store({
   strict: false,
   modules: {
     categories,
-    lectures
+    articles
   },
   plugins: [
     createPersistedState()

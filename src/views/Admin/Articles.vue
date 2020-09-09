@@ -2,11 +2,11 @@
   <v-app>
     <AdminHeader />
     <v-container fluid>
-      <span class="d-block title pa-2">LECTURES</span>
+      <span class="d-block title pa-2">ARTICLES</span>
 
       <v-card>
         <v-card-title>
-          All Lectures
+          All Articles
           <v-spacer></v-spacer>
           <v-text-field
             v-model="search"
@@ -35,20 +35,20 @@
                 <v-flex xs12 justify="center" align="center">
                   <v-card class="mx-auto">
                     <v-toolbar flat color="#617BE3" dark>
-                      <v-toolbar-title>Edit Lecture</v-toolbar-title>
+                      <v-toolbar-title>Edit Article</v-toolbar-title>
                     </v-toolbar>
-                    <v-card-text v-if="lecture">
+                    <v-card-text v-if="article">
                       <v-form lazy-validation>
                         <label for="title">Title</label>
                         <v-text-field
                           id="title"
-                          label="Enter a title for your lecture"
+                          label="Enter a title for your article"
                           maxlength="30"
                           counter
                           :rules="[rules.min]"
                           solo
                           aria-autocomplete="false"
-                          v-model="lecture.title"
+                          v-model="article.title"
                         />
 
                         <label for="shortDescription">Short Description</label>
@@ -60,15 +60,15 @@
                           clearable
                           counter
                           maxlength="60"
-                          hint="This description will be used on the Lecture card before the user clicks on it."
+                          hint="This description will be used on the Article card before the user clicks on it."
                           aria-autocomplete="false"
-                          v-model="lecture.short_description"
+                          v-model="article.short_description"
                         />
                         <label for="description">Description</label>
                         <div style="margin: 0.5rem 0 2rem">
                           <tiptap-vuetify
                             id="description"
-                            v-model="lecture.description"
+                            v-model="article.description"
                             :rules="[rules.description]"
                             placeholder="Write your description here."
                             maxlength="300"
@@ -82,7 +82,7 @@
                           label="Enter Thumbnail URL"
                           solo
                           aria-autocomplete="false"
-                          v-model="lecture.thumbnail_url"
+                          v-model="article.thumbnail_url"
                         />
 
                         <label for="category">Category</label>
@@ -90,15 +90,15 @@
                           id="category"
                           :items="categories"
                           label="Select Category"
-                          v-model="lecture.category_id"
+                          v-model="article.category_id"
                           item-text="name"
                           item-value="id"
                           solo
                         ></v-select>
                       </v-form>
                       <v-scroll-x-transition>
-                        <v-alert type="success" mode="out-in" v-if="successfulLectureUpdate">
-                          <span>You successfuly updated a lecture</span>
+                        <v-alert type="success" mode="out-in" v-if="successfulArticleUpdate">
+                          <span>You successfuly updated a article</span>
                         </v-alert>
                       </v-scroll-x-transition>
                       <v-scroll-x-transition>
@@ -114,7 +114,7 @@
                         color="#f4f6ff"
                         :disabled="waitBeforeClick"
                         large
-                        @click="updateLecture"
+                        @click="updateArticle"
                       >SUBMIT</v-btn>
                       <v-btn
                         color="#ff6363"
@@ -131,11 +131,11 @@
              <v-layout>
                 <v-flex xs12 justify="center" align="center">
                   <v-card class="mx-auto">
-                    <v-card-text v-if="lecture">
-                      <span class="font-weight-bold">Are you sure you want to delete this lecture?</span>
+                    <v-card-text v-if="article">
+                      <span class="font-weight-bold">Are you sure you want to delete this article?</span>
                       <v-scroll-x-transition>
-                        <v-alert type="success" mode="out-in" v-if="successfulLectureDelete">
-                          <span>Lecture deleted</span>
+                        <v-alert type="success" mode="out-in" v-if="successfulArticleDelete">
+                          <span>Article deleted</span>
                         </v-alert>
                       </v-scroll-x-transition>
                       <v-scroll-x-transition>
@@ -150,7 +150,7 @@
                       <v-btn
                         color="#ff6363"
                         :disabled="waitBeforeClick"
-                        @click="deleteLecture"
+                        @click="deleteArticle"
                       >DELETE</v-btn>
                       <v-spacer/>
                       <v-btn
@@ -165,8 +165,8 @@
             </v-dialog>
           </template>
           <template v-slot:item.actions="{ item }">
-            <v-icon small class="mr-2" @click="editLecture(item)">mdi-pencil</v-icon>
-            <v-icon small @click="deleteLectureDialog(item)">mdi-delete</v-icon>
+            <v-icon small class="mr-2" @click="editArticle(item)">mdi-pencil</v-icon>
+            <v-icon small @click="deleteArticleDialog(item)">mdi-delete</v-icon>
           </template>
           <template v-slot:expanded-item="{ headers, item }">
             <td class="pa-6" :colspan="headers.length">
@@ -187,7 +187,7 @@
 </template>
 
 <script>
-import LectureService from "@/services/LectureService";
+import ArticleService from "@/services/ArticleService";
 import CategoryService from "@/services/CategoryService";
 import {
   TiptapVuetify,
@@ -214,7 +214,7 @@ export default {
     loading: true,
     dialog: false,
     deleteDialog: false,
-    lecture: null,
+    article: null,
     categories: [],
     errors: [],
     rules: {
@@ -226,8 +226,8 @@ export default {
       required: value => !!value || "Required.",
       min: v => v.length >= 8 || "Min 8 characters"
     },
-    successfulLectureUpdate: false,
-    successfulLectureDelete: false,
+    successfulArticleUpdate: false,
+    successfulArticleDelete: false,
     waitBeforeClick: false,
     extensions: [
       History,
@@ -265,13 +265,13 @@ export default {
     ]
   }),
   created() {
-    this.getLectures();
+    this.getArticles();
     this.getCategories();
   },
   methods: {
-    async getLectures() {
+    async getArticles() {
       try {
-        const response = await LectureService.index();
+        const response = await ArticleService.index();
         this.statistics = response.data;
         this.loading = false;
       } catch (err) {
@@ -288,10 +288,10 @@ export default {
         this.error = err.response.data;
       }
     },
-    async updateLecture() {
+    async updateArticle() {
       this.waitBeforeClick = true;
-      const areAllFieldsFilledIn = Object.keys(this.lecture).every(
-        key => !!this.lecture[key]
+      const areAllFieldsFilledIn = Object.keys(this.article).every(
+        key => !!this.article[key]
       );
       if (!areAllFieldsFilledIn) {
         this.errors.push("Please fill in all the fields.");
@@ -302,14 +302,14 @@ export default {
         return;
       }
       try {
-        const response = await LectureService.put(this.lecture);
+        const response = await ArticleService.put(this.article);
         if (response) {
-          this.successfulLectureUpdate = true;
+          this.successfulArticleUpdate = true;
           setTimeout(() => {
-            this.successfulLectureUpdate = false;
+            this.successfulArticleUpdate = false;
             this.waitBeforeClick = false;
             this.dialog = false;
-            this.getLectures();
+            this.getArticles();
           }, 3000);
         }
       } catch (err) {
@@ -318,26 +318,26 @@ export default {
         setTimeout(() => (this.errors = []), 5000);
       }
     },
-    editLecture(lecture) {
-      this.lecture = lecture;
+    editArticle(article) {
+      this.article = article;
       this.dialog = true;
     },
-    deleteLectureDialog(lecture) {
-      this.lecture = lecture;
+    deleteArticleDialog(article) {
+      this.article = article;
       this.deleteDialog = true
-      // await LectureService.delete(lectureId), this.$router.go();       
+      // await articleService.delete(articleId), this.$router.go();       
     },
-    async deleteLecture() {
+    async deleteArticle() {
       this.waitBeforeClick = true;
       try {
-        await LectureService.delete(this.lecture.id)
+        await ArticleService.delete(this.article.id)
         .then(() => {
-          this.successfulLectureDelete = true;
+          this.successfularticleDelete = true;
           setTimeout(() => {
-            this.successfulLectureDelete = false;
+            this.successfularticleDelete = false;
             this.waitBeforeClick = false;
             this.deleteDialog = false;
-            this.getLectures();
+            this.getArticles();
           }, 3000);
         })
         .catch((err) => console.log(err))

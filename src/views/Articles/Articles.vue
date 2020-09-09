@@ -4,7 +4,7 @@
       <Header />
     </div>
     <div>
-      <template v-slot:lectures-panel>
+      <template v-slot:articles-panel>
         <div v-if="$store.state.isUserLoggedIn">
           <span class="greeting-title">
             Welcome
@@ -15,11 +15,11 @@
           </span>
         </div>
         <v-container fluid>
-          <span class="title" v-if="$router.history.current['name'] === 'lectures'">All Lectures</span>
+          <span class="title" v-if="$router.history.current['name'] === 'articles'">All Articles</span>
           <span
             class="title"
-            v-else-if="$router.history.current['name'] === 'lectures-categories' && lectures"
-          >{{lectures[0].Category.name}}</span>
+            v-else-if="$router.history.current['name'] === 'articles-categories' && articles"
+          >{{articles[0].Category.name}}</span>
           <v-row style="z-index: 100" class="flex-sm-fill">
             <v-col
               v-if="priviliges"
@@ -29,7 +29,7 @@
                 <v-card
                   max-width="300px"
                   height="320px"
-                  :to="{path: `/lectures/create/${$store.state.user.id}`}"
+                  :to="{path: `/articles/create/${$store.state.user.id}`}"
                   raised
                   :elevation="hover ? 8 : 2"
                 >
@@ -57,12 +57,12 @@
             </v-col>
             <v-col
               class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-6 d-sm-flex justify-sm-center"
-              v-for="lecture in lectures"
-              :key="lecture.id"
+              v-for="article in articles"
+              :key="article.id"
             >
               <v-hover v-slot:default="{ hover }">
                 <v-card
-                  :to="{path: `/lectures/${lecture.id}`}"
+                  :to="{path: `/articles/${article.id}`}"
                   width="300px"
                   height="320px"
                   raised
@@ -72,19 +72,19 @@
                     <v-list-item>
                       <v-list-item-avatar>
                         <v-img
-                          v-if="lecture.Users.length > 0 && lecture.Users[0].icon_url"
-                          :src="lecture.Users[0].icon_url"
+                          v-if="article.Users.length > 0 && article.Users[0].icon_url"
+                          :src="article.Users[0].icon_url"
                         ></v-img>
                         <v-icon v-else dark large color="indigo">mdi-account-circle</v-icon>
                       </v-list-item-avatar>
                       <v-list-item-content>
-                        <v-list-item-title class="title">{{lecture.title}}</v-list-item-title>
+                        <v-list-item-title class="title">{{article.title}}</v-list-item-title>
                         <!-- <v-list-item-subtitle>by Kurt Wagner</v-list-item-subtitle> -->
                       </v-list-item-content>
                     </v-list-item>
 
                     <v-img
-                      :src="lecture.thumbnail_url"
+                      :src="article.thumbnail_url"
                       height="194"
                       lazy-src="@/assets/blue-error-background.jpeg"
                       class="darker-img"
@@ -103,14 +103,14 @@
                     </v-img>
 
                     <v-card-text>
-                      <span style="display: block;">{{lecture.short_description}}</span>
-                      <!-- <span>{{lecture.Category.name}}</span> -->
+                      <span style="display: block;">{{article.short_description}}</span>
+                      <!-- <span>{{article.Category.name}}</span> -->
                     </v-card-text>
                   </div>
                 </v-card>
               </v-hover>
             </v-col>
-            <v-btn @click="limit = null" v-if="lectures > 10">Show More</v-btn>
+            <v-btn @click="limit = null" v-if="articles > 10">Show More</v-btn>
           </v-row>
         </v-container>
       </template>
@@ -120,43 +120,43 @@
 
 <script>
 import Header from "@/components/Header/Header";
-import LectureService from "@/services/LectureService.js";
+import ArticleService from "@/services/ArticleService.js";
 export default {
   components: {
     Header
   },
   data: () => ({
-    lectures: null,
+    articles: null,
     priviliges: false,
     limit: 10
   }),
   computed: {
-    lectureLimit: async () => {
-      if (this.lectures) {
+    articleLimit: async () => {
+      if (this.articles) {
         return (await this.limit)
-          ? this.lectures.slice(0, this.limit)
-          : this.lectures;
+          ? this.articles.slice(0, this.limit)
+          : this.articles;
       }
     }
   },
   mounted() {
-    this.getLectures();
+    this.getArticles();
     this.checkRoles();
   },
   watch: {
     // call again the method if the route changes
-    $route: "getLectures"
+    $route: "getArticles"
   },
   methods: {
-    async getLectures() {
+    async getArticles() {
       let response = null;
       if (this.$route.params.categoryId) {
         const categoryId = this.$route.params.categoryId;
-        response = await LectureService.categories(categoryId);
+        response = await ArticleService.categories(categoryId);
       } else {
-        response = await LectureService.index();
+        response = await ArticleService.index();
       }
-      this.lectures = response.data;
+      this.articles = response.data;
     },
     checkRoles() {
       const userAuthorities = this.$store.state.authorities;

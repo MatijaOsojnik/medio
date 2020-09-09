@@ -322,7 +322,7 @@
                         </v-scroll-x-transition>
                         <v-form lazy-validation autocomplete="off">
                           <label for="email">Roles</label>
-                          <v-checkbox v-model="selectedRoles" label="Lecturer" value="Lecturer"></v-checkbox>
+                          <v-checkbox v-model="selectedRoles" label="Writer" value="Writer"></v-checkbox>
                           <v-checkbox v-model="selectedRoles" label="Moderator" value="Moderator"></v-checkbox>
                           <v-checkbox v-model="selectedRoles" label="Admin" value="Admin"></v-checkbox>
                           <v-scroll-x-transition>

@@ -4,7 +4,7 @@
       <v-flex xs12 justify="center" align="center">
         <v-card class="ma-12 mx-auto" max-width="1000px">
           <v-toolbar flat color="#617BE3" dark>
-            <v-toolbar-title>Edit Lecture</v-toolbar-title>
+            <v-toolbar-title>Edit Article</v-toolbar-title>
           </v-toolbar>
           <v-card-text>
             <v-scroll-x-transition>
@@ -18,13 +18,13 @@
                <label for="title">Title</label>
               <v-text-field
                 id="title"
-                label="Enter a title for your lecture"
+                label="Enter a title for your article"
                 maxlength="30"
                 counter
                 :rules="[rules.min]"
                 solo
                 aria-autocomplete="false"
-                v-model="lecture.title"
+                v-model="article.title"
               />
 
               <label for="shortDescription">Short Description</label>
@@ -36,15 +36,15 @@
                 clearable
                 counter
                 maxlength="60"
-                hint="This description will be used on the Lecture card before the user clicks on it."
+                hint="This description will be used on the Article card before the user clicks on it."
                 aria-autocomplete="false"
-                v-model="lecture.short_description"
+                v-model="article.short_description"
               />
               <label for="description">Description</label>
               <div style="margin: 0.5rem 0 2rem">
                 <tiptap-vuetify
                   id="description"
-                  v-model="lecture.description"
+                  v-model="article.description"
                   :rules="[rules.description]"
                   placeholder="Write your description here."
                   maxlength="300"
@@ -58,7 +58,7 @@
                 label="Enter Thumbnail URL"
                 solo
                 aria-autocomplete="false"
-                v-model="lecture.thumbnail_url"
+                v-model="article.thumbnail_url"
               />
 
               <label for="category">Category</label>
@@ -66,7 +66,7 @@
                 id="category"
                 :items="categories"
                 label="Select Category"
-                v-model="lecture.category_id"
+                v-model="article.category_id"
                 item-text="name"
                 item-value="id"
                 solo
@@ -74,8 +74,8 @@
 
             </v-form>
             <v-scroll-x-transition>
-              <v-alert type="success" mode="out-in" v-if="successfulLectureUpdate">
-                <span>You successfuly updated a lecture</span>
+              <v-alert type="success" mode="out-in" v-if="successfulArticleUpdate">
+                <span>You successfuly updated a article</span>
               </v-alert>
             </v-scroll-x-transition>
           </v-card-text>
@@ -85,7 +85,7 @@
               :disabled="waitBeforeClick"
               block
               large
-              @click="updateLecture"
+              @click="updateArticle"
             >SUBMIT</v-btn>
           </v-card-actions>
         </v-card>
@@ -95,7 +95,7 @@
 </template>
 
 <script>
-import LectureService from "@/services/LectureService";
+import ArticleService from "@/services/ArticleService";
 import CategoryService from "@/services/CategoryService";
 import {
   TiptapVuetify,
@@ -126,7 +126,7 @@ export default {
       required: value => !!value || "Required.",
             min: v => v.length >= 8 || "Min 8 characters"
     },
-    lecture: {
+    article: {
       title: ``,
       short_description: ``,
       description: `<p>Write your description here.</p>`,
@@ -134,7 +134,7 @@ export default {
       category_id: ``,
       user_id: null
     },
-    successfulLectureUpdate: false,
+    successfulArticleUpdate: false,
     waitBeforeClick: false,
     isOwner: false,
     errors: [],
@@ -160,15 +160,15 @@ export default {
     ]
   }),
   created() {
-    this.getLecture();
+    this.getArticle();
     this.getCategories();
-    this.lecture.user_id = this.$route.params.id;
+    this.article.user_id = this.$route.params.id;
   },
   methods: {
-    async updateLecture() {
+    async updateArticle() {
       this.waitBeforeClick = true;
-      const areAllFieldsFilledIn = Object.keys(this.lecture).every(
-        key => !!this.lecture[key]
+      const areAllFieldsFilledIn = Object.keys(this.article).every(
+        key => !!this.article[key]
       );
       if (!areAllFieldsFilledIn) {
         this.errors.push("Please fill in all the fields.");
@@ -179,17 +179,17 @@ export default {
         return;
       }
       try {
-        const lectureId = this.$route.params.id;
-        const response = await LectureService.put(this.lecture);
+        const articleId = this.$route.params.id;
+        const response = await ArticleService.put(this.article);
         if (response) {
-          this.successfulLectureUpdate = true;
+          this.successfulArticleUpdate = true;
           setTimeout(() => {
-            this.successfulLectureUpdate = false;
+            this.successfulArticleUpdate = false;
             this.waitBeforeClick = false;
             this.$router.push({
-              name: "lecture",
+              name: "article",
               params: {
-                id: lectureId
+                id: articleId
               }
             });
           }, 3000);
@@ -210,22 +210,22 @@ export default {
         this.error = err.response.data;
       }
     },
-    async getLecture() {
+    async getArticle() {
       try {
-        const lectureId = this.$route.params.id;
-        const response = await LectureService.show(lectureId);
+        const articleId = this.$route.params.id;
+        const response = await ArticleService.show(articleId);
         if (response.data === undefined || !response.data) {
           this.$router.push({
-            name: "lectures"
+            name: "articles"
           });
         } else {
           if (this.$store.state.user) {
             if (response.data.Users[0].id === this.$store.state.user.id) {
               this.isOwner = true;
-              this.lecture = response.data;
+              this.article = response.data;
             } else {
               this.$router.push({
-                name: "lectures"
+                name: "articles"
               });
             }
           }

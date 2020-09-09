@@ -1,24 +1,24 @@
 <template>
   <v-container>
-    <router-link :to="{name: 'lectures'}" class="back-link" style="margin-top: 20px;">
-      <v-icon dense>mdi-chevron-left</v-icon>Back to all lectures
+    <router-link :to="{name: 'articles'}" class="back-link" style="margin-top: 20px;">
+      <v-icon dense>mdi-chevron-left</v-icon>Back to all articles
     </router-link>
-    <slot name="lecture">
+    <slot name="article">
       <span class="heading ma-4 d-block">Loading..</span>
     </slot>
     <div>
-      <span class="title ma-4 d-block">Similar lectures</span>
+      <span class="title ma-4 d-block">Similar articles</span>
       <v-divider></v-divider>
       <slot name="similar">
-        <span class="heading ma-4 d-block">No similar lectures found</span>
+        <span class="heading ma-4 d-block">No similar articles found</span>
       </slot>
     </div>
     <v-spacer />
     <div>
-      <span class="title ma-4 d-block">Other lectures</span>
+      <span class="title ma-4 d-block">Other articles</span>
       <v-divider></v-divider>
       <slot name="other">
-        <span class="heading ma-4 d-block">No other lectures found</span>
+        <span class="heading ma-4 d-block">No other articles found</span>
       </slot>
     </div>
   </v-container>
@@ -39,7 +39,7 @@ export default {
 .back-link:hover {
   color: #303841;
 }
-.lecture-count {
+.article-count {
   display: inline-block;
   font-size: 16px;
 }

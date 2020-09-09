@@ -29,7 +29,7 @@ module.exports = {
         } catch (error) {
             console.log(error)
             res.status(500).send({
-                error: `An error has occured trying to fetch lectures`
+                error: `An error has occured trying to fetch articles`
             })
         }
     },
@@ -60,10 +60,10 @@ module.exports = {
     async postHistory (req, res) {
         try {
           const userId = req.params.userId
-          const lectureId = req.params.lectureId
-          console.log(lectureId, userId)
+          const articleId = req.params.articleId
+          console.log(articleId, userId)
           const history = await History.create({
-            lecture_id: lectureId,
+            article_id: articleId,
             user_id: userId
           })
           res.send(history)

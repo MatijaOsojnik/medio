@@ -88,7 +88,7 @@ export default {
           this.$store.dispatch("setAuthorities", response.data.authorities);
           this.loginSuccess = false;
           this.showPanel = false;
-          this.$router.push({ name: "lectures" });
+          this.$router.push({ name: "articles" });
         }, 2500);
       } catch (error) {
         this.error = error.response.data.error;

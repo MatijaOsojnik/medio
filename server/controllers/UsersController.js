@@ -98,8 +98,8 @@ module.exports = {
             })
             await user.removeArticle(userArticles)
             await user.destroy({})
-            // if(userLectures.length) {
-            //     await userLectures.destroy({}).then(() => res.send('this worked')).catch((err) => console.log(err))
+            // if(userArticles.length) {
+            //     await userArticles.destroy({}).then(() => res.send('this worked')).catch((err) => console.log(err))
             // }
             res.send('User deleted')
         } catch (error) {

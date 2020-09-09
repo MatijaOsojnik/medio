@@ -1,4 +1,4 @@
-import LectureService from '@/services/LectureService'
+import ArticleService from '@/services/ArticleService'
 
 export default {
     namespaced: true,
@@ -7,7 +7,7 @@ export default {
         item: {},
     },
     actions: {
-        async fetchLectures({
+        async fetchArticles({
             state,
             commit
         }, options = {
@@ -15,17 +15,17 @@ export default {
         }) {
             if (options.reset) {
                 commit('setItems', {
-                    resource: 'lectures',
+                    resource: 'articles',
                     items: []
                 }, {
                     root: true
                 })
             }
-            const response = await LectureService.index()
-            const lectures = response.data
+            const response = await ArticleService.index()
+            const articles = response.data
             commit('setItems', {
-                resource: 'lectures',
-                items: lectures
+                resource: 'articles',
+                items: articles
             }, {
                 root: true
             })

@@ -43,7 +43,7 @@ module.exports = {
                         })
                     }
                 })
-            res.send('Successful Lecture Creation')
+            res.send('Successful Article Creation')
         } catch (error) {
             console.log(error)
             res.status(500).send({
@@ -53,7 +53,7 @@ module.exports = {
     },
     async show(req, res) {
         try {
-            const article = await Article.findByPk(req.params.lectureId, {
+            const article = await Article.findByPk(req.params.articleId, {
                 include: [User, Tip, Sentence]
             })
             res.send(article)
@@ -173,7 +173,7 @@ module.exports = {
                     id: req.params.articleId
                 }
             })
-            res.send('Successful lecture delete')
+            res.send('Successful article delete')
         } catch (error) {
             res.status(500).send({
                 error: `An error has occured trying fetch a article`
