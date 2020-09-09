@@ -57,7 +57,7 @@ module.exports = (sequelize, DataTypes) => {
         twitter_url: {
             type: DataTypes.STRING
         },
-        isLecturer: {
+        isWriter: {
             type: DataTypes.BOOLEAN,
             allowNull: false,
             defaultValue: false
@@ -73,7 +73,7 @@ module.exports = (sequelize, DataTypes) => {
     }
 
     const Role = sequelize.models.Role;
-    const Lecture = sequelize.models.Lecture;
+    const Article = sequelize.models.Article;
     const History = sequelize.models.History;
 
 
@@ -84,10 +84,10 @@ module.exports = (sequelize, DataTypes) => {
         through: 'RoleUsers'
     });
 
-    Lecture.belongsToMany(User, {
+    Article.belongsToMany(User, {
         through: 'LectureUsers'
     })
-    User.belongsToMany(Lecture, {
+    User.belongsToMany(Article, {
         through: 'LectureUsers'
     })
 
@@ -95,7 +95,7 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'user_id',
         targetKey: 'id'
     });
-    History.belongsTo(Lecture, {
+    History.belongsTo(Article, {
         foreignKey: 'lecture_id',
         targetKey: 'id'
     });

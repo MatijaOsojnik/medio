@@ -23,18 +23,18 @@ const verifyToken = (req, res, next) => {
     });
 };
 
-const isLecturer = (req, res, next) => {
+const isWriter = (req, res, next) => {
     User.findByPk(req.userId).then(user => {
         user.getRoles().then(roles => {
             for (let i = 0; i < roles.length; i++) {
-                if (roles[i].name === "Lecturer") {
+                if (roles[i].name === "Writer") {
                     next();
                     return;
                 }
             }
 
             res.status(403).send({
-                message: "Require Lecturer Role!"
+                message: "Require Writer Role!"
             });
             return;
         });
@@ -100,7 +100,7 @@ const isModeratorOrAdmin = (req, res, next) => {
 
 const authJwt = {
     verifyToken,
-    isLecturer,
+    isWriter,
     isAdmin,
     isModerator,
     isModeratorOrAdmin

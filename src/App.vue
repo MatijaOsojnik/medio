@@ -1,60 +1,55 @@
 <template>
   <v-app>
-    <v-app-bar
-      app
-      color="primary"
-      dark
-    >
-      <div class="d-flex align-center">
-        <v-img
-          alt="Vuetify Logo"
-          class="shrink mr-2"
-          contain
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-logo-dark.png"
-          transition="scale-transition"
-          width="40"
-        />
-
-        <v-img
-          alt="Vuetify Name"
-          class="shrink mt-1 hidden-sm-and-down"
-          contain
-          min-width="100"
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-name-dark.png"
-          width="100"
-        />
-      </div>
-
-      <v-spacer></v-spacer>
-
-      <v-btn
-        href="https://github.com/vuetifyjs/vuetify/releases/latest"
-        target="_blank"
-        text
-      >
-        <span class="mr-2">Latest Release</span>
-        <v-icon>mdi-open-in-new</v-icon>
-      </v-btn>
-    </v-app-bar>
-
-    <v-main>
-      <HelloWorld/>
-    </v-main>
+    <div id="app">
+      <main>
+        <UserHeader v-if="$router.history.current['name'] !== 'admin-login'"/>
+          <router-view/>
+        <Footer />
+      </main>
+    </div>
   </v-app>
 </template>
-
 <script>
-import HelloWorld from './components/HelloWorld';
-
+import UserHeader from "@/components/Header/User-Header";
+import Footer from "@/components/Footer/Footer";
 export default {
-  name: 'App',
+  name: "App",
 
-  components: {
-    HelloWorld,
-  },
+  components: { UserHeader, Footer },
 
   data: () => ({
     //
-  }),
+  })
 };
 </script>
+
+<style>
+/* #app {
+  font-family: "Roboto", cursive;
+} */
+
+a {
+  text-decoration: none;
+}
+
+.v-application a {
+  color: black !important;
+}
+
+.main {
+  font-family: 'Roboto', sans-serif;
+  padding: 0;
+  margin: 0;
+}
+
+.cta-btn-active {
+  background-color: #3f72af !important;
+  color: white !important;
+  transition: 0.2s;
+}
+.cta-btn-hover {
+  background-color: white !important;
+  color: black !important;
+  transition: 0.2s;
+}
+</style>

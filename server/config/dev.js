@@ -3,7 +3,7 @@ require('dotenv').config()
 module.exports = {
     port: process.env.PORT || 8081,
     db: {
-        database: process.env.DB_NAME || 'thinq',
+        database: process.env.DB_NAME || 'medio',
         username: process.env.DB_USERNAME || 'postgres',
         password: process.env.DB_PASSWORD || 'postgres',
         options: {

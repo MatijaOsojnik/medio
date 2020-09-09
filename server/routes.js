@@ -1,5 +1,5 @@
 const AuthenticationController = require('./controllers/AuthenticationController')
-const LecturesController = require('./controllers/LecturesController')
+const ArticlesController = require('./controllers/ArticlesController')
 const CategoriesController = require('./controllers/CategoriesController')
 const RolesController = require('./controllers/RolesController')
 const UsersController = require('./controllers/UsersController')
@@ -9,7 +9,7 @@ const GeneralController = require('./controllers/GeneralController')
 
 const AuthenticationControllerPolicy = require('./policies/AuthenticationControllerPolicy')
 const UserControllerPolicy = require('./policies/UserControllerPolicy')
-const LectureControllerPolicy = require('./policies/LectureControllerPolicy')
+const ArticleControllerPolicy = require('./policies/ArticleControllerPolicy')
 
 // const UserControllerPolicy = require('./policies/UserControllerPolicy')
 const isAuthenticated = require('./policies/isAuthenticated')
@@ -75,16 +75,16 @@ module.exports = (app) => {
     app.delete('/api/users/:userId', UsersController.delete)
 
     // LECTURE ROUTES
-    app.get('/api/lectures', LecturesController.index)
-    app.get('/api/lectures/:lectureId', LecturesController.show)
-    app.get('/api/lectures/users/:userId', LecturesController.user)
-    app.get('/api/lectures/categories/:categoryId', LecturesController.showCategories)
-    app.get('/api/lectures/categories/similar/:categoryId/:lectureId', LecturesController.showSimilar)
-    app.get('/api/lectures/categories/other/:categoryId/:lectureId', LecturesController.showDifferent)
+    app.get('/api/articles', ArticlesController.index)
+    app.get('/api/articles/:lectureId', ArticlesController.show)
+    app.get('/api/articles/users/:userId', ArticlesController.user)
+    app.get('/api/articles/categories/:categoryId', ArticlesController.showCategories)
+    app.get('/api/articles/categories/similar/:categoryId/:lectureId', ArticlesController.showSimilar)
+    app.get('/api/articles/categories/other/:categoryId/:lectureId', ArticlesController.showDifferent)
 
-    app.put('/api/lectures/:lectureId', LectureControllerPolicy.update, LecturesController.put)
-    app.post('/api/lectures/:userId', LectureControllerPolicy.update, LecturesController.post)
-    app.delete('/api/lectures/:lectureId', LecturesController.delete)
+    app.put('/api/articles/:lectureId', ArticleControllerPolicy.update, ArticlesController.put)
+    app.post('/api/articles/:userId', ArticleControllerPolicy.update, ArticlesController.post)
+    app.delete('/api/articles/:lectureId', ArticlesController.delete)
 
     // CATEGORY ROUTES
     app.get('/api/categories', CategoriesController.index)
@@ -102,7 +102,7 @@ module.exports = (app) => {
 
     app.get('/api/admin/general/count', GeneralController.count)
     app.get('/api/history/:userId', GeneralController.findHistory) //TRACK USER HISTORY
-    app.post('/api/history/:lectureId/:userId', GeneralController.postHistory)
+    app.post('/api/history/:articleId/:userId', GeneralController.postHistory)
 
     //FILE UPLOAD ROUTE
     // app.post('/upload', upload.single('file'), (req, res) => {

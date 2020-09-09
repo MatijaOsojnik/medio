@@ -1,7 +1,7 @@
 const {
     User,
     Role,
-    Lecture
+    Article
 } = require('../models')
 
 const fs = require('fs')
@@ -86,17 +86,17 @@ module.exports = {
     async delete(req, res) {
         try {
             const user = await User.findByPk(req.params.userId)
-            const lectures = await Lecture.findAll({
+            const articles = await Article.findAll({
                 include: [{
                     model: User
                 }]
             })
-            const userLectures = lectures.map((value) => {
+            const userArticles = articles.map((value) => {
                 if (value.Users[0].id == user.id) {
                     return value
                 }
             })
-            await user.removeLecture(userLectures)
+            await user.removeArticle(userArticles)
             await user.destroy({})
             // if(userLectures.length) {
             //     await userLectures.destroy({}).then(() => res.send('this worked')).catch((err) => console.log(err))

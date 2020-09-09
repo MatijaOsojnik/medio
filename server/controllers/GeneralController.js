@@ -1,6 +1,6 @@
 const {
     User,
-    Lecture,
+    Article,
     Category,
     Role,
     History
@@ -12,7 +12,7 @@ module.exports = {
             const users = await User.findAndCountAll({
                 limit: 5
             });
-            const lectures = await Lecture.findAndCountAll({
+            const articles = await Article.findAndCountAll({
                 limit: 5
             });
             const categories = await Category.findAndCountAll({
@@ -22,7 +22,7 @@ module.exports = {
             });
             res.send({
                 users: users,
-                lectures: lectures,
+                articles: articles,
                 categories: categories,
                 roles: roles
             })
@@ -42,7 +42,7 @@ module.exports = {
             },
             include: [
               {
-                model: Lecture,
+                model: Article,
                 include: [User]
               }
             ],
