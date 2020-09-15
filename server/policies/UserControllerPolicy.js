@@ -68,6 +68,7 @@ module.exports = {
                 .allow('', null),
             linkedin_url: Joi.string()
                 .allow('', null),
+            roles: Joi.any()
         })
 
         const {

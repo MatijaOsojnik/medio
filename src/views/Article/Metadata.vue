@@ -1,4 +1,5 @@
 <template>
+
   <v-container>
     <router-link :to="{name: 'articles'}" class="back-link" style="margin-top: 20px;">
       <v-icon dense>mdi-chevron-left</v-icon>Back to all articles
@@ -26,7 +27,8 @@
 
 <script>
 export default {
-  data: () => ({}),
+  data: () => ({
+  }),
 };
 </script>
 

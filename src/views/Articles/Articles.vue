@@ -3,17 +3,8 @@
     <div>
       <Header />
     </div>
-    <div>
+    <v-container fluid>
       <template v-slot:articles-panel>
-        <div v-if="$store.state.isUserLoggedIn">
-          <span class="greeting-title">
-            Welcome
-            <span
-              class="greeting-name pa-1"
-              v-if="$store.state.isUserLoggedIn"
-            >{{$store.state.user.display_name}}</span>! Start Your First Class :)
-          </span>
-        </div>
         <v-container fluid>
           <span class="title" v-if="$router.history.current['name'] === 'articles'">All Articles</span>
           <span
@@ -114,7 +105,7 @@
           </v-row>
         </v-container>
       </template>
-    </div>
+    </v-container>
   </div>
 </template>
 

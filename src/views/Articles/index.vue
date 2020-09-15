@@ -1,6 +1,13 @@
 <template>
   <div>
     <Header />
+    <v-app-bar dense >
+      <v-slide-group show-arrows>
+        <v-slide-item v-for="n in 25" :key="n">
+          <v-btn class="mx-2" depressed>Publication</v-btn>
+        </v-slide-item>
+      </v-slide-group>
+    </v-app-bar>
     <div
       class="d-flex justify-center align-center flex-column fill-height"
       style="height: 70vh;"
@@ -17,18 +24,6 @@
       <v-progress-circular indeterminate color="primary" class="d-block ma-5"></v-progress-circular>
     </div>
     <v-container fluid v-if="articles && !loading">
-      <div v-if="$store.state.isUserLoggedIn && !userArticles">
-        <span class="greeting-title" v-if="$store.state.isUserLoggedIn && articles">
-          Welcome
-          <span class="greeting-name pa-1">{{$store.state.user.display_name}}</span>! Start Your First Class :)
-        </span>
-      </div>
-      <div v-else-if="$store.state.isUserLoggedIn && userArticles.length > 0">
-        <span class="greeting-title">
-          Welcome back
-          <span class="greeting-name pa-1">{{$store.state.user.display_name}}</span>!
-        </span>
-      </div>
       <v-container fluid>
         <Metadata>
           <template v-slot:completed-articles>
@@ -84,19 +79,21 @@ export default {
     ArticleCardComponent,
     ArticleCardCreateComponent,
     Metadata,
-    Header
+    Header,
   },
   data: () => ({
     card: {
       imageUrl:
         "https://images.pexels.com/photos/1762851/pexels-photo-1762851.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
-      url: "/articles/create/"
+      url: "/articles/create/",
     },
     articles: null,
     userArticles: null,
     loading: false,
     priviliges: false,
-    limit: 10
+    limit: 10,
+    length: 15,
+    tab: null,
   }),
   computed: {
     articleLimit() {
@@ -110,7 +107,7 @@ export default {
       } else {
         return this.articles;
       }
-    }
+    },
   },
   created() {
     this.getArticles();
@@ -119,7 +116,7 @@ export default {
   },
   watch: {
     // call again the method if the route changes
-    $route: "getArticles"
+    $route: "getArticles",
   },
   methods: {
     async getArticles() {
@@ -173,8 +170,8 @@ export default {
       if (hasPriviliges) {
         this.priviliges = true;
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

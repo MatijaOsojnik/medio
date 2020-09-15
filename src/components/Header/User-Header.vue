@@ -1,8 +1,14 @@
 <template>
-  <div class="container">
-    <v-app-bar flat color="white" hide-on-scroll v-if="$store.state.isUserLoggedIn">
-      <v-toolbar-title>
+  <div class="container" v-if="$store.state.isUserLoggedIn">
+    <v-app-bar flat color="white" hide-on-scroll>
+      <v-toolbar-title class="d-xl-block d-lg-block d-md-block d-none">
         <router-link :to="{name: 'articles'}" class="brand-black">Medio</router-link>
+      </v-toolbar-title>
+      <v-toolbar-title class="d-xl-none d-lg-none d-md-none d-block">
+        <router-link :to="{name: 'articles'}" class="mobile-logo">
+          M
+          <!-- <v-img src="@/assets/logo.png" style="border-radius: 7px;" max-width="50px"></v-img> -->
+        </router-link>
       </v-toolbar-title>
 
       <!-- <v-menu
@@ -45,12 +51,23 @@
 
       <v-spacer></v-spacer>
 
+      <v-text-field
+      class="d-xl-flex d-lg-flex d-md-flex d-none"
+        color="#A2D5F2"
+        hide-details
+        outlined
+        dense
+        prepend-icon="mdi-magnify"
+        style="max-width: 250px;"
+        single-line
+      ></v-text-field>
+
       <v-btn color="#1b262c" v-on="on" icon style="margin-right: 0.3em" class="ma-4">
-        <router-link :to="{path: `/users/${($store.state.user.display_name).toLowerCase()}/${$store.state.user.id}/bookmarks`}">
+        <router-link
+          :to="{path: `/users/${($store.state.user.display_name).toLowerCase()}/${$store.state.user.id}/bookmarks`}"
+        >
           <v-avatar v-if="!$store.state.user.icon_url">
-            <v-icon
-              size="33px"
-            >mdi-bookmark-multiple-outline</v-icon>
+            <v-icon size="33px">mdi-bookmark-multiple-outline</v-icon>
           </v-avatar>
         </router-link>
       </v-btn>
@@ -121,7 +138,16 @@
                 text
                 block
                 :to="{path: `/users/${($store.state.user.display_name).toLowerCase()}/${$store.state.user.id}/articles`}"
-              >My articles</v-btn>
+              >New Story</v-btn>
+              <v-btn
+                v-if="permissions"
+                class="ma-1"
+                depressed
+                small
+                text
+                block
+                :to="{path: `/users/${($store.state.user.display_name).toLowerCase()}/${$store.state.user.id}/articles`}"
+              >My stories</v-btn>
               <v-btn
                 class="ma-1"
                 depressed
@@ -213,6 +239,18 @@ export default {
   opacity: 0.9;
   font-weight: 400 !important;
   font-size: 33px !important;
+  padding: 2px;
+  border-top: 1px solid;
+  border-bottom: 1px solid;
+}
+.mobile-logo {
+    font-family: "Julius Sans One", sans-serif;
+  color: #1b262c !important;
+  opacity: 0.9;
+  font-weight: 400 !important;
+  font-size: 33px !important;
+  padding: 2px;
+  border: 2px solid
 }
 .brand {
   font-family: "Julius Sans One", sans-serif;

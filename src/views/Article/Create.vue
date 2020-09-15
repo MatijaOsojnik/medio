@@ -4,7 +4,7 @@
       <v-flex xs12 justify="center" align="center">
         <v-stepper v-model="stepper">
           <v-stepper-header>
-            <v-stepper-step :complete="stepper> 1" editable step="1">Tips</v-stepper-step>
+            <v-stepper-step :complete="stepper> 1" editable step="1">Story</v-stepper-step>
 
             <v-divider></v-divider>
 
@@ -12,7 +12,7 @@
 
             <v-divider></v-divider>
 
-            <v-stepper-step step="3" editable>General Information</v-stepper-step>
+            <v-stepper-step step="3" editable>Tags</v-stepper-step>
           </v-stepper-header>
 
           <v-stepper-items>
