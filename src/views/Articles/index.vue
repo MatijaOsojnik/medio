@@ -45,12 +45,12 @@
           v-else-if="$router.history.current['name'] === 'articles-categories' && articles"
         >{{articles[0].Category.name}}</span>
         <v-row style="z-index: 100" class="flex-sm-fill">
-          <v-col
+          <!-- <v-col
             class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-12 d-flex d-sm-flex d-md-block d-lg-block d-xl-block justify-center justify-sm-center"
             v-if="priviliges"
           >
             <ArticleCardCreateComponent :card="card" />
-          </v-col>
+          </v-col> -->
           <v-col
             class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-12 d-flex d-sm-flex d-md-block d-lg-block d-xl-block justify-center justify-sm-center"
             v-for="article in articleLimit"
@@ -72,12 +72,12 @@ import ArticleService from "@/services/ArticleService.js";
 import ArticleCardComponent from "@/components/Card-Article";
 import GeneralService from "@/services/GeneralService";
 import Metadata from "@/views/Articles/Metadata";
-import ArticleCardCreateComponent from "@/components/Card-Article-Create";
+// import ArticleCardCreateComponent from "@/components/Card-Article-Create";
 import Header from "@/components/Header/Header.vue";
 export default {
   components: {
     ArticleCardComponent,
-    ArticleCardCreateComponent,
+    // ArticleCardCreateComponent,
     Metadata,
     Header,
   },

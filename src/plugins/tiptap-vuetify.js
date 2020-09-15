@@ -1,4 +1,4 @@
-import vuetify from './vuetify'
+import Vuetify from 'vuetify'
 import Vue from 'vue'
 import {
     TiptapVuetifyPlugin
@@ -7,7 +7,7 @@ import {
 import 'tiptap-vuetify/dist/main.css'
 
 Vue.use(TiptapVuetifyPlugin, {
-    vuetify,
+    Vuetify,
     // "md" (default), "fa", "mdi"
     iconsGroup: 'mdi' // same as "iconsGroup: iconsGroup"
 })

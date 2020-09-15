@@ -2,7 +2,7 @@
   <v-app>
     <v-layout>
       <v-flex xs12 justify="center" align="center">
-        <v-stepper v-model="stepper">
+        <!-- <v-stepper v-model="stepper">
           <v-stepper-header>
             <v-stepper-step :complete="stepper> 1" editable step="1">Story</v-stepper-step>
 
@@ -171,7 +171,7 @@
               </v-card>
             </v-stepper-content>
 
-            <v-stepper-content step="3">
+            <v-stepper-content step="3"> -->
               <v-card class="ma-12 mx-auto" max-width="1000px">
                 <v-toolbar flat color="#617BE3" dark>
                   <v-toolbar-title>General Information</v-toolbar-title>
@@ -206,23 +206,10 @@
                     <label for="description">Description</label>
                     <div style="margin: 0.5rem 0 2rem">
                       <tiptap-vuetify
-                        id="description"
-                        v-model="article.description"
-                        :rules="[rules.description]"
-                        placeholder="Write your description here."
-                        maxlength="300"
-                        :extensions="extensions"
+      v-model="content"
+      :extensions="extensions"
                       />
                     </div>
-
-                    <label for="thumbnailURL">Thumbnail URL</label>
-                    <v-text-field
-                      id="thumbnailURL"
-                      label="Enter Thumbnail URL"
-                      solo
-                      aria-autocomplete="false"
-                      v-model="article.thumbnail_url"
-                    />
 
                     <label for="category">Category</label>
                     <v-select
@@ -258,9 +245,9 @@
                   >COMPLETE</v-btn>
                 </v-card-actions>
               </v-card>
-            </v-stepper-content>
+            <!-- </v-stepper-content>
           </v-stepper-items>
-        </v-stepper>
+        </v-stepper> -->
       </v-flex>
     </v-layout>
   </v-app>
@@ -269,19 +256,8 @@
 <script>
 import ArticleService from "@/services/ArticleService";
 import CategoryService from "@/services/CategoryService";
-import {
-  TiptapVuetify,
-  Heading,
-  Bold,
-  Italic,
-  Paragraph,
-  BulletList,
-  OrderedList,
-  ListItem,
-  HardBreak,
-  History,
-  Link
-} from "tiptap-vuetify";
+import { TiptapVuetify, Heading, Bold, Italic, Strike, Underline, Code, Paragraph, BulletList, OrderedList, ListItem, Link, Blockquote, HardBreak, HorizontalRule, History } from 'tiptap-vuetify'
+
 
 export default {
   components: {
@@ -301,97 +277,88 @@ export default {
       required: value => !!value || "Required.",
       min: v => v.length >= 8 || "Min 8 characters"
     },
-    tip: {
-      title: ``,
-      content: ``
-    },
-    sentence: {
-      english_sentence: ``,
-      slovene_sentence: ``,
-      pronounciation_url: ``,
-      is_sentence: true
-    },
     article: {
       title: ``,
       short_description: ``,
       description: ``,
       thumbnail_url: ``,
       category_id: ``,
-      Sentences: [],
-      Tips: []
     },
     waitBeforeClick: false,
     successfulArticlePost: false,
     errors: [],
     categories: [],
-    extensions: [
+extensions: [
       History,
-      Bold,
+      Blockquote,
+      Link,
+      Underline,
+      Strike,
       Italic,
       ListItem,
-      Link,
       BulletList,
       OrderedList,
-      [
-        Heading,
-        {
-          options: {
-            levels: [1, 2, 3]
-          }
+      [Heading, {
+        options: {
+          levels: [1, 2, 3]
         }
-      ],
+      }],
+      Bold,
+      Code,
+      HorizontalRule,
       Paragraph,
       HardBreak
-    ]
+    ],
+    content: `<p>haha</p>`
   }),
   mounted() {
     this.findCategories();
     this.checkUser();
   },
   methods: {
-    addTip() {
-      const areAllFieldsFilledIn = Object.keys(this.tip).every(
-        key => !!this.tip[key]
-      );
-      if (!areAllFieldsFilledIn) {
-        this.errors.push("Please fill in all the fields.");
-        setTimeout(() => {
-          this.errors = [];
-          this.waitBeforeClick = false;
-        }, 3000);
-        return;
-      }
-      this.article.Tips.push(this.tip);
-      this.tip = {
-        title: ``,
-        content: ``
-      };
-    },
-    removeTip(index) {
-      this.article.Tips.splice(index, 1);
-    },
-    addSentence() {
-      const areAllFieldsFilledIn = Object.keys(this.sentence).every(
-        key => !!this.sentence[key]
-      );
-      if (!areAllFieldsFilledIn) {
-        this.errors.push("Please fill in all the fields.");
-        setTimeout(() => {
-          this.errors = [];
-          this.waitBeforeClick = false;
-        }, 3000);
-        return;
-      }
-      this.article.Sentences.push(this.sentence);
-      this.sentence = {
-        slovene_sentence: ``,
-        english_sentence: ``,
-        pronounciation_url: ``
-      };
-    },
-    removeSentence(index) {
-      this.article.Sentences.splice(index, 1);
-    },
+    // addTip() {
+    //   const areAllFieldsFilledIn = Object.keys(this.tip).every(
+    //     key => !!this.tip[key]
+    //   );
+    //   if (!areAllFieldsFilledIn) {
+    //     this.errors.push("Please fill in all the fields.");
+    //     setTimeout(() => {
+    //       this.errors = [];
+    //       this.waitBeforeClick = false;
+    //     }, 3000);
+    //     return;
+    //   }
+      // this.article.Tips.push(this.tip);
+      // this.tip = {
+      //   title: ``,
+      //   content: ``
+      // };
+    // },
+    // removeTip(index) {
+    //   this.article.Tips.splice(index, 1);
+    // },
+    // addSentence() {
+    //   const areAllFieldsFilledIn = Object.keys(this.sentence).every(
+    //     key => !!this.sentence[key]
+    //   );
+    //   if (!areAllFieldsFilledIn) {
+    //     this.errors.push("Please fill in all the fields.");
+    //     setTimeout(() => {
+    //       this.errors = [];
+    //       this.waitBeforeClick = false;
+    //     }, 3000);
+    //     return;
+    //   }
+    //   this.article.Sentences.push(this.sentence);
+    //   this.sentence = {
+    //     slovene_sentence: ``,
+    //     english_sentence: ``,
+    //     pronounciation_url: ``
+    //   };
+    // },
+    // removeSentence(index) {
+    //   this.article.Sentences.splice(index, 1);
+    // },
     async createArticle() {
       this.waitBeforeClick = true;
       const areAllFieldsFilledIn = Object.keys(this.article).every(
