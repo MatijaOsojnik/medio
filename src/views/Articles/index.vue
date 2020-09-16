@@ -1,7 +1,7 @@
 <template>
   <div>
     <Header />
-    <v-app-bar dense >
+    <v-app-bar dense>
       <v-slide-group show-arrows>
         <v-slide-item v-for="n in 25" :key="n">
           <v-btn class="mx-2" depressed>Publication</v-btn>
@@ -24,13 +24,12 @@
       <v-progress-circular indeterminate color="primary" class="d-block ma-5"></v-progress-circular>
     </div>
     <v-container fluid v-if="articles && !loading">
-      <v-container fluid>
         <Metadata>
           <template v-slot:completed-articles>
             <span class="title" v-if="userArticles.length > 0">Completed Articles</span>
             <v-row style="z-index: 100" v-if="userArticles" class="flex-sm-fill">
               <v-col
-                class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-12 d-flex d-sm-flex d-md-block d-lg-block d-xl-block justify-center justify-sm-center"
+                class="col-xl-3 col-lg-3 col-md-3 col-sm-6 col-12 d-flex d-sm-flex d-md-block d-lg-block d-xl-block justify-center justify-sm-center"
                 v-for="article in userArticles"
                 :key="article.Article.id"
               >
@@ -39,45 +38,60 @@
             </v-row>
           </template>
         </Metadata>
-        <span class="title" v-if="$router.history.current['name'] === 'articles'">All Articles</span>
+        <span class="title ma-4" v-if="$router.history.current['name'] === 'articles'">All Articles</span>
         <span
           class="title"
           v-else-if="$router.history.current['name'] === 'articles-categories' && articles"
         >{{articles[0].Category.name}}</span>
-        <v-row style="z-index: 100" class="flex-sm-fill">
+        <v-row style="z-index: 100;" class="flex-sm-fill ma-3">
           <!-- <v-col
             class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-12 d-flex d-sm-flex d-md-block d-lg-block d-xl-block justify-center justify-sm-center"
             v-if="priviliges"
           >
             <ArticleCardCreateComponent :card="card" />
-          </v-col> -->
+          </v-col>-->
           <v-col
-            class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-12 d-flex d-sm-flex d-md-block d-lg-block d-xl-block justify-center justify-sm-center"
+            class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12 d-flex d-sm-flex d-md-block d-lg-block d-xl-block justify-center justify-sm-center"
             v-for="article in articleLimit"
             :key="article.id"
           >
             <ArticleCardComponent :article="article" />
           </v-col>
-          <v-col class="col-12 text-center">
+          <!-- <v-col class="col-12 text-center">
             <v-btn @click="limit = null" v-if="limit && articles.length > 10">Show More</v-btn>
+          </v-col>-->
+        </v-row>
+        <v-row class="flex-sm-fill ma-3" style="z-index: 100">
+          <v-col
+            class="col-xl-8 col-lg-8 col-md-8 col-sm-12 col-12 d-flex d-sm-flex d-md-block d-lg-block d-xl-block justify-center justify-sm-center"
+          >
+            <v-col v-for="article in articleLimit" :key="article.id">
+              <ArticleCardSmallComponent :article="article" />
+            </v-col>
+          </v-col>
+          <v-col
+            class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12 d-flex d-sm-flex d-md-block d-lg-block d-xl-block justify-center justify-sm-center"
+          >
+            <v-col v-for="article in articleLimit" :key="article.id">
+              <ArticleCardSmallComponent :article="article" />
+            </v-col>
           </v-col>
         </v-row>
       </v-container>
-    </v-container>
   </div>
 </template>
 
 <script>
 import ArticleService from "@/services/ArticleService.js";
 import ArticleCardComponent from "@/components/Card-Article";
+import ArticleCardSmallComponent from "@/components/Card-Article-Small";
 import GeneralService from "@/services/GeneralService";
 import Metadata from "@/views/Articles/Metadata";
-// import ArticleCardCreateComponent from "@/components/Card-Article-Create";
 import Header from "@/components/Header/Header.vue";
 export default {
   components: {
     ArticleCardComponent,
-    // ArticleCardCreateComponent,
+    ArticleCardSmallComponent,
     Metadata,
     Header,
   },
@@ -99,7 +113,7 @@ export default {
     articleLimit() {
       if (this.articles) {
         if (this.limit) {
-          const splitArticles = this.articles.slice(0, 11);
+          const splitArticles = this.articles.slice(0, 3);
           return splitArticles;
         } else {
           return this.articles;

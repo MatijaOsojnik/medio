@@ -12,5 +12,14 @@ export default {
     },
     getHistory(userId) {
         return axios.get(`history/${userId}`)
+    },
+    postBookmark(userId, articleId) {
+        return axios.post(`bookmarks/${articleId}/${userId}`)
+    },
+    deleteBookmark(userId, articleId) {
+        return axios.delete(`bookmarks/${articleId}/${userId}`)
+    },
+    getBookmarks(userId) {
+        return axios.get(`bookmarks/${userId}`)
     }
 }

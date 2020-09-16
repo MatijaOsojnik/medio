@@ -82,7 +82,7 @@ module.exports = (app) => {
     app.get('/api/articles/categories/similar/:categoryId/:articleId', ArticlesController.showSimilar)
     app.get('/api/articles/categories/other/:categoryId/:articleId', ArticlesController.showDifferent)
 
-    app.put('/api/articles/:articleId', ArticleControllerPolicy.update, ArticlesController.put)
+    app.put('/ap/articles/:articleId', ArticleControllerPolicy.update, ArticlesController.put)
     app.post('/api/articles/:userId', ArticleControllerPolicy.update, ArticlesController.post)
     app.delete('/api/articles/:articleId', ArticlesController.delete)
 

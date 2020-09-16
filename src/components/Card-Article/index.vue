@@ -2,13 +2,12 @@
   <v-hover v-slot:default="{ hover }">
     <v-card
       :to="{path: `/articles/${article.id}`}"
-      width="300px"
-      height="320px"
+      class="mx-auto"
       raised
       :elevation="hover ? 8 : 2"
     >
       <div>
-        <v-list-item>
+        <!-- <v-list-item>
           <router-link
             v-if="article.Users[0]"
             :to="{path: `/users/${article.Users[0].display_name.toLowerCase()}/${article.Users[0].id}/profile`}"
@@ -39,7 +38,7 @@
               <span>By</span><span class="font-weight-bold"> Unknown</span>
             </v-list-item-subtitle>
           </v-list-item-content>
-        </v-list-item>
+        </v-list-item>-->
 
         <v-img
           :src="imageError ? require('@/assets/blue-error-background.jpg') : article.thumbnail_url"
@@ -47,7 +46,7 @@
           class="darker-img"
           @error="imageLoadError"
         >
-          <v-row class="fill-height flex-column justify-center">
+          <!-- <v-row class="fill-height flex-column justify-center">
             <div class="align-self-center">
               <v-btn :class="{ 'show-btns': hover }" class="invisible" icon>
                 <v-icon
@@ -57,26 +56,40 @@
                 >{{"mdi-play-circle-outline"}}</v-icon>
               </v-btn>
             </div>
-          </v-row>
+          </v-row>-->
         </v-img>
-
-        <v-card-text>
-          <span style="display: block;">{{article.short_description}}</span>
-          <div v-if="$router.history.current['name'] === 'user-articles'">
-            <v-btn
-              absolute
-              dark
-              fab
-              small
-              bottom
-              left
-              color="white"
-              :to="{path: `/articles/${article.id}/edit`}"
+        <v-card-title>{{article.title}}</v-card-title>
+        <v-card-subtitle>{{article.short_description}}</v-card-subtitle>
+        <v-card-actions>
+          <v-list-item>
+            <router-link
+              v-if="article.Users[0]"
+              :to="{path: `/users/${article.Users[0].display_name.toLowerCase()}/${article.Users[0].id}/profile`}"
             >
-              <v-icon>mdi-pencil</v-icon>
-            </v-btn>
-          </div>
-        </v-card-text>
+              <v-list-item-avatar color="grey darken-3">
+                <v-img
+                  v-if="article.Users.length > 0 && article.Users[0].icon_url"
+                  :src="article.Users[0].icon_url"
+                ></v-img>
+                <v-img v-else src="@/assets/blue-error-background.jpg"></v-img>
+              </v-list-item-avatar>
+            </router-link>
+
+            <router-link
+              v-if="article.Users[0]"
+              :to="{path: `/users/${article.Users[0].display_name.toLowerCase()}/${article.Users[0].id}/profile`}"
+            >
+              <v-list-item-content>
+                <v-list-item-title>{{article.Users[0].display_name}}</v-list-item-title>
+              </v-list-item-content>
+            </router-link>
+
+            <v-row align="center" justify="end">
+              <v-icon class="mr-3" @click="addBookmark(article.id)">{{bookmarkIcon}}</v-icon>
+              <v-icon class="mr-3">mdi-share-variant</v-icon>
+            </v-row>
+          </v-list-item>
+        </v-card-actions>
       </div>
     </v-card>
   </v-hover>
@@ -84,18 +97,35 @@
 
 
 <script>
+import GeneralService from '@/services/GeneralService'
 export default {
   data: () => ({
-    imageError: false
+    imageError: false,
+    bookmarkIcon: 'mdi-bookmark-outline'
   }),
   props: {
-    article: Object
+    article: Object,
   },
   methods: {
     async imageLoadError() {
       this.imageError = true;
+    },
+    async addBookmark(articleId) {
+      try {
+            const response = await GeneralService.postBookmark(
+              this.$store.state.user.id,
+              articleId
+            );
+            if (response)
+            this.bookmarkIcon = 'mdi-bookmark'
+              setTimeout(() => {
+                this.$router.push({
+                  path: `/articles/${this.$route.params.id}`
+                });
+              }, 6000);
+          } catch (err) {console.log(err)}
     }
-  }
+  },
 };
 </script>
 

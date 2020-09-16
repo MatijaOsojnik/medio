@@ -37,20 +37,6 @@ module.exports = {
             thumbnail_url: Joi.string()
                 .allow(''),
             category_id: Joi.allow('', null),
-            Sentences: Joi.array()
-                .min(1)
-                .required()
-                .messages({
-                    'array.min': `You must add at least one exercise`,
-                    'array.empty': `You must add at least one exercise`
-                }),
-            Tips: Joi.array()
-                .min(1)
-                .required()
-                .messages({
-                    'array.min': `You must add at least one tip`,
-                    'array.empty': `You must add at least one tip`
-                }),
         }).unknown(true)
 
         const {

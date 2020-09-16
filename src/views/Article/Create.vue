@@ -206,8 +206,12 @@
                     <label for="description">Description</label>
                     <div style="margin: 0.5rem 0 2rem">
                       <tiptap-vuetify
-      v-model="content"
-      :extensions="extensions"
+                        id="description"
+                        v-model="article.description"
+                        :rules="[rules.description]"
+                        placeholder="Write your description here."
+                        maxlength="300"
+                        :extensions="extensions"
                       />
                     </div>
 
@@ -256,8 +260,19 @@
 <script>
 import ArticleService from "@/services/ArticleService";
 import CategoryService from "@/services/CategoryService";
-import { TiptapVuetify, Heading, Bold, Italic, Strike, Underline, Code, Paragraph, BulletList, OrderedList, ListItem, Link, Blockquote, HardBreak, HorizontalRule, History } from 'tiptap-vuetify'
-
+import {
+  TiptapVuetify,
+  Heading,
+  Bold,
+  Italic,
+  Paragraph,
+  BulletList,
+  OrderedList,
+  ListItem,
+  HardBreak,
+  History,
+  Link
+} from "tiptap-vuetify";
 
 export default {
   components: {
@@ -288,28 +303,25 @@ export default {
     successfulArticlePost: false,
     errors: [],
     categories: [],
-extensions: [
+    extensions: [
       History,
-      Blockquote,
-      Link,
-      Underline,
-      Strike,
+      Bold,
       Italic,
       ListItem,
+      Link,
       BulletList,
       OrderedList,
-      [Heading, {
-        options: {
-          levels: [1, 2, 3]
+      [
+        Heading,
+        {
+          options: {
+            levels: [1, 2, 3]
+          }
         }
-      }],
-      Bold,
-      Code,
-      HorizontalRule,
+      ],
       Paragraph,
       HardBreak
-    ],
-    content: `<p>haha</p>`
+    ]
   }),
   mounted() {
     this.findCategories();

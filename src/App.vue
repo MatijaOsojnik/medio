@@ -24,9 +24,11 @@ export default {
 </script>
 
 <style>
-/* #app {
-  font-family: "Roboto", cursive;
-} */
+#app {
+  /* max-width: 1px;
+  min-width: 1200px;
+  margin: 0 auto; */
+}
 
 a {
   text-decoration: none;
