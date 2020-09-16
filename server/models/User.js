@@ -78,6 +78,7 @@ module.exports = (sequelize, DataTypes) => {
     const History = sequelize.models.History;
     const Category = sequelize.models.Category;
     const Tag = sequelize.models.Tag;
+    const Bookmark = sequelize.models.Bookmark
 
     Role.belongsToMany(User, {
         through: 'RoleUsers'
@@ -131,6 +132,15 @@ module.exports = (sequelize, DataTypes) => {
     Article.belongsToMany(Tag, {
         through: 'ArticleTags'
     })
+
+    Bookmark.belongsTo(User, {
+        foreignKey: 'user_id',
+        targetKey: 'id'
+    });
+    Bookmark.belongsTo(Article, {
+        foreignKey: 'article_id',
+        targetKey: 'id'
+    });
 
     return User;
 }

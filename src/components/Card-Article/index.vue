@@ -85,7 +85,7 @@
             </router-link>
 
             <v-row align="center" justify="end">
-              <v-icon class="mr-3" @click="addBookmark(article.id)">{{bookmarkIcon}}</v-icon>
+              <v-icon class="mr-3" @click="bookmarkIcon === 'mdi-bookmark-outline' ? addBookmark(article.id) : removeBookmark(article.id)">{{bookmarkIcon}}</v-icon>
               <v-icon class="mr-3">mdi-share-variant</v-icon>
             </v-row>
           </v-list-item>
@@ -109,6 +109,21 @@ export default {
   methods: {
     async imageLoadError() {
       this.imageError = true;
+    },
+    async removeBookmark(articleId) {
+      try {
+            const response = await GeneralService.deleteBookmark(
+              this.$store.state.user.id,
+              articleId
+            );
+            if (response)
+            this.bookmarkIcon = 'mdi-bookmark-outline'
+              setTimeout(() => {
+                this.$router.push({
+                  path: `/articles/${this.$route.params.id}`
+                });
+              }, 6000);
+          } catch (err) {console.log(err)}
     },
     async addBookmark(articleId) {
       try {
