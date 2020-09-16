@@ -85,7 +85,7 @@
             </router-link>
 
             <v-row align="center" justify="end">
-              <v-icon class="mr-3" @click="bookmarkIcon === 'mdi-bookmark-outline' ? addBookmark(article.id) : removeBookmark(article.id)">{{bookmarkIcon}}</v-icon>
+              <v-icon class="mr-3" style="z-index: 999;" @click="bookmarkIcon === 'mdi-bookmark-outline' ? addBookmark(article.id) : removeBookmark(article.id)">{{bookmarkIcon}}</v-icon>
               <v-icon class="mr-3">mdi-share-variant</v-icon>
             </v-row>
           </v-list-item>
