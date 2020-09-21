@@ -2,12 +2,12 @@
   <BookmarkMetadata>
     <template v-slot:yourBookmarks>
       <span class="title my-4 d-block">Your Bookmarks</span>
-      <v-row class="flex-sm-fill ma-3" style="z-index: 100">
+      <v-row class="ma-3" style="z-index: 100">
         <v-col
-          class="col-12 d-flex d-sm-flex d-md-block d-lg-block d-xl-block justify-center justify-sm-center"
+          class="col-12 d-block justify-center"
         >
           <v-col v-for="story in stories" :key="story.id">
-            <StoryCardSmallComponent :story="story" />
+            <StoryCardSmallComponent :story="story.Story"/>
           </v-col>
         </v-col>
       </v-row>
@@ -18,7 +18,7 @@
 <script>
 import StoryCardSmallComponent from "@/components/Card-Story-Small";
 import GeneralService from "@/services/GeneralService";
-import BookmarkMetadata from "@/views/Users/StoryMetadata";
+import BookmarkMetadata from "@/views/Bookmarks/BookmarkMetadata";
 
 export default {
   components: {
@@ -39,7 +39,7 @@ export default {
   methods: {
     async getUserBookmarks() {
       const response = await GeneralService.getBookmarks(this.$store.state.user.id);
-      this.stories = response.data.bookmarks.Stories;
+      this.stories = response.data.bookmarks
     },
   },
 };

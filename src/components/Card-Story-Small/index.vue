@@ -29,6 +29,9 @@ export default {
   props: {
     story: Object,
   },
+  mounted() {
+    console.log(this.story.Story)
+  },
   methods: {
     async imageLoadError() {
       this.imageError = true;

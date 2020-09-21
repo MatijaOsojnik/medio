@@ -17,6 +17,7 @@ import AdminStories from '@/views/Admin/Stories'
 import AdminCategories from '@/views/Admin/Categories'
 import AdminRoles from '@/views/Admin/Roles'
 import UserStories from '@/views/Users/Stories'
+import UserBookmarks from '@/views/Bookmarks/'
 import EditUser from '@/views/Users/Edit.vue'
 
 Vue.use(VueRouter)
@@ -107,6 +108,15 @@ const routes = [{
       onlyPrivilegedUser: true,
       belongsToUser: true
     }
+  },
+  {
+        path: '/users/:displayName/:id/bookmarks',
+          name: 'user-bookmarks',
+          component: UserBookmarks,
+          meta: {
+            onlyPrivilegedUser: true,
+            belongsToUser: true
+          }
   },
   {
     path: '/admin/main',
