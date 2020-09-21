@@ -1,4 +1,4 @@
-import ArticleService from '@/services/ArticleService'
+import StoryService from '@/services/StoryService'
 
 export default {
     namespaced: true,
@@ -7,7 +7,7 @@ export default {
         item: {},
     },
     actions: {
-        async fetchArticles({
+        async fetchStories({
             state,
             commit
         }, options = {
@@ -15,17 +15,17 @@ export default {
         }) {
             if (options.reset) {
                 commit('setItems', {
-                    resource: 'articles',
+                    resource: 'stories',
                     items: []
                 }, {
                     root: true
                 })
             }
-            const response = await ArticleService.index()
-            const articles = response.data
+            const response = await StoryService.index()
+            const stories = response.data
             commit('setItems', {
-                resource: 'articles',
-                items: articles
+                resource: 'stories',
+                items: stories
             }, {
                 root: true
             })

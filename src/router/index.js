@@ -4,19 +4,19 @@ import store from '@/store'
 import Landing from '@/views/Landing'
 import Register from '@/views/Register'
 import Login from '@/views/Login'
-import Articles from '@/views/Articles'
-import Article from '@/views/Article'
-import ArticleCreate from '@/views/Article/Create'
-import ArticleEdit from '@/views/Article/Edit'
-import ArticleAction from '@/views/Article/Action'
+import Stories from '@/views/Stories'
+import Story from '@/views/Story'
+import StoryCreate from '@/views/Story/Create'
+import StoryEdit from '@/views/Story/Edit'
+import StoryAction from '@/views/Story/Action'
 import User from '@/views/Users/Show'
 import Admin from '@/views/Admin'
 import AdminLogin from '@/views/Admin/Login'
 import AdminUsers from '@/views/Admin/Users'
-import AdminArticles from '@/views/Admin/Articles'
+import AdminStories from '@/views/Admin/Stories'
 import AdminCategories from '@/views/Admin/Categories'
 import AdminRoles from '@/views/Admin/Roles'
-import UserArticles from '@/views/Users/Articles'
+import UserStories from '@/views/Users/Stories'
 import EditUser from '@/views/Users/Edit.vue'
 
 Vue.use(VueRouter)
@@ -46,42 +46,42 @@ const routes = [{
     }
   },
   {
-    path: '/articles',
-    name: 'articles',
-    component: Articles,
+    path: '/stories',
+    name: 'stories',
+    component: Stories,
   },
   {
-    path: '/articles/:id',
-    name: 'article',
-    component: Article,
+    path: '/stories/:id',
+    name: 'story',
+    component: Story,
     props: true
   },
   {
-    path: '/articles/categories/:categoryId',
-    name: 'articles-categories',
-    component: Articles,
+    path: '/stories/categories/:categoryId',
+    name: 'stories-categories',
+    component: Stories,
     props: true,
   },
   {
-    path: '/articles/create/:id',
-    name: 'article-create',
-    component: ArticleCreate,
+    path: '/stories/create/:id',
+    name: 'story-create',
+    component: StoryCreate,
     meta: {
       onlyPrivilegedUser: true
     }
   },
   {
-    path: '/articles/:id/edit',
-    name: 'article-edit',
-    component: ArticleEdit,
+    path: '/stories/:id/edit',
+    name: 'story-edit',
+    component: StoryEdit,
     meta: {
       onlyPrivilegedUser: true
     }
   },
   {
-    path: '/articles/:id/action',
-    name: 'article-action',
-    component: ArticleAction,
+    path: '/stories/:id/action',
+    name: 'story-action',
+    component: StoryAction,
     meta: {
       onlyAuthUser: true
     }
@@ -100,9 +100,9 @@ const routes = [{
       belongsToUser: true
     },
   }, {
-    path: '/users/:displayName/:id/articles',
-    name: 'user-articles',
-    component: UserArticles,
+    path: '/users/:displayName/:id/stories',
+    name: 'user-stories',
+    component: UserStories,
     meta: {
       onlyPrivilegedUser: true,
       belongsToUser: true
@@ -130,9 +130,9 @@ const routes = [{
     },
   },
   {
-    path: '/admin/articles',
-    name: 'admin-articles',
-    component: AdminArticles,
+    path: '/admin/stories',
+    name: 'admin-stories',
+    component: AdminStories,
     meta: {
       onlyAdmin: true
     },
@@ -155,7 +155,7 @@ const routes = [{
   },
   {
     path: '*',
-    redirect: 'articles'
+    redirect: 'stories'
   },
 ]
 
@@ -194,7 +194,7 @@ router.beforeEach((to, from, next) => {
   } else if (to.meta.onlyGuestUser) {
     if (isUserLoggedIn) {
       next({
-        name: 'articles'
+        name: 'stories'
       })
     } else {
       next()
@@ -205,12 +205,12 @@ router.beforeEach((to, from, next) => {
         next()
       } else {
         next({
-          name: 'articles'
+          name: 'stories'
         })
       }
     } else {
       next({
-        name: 'articles'
+        name: 'stories'
       })
     }
   } else if (to.meta.onlyPrivilegedUser) {
@@ -219,7 +219,7 @@ router.beforeEach((to, from, next) => {
         next()
       } else {
         next({
-          name: 'articles'
+          name: 'stories'
         })
       }
     } else if (to.meta.belongsToUser) {
@@ -228,17 +228,17 @@ router.beforeEach((to, from, next) => {
           next()
         } else {
           next({
-            name: 'articles'
+            name: 'stories'
           })
         }
       } else {
         next({
-          name: 'articles'
+          name: 'stories'
         })
       }
     } else {
       next({
-        name: 'articles'
+        name: 'stories'
       })
     }
   } else {

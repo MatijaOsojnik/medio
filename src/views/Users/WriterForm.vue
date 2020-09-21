@@ -58,13 +58,13 @@
               />
             </v-form>
             <!-- <v-scroll-x-transition>
-              <v-alert type="success" mode="out-in" v-if="successfulArticlerSubmit">
+              <v-alert type="success" mode="out-in" v-if="successfulStoryrSubmit">
                 <span>You successfuly sent an email</span>
               </v-alert>
             </v-scroll-x-transition>-->
           </v-card-text>
           <v-card-actions>
-            <v-btn color="#f0f0f0" block large @click="createArticle">Contact</v-btn>
+            <v-btn color="#f0f0f0" block large @click="createStory">Contact</v-btn>
           </v-card-actions>
         </v-card>
       </v-flex>
@@ -89,7 +89,7 @@ export default {
       min: v => v.length >= 8 || "Min 8 characters"
     },
     waitBeforeClick: false,
-    successfulArticlePost: false,
+    successfulStoryPost: false,
     errors: [],
     categories: []
   }),

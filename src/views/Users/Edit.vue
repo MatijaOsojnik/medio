@@ -453,7 +453,7 @@ export default {
           this.$store.dispatch("setUser", this.user);
         } else {
           this.$router.push({
-            name: "articles"
+            name: "stories"
           });
         }
       } catch (err) {

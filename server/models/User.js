@@ -74,7 +74,7 @@ module.exports = (sequelize, DataTypes) => {
 
     const Role = sequelize.models.Role;
     const Publication = sequelize.models.Publication
-    const Article = sequelize.models.Article;
+    const Story = sequelize.models.Story;
     const History = sequelize.models.History;
     const Category = sequelize.models.Category;
     const Tag = sequelize.models.Tag;
@@ -87,27 +87,27 @@ module.exports = (sequelize, DataTypes) => {
         through: 'RoleUsers'
     });
 
-    Article.belongsToMany(User, {
-        through: 'ArticleUsers'
+    Story.belongsToMany(User, {
+        through: 'StoryUsers'
     })
-    User.belongsToMany(Article, {
-        through: 'ArticleUsers'
+    User.belongsToMany(Story, {
+        through: 'StoryUsers'
     })
 
     History.belongsTo(User, {
         foreignKey: 'user_id',
         targetKey: 'id'
     });
-    History.belongsTo(Article, {
-        foreignKey: 'article_id',
+    History.belongsTo(Story, {
+        foreignKey: 'story_id',
         targetKey: 'id'
     });
 
-    Article.belongsTo(Category, {
+    Story.belongsTo(Category, {
         foreignKey: 'category_id',
         targetKey: 'id'
     });
-    Category.hasMany(Article, {
+    Category.hasMany(Story, {
         foreignKey: 'category_id',
         sourceKey: 'id'
     });
@@ -119,26 +119,26 @@ module.exports = (sequelize, DataTypes) => {
         through: 'PublicationUsers'
     });
 
-    Publication.belongsToMany(Article, {
-        through: 'ArticlePublications'
+    Publication.belongsToMany(Story, {
+        through: 'StoryPublications'
     });
-    Article.belongsToMany(Publication, {
-        through: 'ArticlePublications'
+    Story.belongsToMany(Publication, {
+        through: 'StoryPublications'
     });
 
-    Tag.belongsToMany(Article, {
-        through: 'ArticleTags'
+    Tag.belongsToMany(Story, {
+        through: 'StoryTags'
     })
-    Article.belongsToMany(Tag, {
-        through: 'ArticleTags'
+    Story.belongsToMany(Tag, {
+        through: 'StoryTags'
     })
 
     Bookmark.belongsTo(User, {
         foreignKey: 'user_id',
         targetKey: 'id'
     });
-    Bookmark.belongsTo(Article, {
-        foreignKey: 'article_id',
+    Bookmark.belongsTo(Story, {
+        foreignKey: 'story_id',
         targetKey: 'id'
     });
 

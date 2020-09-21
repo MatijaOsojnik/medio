@@ -54,9 +54,9 @@
                     </div>
                   </v-form>
                   <div>
-                    <v-expansion-panels class="my-5" v-if="article.Tips.length">
+                    <v-expansion-panels class="my-5" v-if="story.Tips.length">
                       <v-expansion-panel
-                        v-for="(tip, index) in article.Tips"
+                        v-for="(tip, index) in story.Tips"
                         :key="index"
                         class="my-3"
                       >
@@ -133,9 +133,9 @@
                     />
                   </v-form>
                   <div>
-                    <v-expansion-panels class="my-3" v-if="article.Sentences.length">
+                    <v-expansion-panels class="my-3" v-if="story.Sentences.length">
                       <v-expansion-panel
-                        v-for="(sentence, index) in article.Sentences"
+                        v-for="(sentence, index) in story.Sentences"
                         :key="index"
                         class="mb-3"
                       >
@@ -181,13 +181,13 @@
                     <label for="title">Title</label>
                     <v-text-field
                       id="title"
-                      label="Enter a title for your article"
+                      label="Enter a title for your story"
                       maxlength="30"
                       :rules="[rules.min]"
                       counter
                       solo
                       aria-autocomplete="false"
-                      v-model="article.title"
+                      v-model="story.title"
                     />
 
                     <label for="shortDescription">Short Description</label>
@@ -199,15 +199,15 @@
                       clearable
                       counter
                       maxlength="60"
-                      hint="This description will be used on the Article card before the user clicks on it."
+                      hint="This description will be used on the Story card before the user clicks on it."
                       aria-autocomplete="false"
-                      v-model="article.short_description"
+                      v-model="story.short_description"
                     />
                     <label for="description">Description</label>
                     <div style="margin: 0.5rem 0 2rem">
                       <tiptap-vuetify
                         id="description"
-                        v-model="article.description"
+                        v-model="story.description"
                         :rules="[rules.description]"
                         placeholder="Write your description here."
                         maxlength="300"
@@ -220,7 +220,7 @@
                       id="category"
                       :items="categories"
                       label="Select Category"
-                      v-model="article.category_id"
+                      v-model="story.category_id"
                       item-text="name"
                       item-value="id"
                       solo
@@ -234,8 +234,8 @@
                     </v-alert>
                   </v-scroll-x-transition>
                   <v-scroll-x-transition>
-                    <v-alert type="success" mode="out-in" v-if="successfulArticlePost">
-                      <span>You successfuly posted a article</span>
+                    <v-alert type="success" mode="out-in" v-if="successfulStoryPost">
+                      <span>You successfuly posted a story</span>
                     </v-alert>
                   </v-scroll-x-transition>
                 </v-card-text>
@@ -245,7 +245,7 @@
                     :disabled="waitBeforeClick"
                     block
                     large
-                    @click="createArticle"
+                    @click="createStory"
                   >COMPLETE</v-btn>
                 </v-card-actions>
               </v-card>
@@ -258,7 +258,7 @@
 </template>
 
 <script>
-import ArticleService from "@/services/ArticleService";
+import StoryService from "@/services/StoryService";
 import CategoryService from "@/services/CategoryService";
 import {
   TiptapVuetify,
@@ -292,7 +292,7 @@ export default {
       required: value => !!value || "Required.",
       min: v => v.length >= 8 || "Min 8 characters"
     },
-    article: {
+    story: {
       title: ``,
       short_description: ``,
       description: ``,
@@ -300,7 +300,7 @@ export default {
       category_id: ``,
     },
     waitBeforeClick: false,
-    successfulArticlePost: false,
+    successfulStoryPost: false,
     errors: [],
     categories: [],
     extensions: [
@@ -340,14 +340,14 @@ export default {
     //     }, 3000);
     //     return;
     //   }
-      // this.article.Tips.push(this.tip);
+      // this.story.Tips.push(this.tip);
       // this.tip = {
       //   title: ``,
       //   content: ``
       // };
     // },
     // removeTip(index) {
-    //   this.article.Tips.splice(index, 1);
+    //   this.story.Tips.splice(index, 1);
     // },
     // addSentence() {
     //   const areAllFieldsFilledIn = Object.keys(this.sentence).every(
@@ -361,7 +361,7 @@ export default {
     //     }, 3000);
     //     return;
     //   }
-    //   this.article.Sentences.push(this.sentence);
+    //   this.story.Sentences.push(this.sentence);
     //   this.sentence = {
     //     slovene_sentence: ``,
     //     english_sentence: ``,
@@ -369,12 +369,12 @@ export default {
     //   };
     // },
     // removeSentence(index) {
-    //   this.article.Sentences.splice(index, 1);
+    //   this.story.Sentences.splice(index, 1);
     // },
-    async createArticle() {
+    async createStory() {
       this.waitBeforeClick = true;
-      const areAllFieldsFilledIn = Object.keys(this.article).every(
-        key => !!this.article[key]
+      const areAllFieldsFilledIn = Object.keys(this.story).every(
+        key => !!this.story[key]
       );
       if (!areAllFieldsFilledIn) {
         this.errors.push("Please fill in all the fields.");
@@ -386,14 +386,14 @@ export default {
       }
       try {
         const userId = this.$route.params.id;
-        const response = await ArticleService.post(this.article, userId);
+        const response = await StoryService.post(this.story, userId);
         if (response) {
-          this.successfulArticlePost = true;
+          this.successfulStoryPost = true;
           setTimeout(() => {
-            this.successfulArticlePost = false;
+            this.successfulStoryPost = false;
             this.waitBeforeClick = false;
             this.$router.push({
-              name: "articles"
+              name: "stories"
             });
           }, 3000);
         }
@@ -414,7 +414,7 @@ export default {
       if (this.$store.state.user) {
         if (this.$route.params.id != this.$store.state.user.id) {
           this.$router.push({
-            name: "articles"
+            name: "stories"
           });
         }
       }

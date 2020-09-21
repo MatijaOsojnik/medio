@@ -11,10 +11,10 @@
     <div
       class="d-flex justify-center align-center flex-column fill-height"
       style="height: 70vh;"
-      v-if="!articles && !loading"
+      v-if="!stories && !loading"
     >
-      <span class="display-1 d-block">There are no articles in this category yet.</span>
-      <v-btn class="ma-4" :to="{name: 'articles'}">Browse All Articles</v-btn>
+      <span class="display-1 d-block">There are no stories in this category yet.</span>
+      <v-btn class="ma-4" :to="{name: 'stories'}">Browse All Stories</v-btn>
     </div>
     <div
       class="d-flex justify-center align-center flex-column fill-height"
@@ -23,57 +23,57 @@
     >
       <v-progress-circular indeterminate color="primary" class="d-block ma-5"></v-progress-circular>
     </div>
-    <v-container fluid v-if="articles && !loading">
-        <Metadata>
-          <template v-slot:completed-articles>
-            <span class="title" v-if="userArticles.length > 0">Completed Articles</span>
-            <v-row style="z-index: 100" v-if="userArticles" class="flex-sm-fill">
+    <v-container fluid v-if="stories && !loading">
+        <!-- <Metadata>
+          <template v-slot:completed-stories>
+            <span class="title" v-if="userStories.length > 0">Completed Stories</span>
+            <v-row style="z-index: 100" v-if="userStories" class="flex-sm-fill">
               <v-col
                 class="col-xl-3 col-lg-3 col-md-3 col-sm-6 col-12 d-flex d-sm-flex d-md-block d-lg-block d-xl-block justify-center justify-sm-center"
-                v-for="article in userArticles"
-                :key="article.Article.id"
+                v-for="story in userStories"
+                :key="story.Story.id"
               >
-                <ArticleCardComponent :article="article.Article" />
+                <StoryCardComponent :story="story.Story" />
               </v-col>
             </v-row>
           </template>
-        </Metadata>
-        <span class="title ma-4" v-if="$router.history.current['name'] === 'articles'">All Articles</span>
+        </Metadata> -->
+        <span class="title ma-4" v-if="$router.history.current['name'] === 'stories'">All Stories</span>
         <span
           class="title"
-          v-else-if="$router.history.current['name'] === 'articles-categories' && articles"
-        >{{articles[0].Category.name}}</span>
+          v-else-if="$router.history.current['name'] === 'stories-categories' && stories"
+        >{{stories[0].Category.name}}</span>
         <v-row style="z-index: 100;" class="flex-sm-fill ma-3">
           <!-- <v-col
             class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-12 d-flex d-sm-flex d-md-block d-lg-block d-xl-block justify-center justify-sm-center"
             v-if="priviliges"
           >
-            <ArticleCardCreateComponent :card="card" />
+            <StoryCardCreateComponent :card="card" />
           </v-col>-->
           <v-col
             class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12 d-flex d-sm-flex d-md-block d-lg-block d-xl-block justify-center justify-sm-center"
-            v-for="article in articleLimit"
-            :key="article.id"
+            v-for="story in storyLimit"
+            :key="story.id"
           >
-            <ArticleCardComponent :article="article" />
+            <StoryCardComponent :story="story" />
           </v-col>
           <!-- <v-col class="col-12 text-center">
-            <v-btn @click="limit = null" v-if="limit && articles.length > 10">Show More</v-btn>
+            <v-btn @click="limit = null" v-if="limit && stories.length > 10">Show More</v-btn>
           </v-col>-->
         </v-row>
         <v-row class="flex-sm-fill ma-3" style="z-index: 100">
           <v-col
             class="col-xl-8 col-lg-8 col-md-8 col-sm-12 col-12 d-flex d-sm-flex d-md-block d-lg-block d-xl-block justify-center justify-sm-center"
           >
-            <v-col v-for="article in articleLimit" :key="article.id">
-              <ArticleCardSmallComponent :article="article" />
+            <v-col v-for="story in storyLimit" :key="story.id">
+              <StoryCardSmallComponent :story="story" />
             </v-col>
           </v-col>
           <v-col
             class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12 d-flex d-sm-flex d-md-block d-lg-block d-xl-block justify-center justify-sm-center"
           >
-            <v-col v-for="article in articleLimit" :key="article.id">
-              <ArticleCardSmallComponent :article="article" />
+            <v-col v-for="story in storyLimit" :key="story.id">
+              <StoryCardSmallComponent :story="story" />
             </v-col>
           </v-col>
         </v-row>
@@ -82,27 +82,27 @@
 </template>
 
 <script>
-import ArticleService from "@/services/ArticleService.js";
-import ArticleCardComponent from "@/components/Card-Article";
-import ArticleCardSmallComponent from "@/components/Card-Article-Small";
+import StoryService from "@/services/StoryService.js";
+import StoryCardComponent from "@/components/Card-Story";
+import StoryCardSmallComponent from "@/components/Card-Story-Small";
 import GeneralService from "@/services/GeneralService";
-import Metadata from "@/views/Articles/Metadata";
+// import Metadata from "@/views/Stories/Metadata";
 import Header from "@/components/Header/Header.vue";
 export default {
   components: {
-    ArticleCardComponent,
-    ArticleCardSmallComponent,
-    Metadata,
+    StoryCardComponent,
+    StoryCardSmallComponent,
+    // Metadata,
     Header,
   },
   data: () => ({
     card: {
       imageUrl:
         "https://images.pexels.com/photos/1762851/pexels-photo-1762851.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
-      url: "/articles/create/",
+      url: "/stories/create/",
     },
-    articles: null,
-    userArticles: null,
+    stories: null,
+    userStories: null,
     loading: false,
     priviliges: false,
     limit: 10,
@@ -110,58 +110,65 @@ export default {
     tab: null,
   }),
   computed: {
-    articleLimit() {
-      if (this.articles) {
+    storyLimit() {
+      if (this.stories) {
         if (this.limit) {
-          const splitArticles = this.articles.slice(0, 3);
-          return splitArticles;
+          const splitStories = this.stories.slice(0, 3);
+          return splitStories;
         } else {
-          return this.articles;
+          return this.stories;
         }
       } else {
-        return this.articles;
+        return this.stories;
       }
     },
   },
   created() {
-    this.getArticles();
+    this.getStories();
+    this.getBookmarks()
     this.getHistory();
     this.checkRoles();
   },
   watch: {
     // call again the method if the route changes
-    $route: "getArticles",
+    $route: "getStories",
   },
   methods: {
-    async getArticles() {
+    async getStories() {
       this.loading = true;
       let response = null;
       if (this.$route.params.categoryId) {
         const categoryId = this.$route.params.categoryId;
-        response = await ArticleService.categories(categoryId);
+        response = await StoryService.categories(categoryId);
+        console.log(response)
         if (response) {
           this.loading = false;
           if (response.data.length > 0) {
-            this.articles = response.data;
+            this.stories = response.data;
           } else {
-            this.articles = null;
+            this.stories = null;
           }
         } else {
           this.loading = false;
         }
       } else {
-        response = await ArticleService.index();
+        response = await StoryService.index();
         if (response) {
           this.loading = false;
         }
-        this.articles = response.data;
+        this.stories = response.data;
       }
+    },
+    async getBookmarks() {
+      const userId = this.$store.state.user.id;
+      const response = await GeneralService.getBookmarks(userId);
+      this.$store.dispatch("setBookmarks", response.data.bookmarks)
     },
     async getHistory() {
       try {
         const userId = this.$store.state.user.id;
         const response = await GeneralService.getHistory(userId);
-        this.userArticles = response.data;
+        this.userStories = response.data;
       } catch (err) {
         console.log(err);
       }

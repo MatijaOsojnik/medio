@@ -2,10 +2,10 @@
   <div class="container" v-if="$store.state.isUserLoggedIn">
     <v-app-bar flat color="white" hide-on-scroll>
       <v-toolbar-title class="d-xl-block d-lg-block d-md-block d-none">
-        <router-link :to="{name: 'articles'}" class="brand-black">Medio</router-link>
+        <router-link :to="{name: 'stories'}" class="brand-black">Medio</router-link>
       </v-toolbar-title>
       <v-toolbar-title class="d-xl-none d-lg-none d-md-none d-block">
-        <router-link :to="{name: 'articles'}" class="mobile-logo">
+        <router-link :to="{name: 'stories'}" class="mobile-logo">
           M
           <!-- <v-img src="@/assets/logo.png" style="border-radius: 7px;" max-width="50px"></v-img> -->
         </router-link>
@@ -28,7 +28,7 @@
           <v-container fluid>
             <span class="subtitle ma-2 d-block font-weight-bold text-center">Featured</span>
             <div class="d-flex justify-center align-center flex-column ma-3">
-              <v-btn depressed small text block :to="{name: `articles`}">All articles</v-btn>
+              <v-btn depressed small text block :to="{name: `stories`}">All stories</v-btn>
             </div>
             <v-divider />
             <span class="subtitle ma-2 d-block font-weight-bold text-center">Categories</span>
@@ -42,7 +42,7 @@
                 small
                 text
                 block
-                :to="{path: `/articles/categories/${category.id}`}"
+                :to="{path: `/stories/categories/${category.id}`}"
               >{{category.name}}</v-btn>
             </div>
           </v-container>
@@ -62,7 +62,7 @@
         single-line
       ></v-text-field>
 
-      <v-btn color="#1b262c" v-on="on" icon style="margin-right: 0.3em" class="ma-4">
+      <v-btn color="#1b262c" icon style="margin-right: 0.3em" class="ma-4">
         <router-link
           :to="{path: `/users/${($store.state.user.display_name).toLowerCase()}/${$store.state.user.id}/bookmarks`}"
         >
@@ -137,7 +137,7 @@
                 small
                 text
                 block
-                :to="{path: `/users/${($store.state.user.display_name).toLowerCase()}/${$store.state.user.id}/articles`}"
+                :to="{path: `/users/${($store.state.user.display_name).toLowerCase()}/${$store.state.user.id}/stories`}"
               >New Story</v-btn>
               <v-btn
                 v-if="permissions"
@@ -146,7 +146,7 @@
                 small
                 text
                 block
-                :to="{path: `/users/${($store.state.user.display_name).toLowerCase()}/${$store.state.user.id}/articles`}"
+                :to="{path: `/users/${($store.state.user.display_name).toLowerCase()}/${$store.state.user.id}/stories`}"
               >My stories</v-btn>
               <v-btn
                 class="ma-1"
@@ -159,7 +159,7 @@
 
               <v-btn class="ma-1" depressed small text block @click="logout">Log out</v-btn>
             </div>
-            <!-- <v-list-item @click="toPath">My articles</v-list-item>
+            <!-- <v-list-item @click="toPath">My stories</v-list-item>
                 <v-list-item @click="toPath">Settings</v-list-item>
                 <v-list-item @click="logout">Log out</v-list-item>
             </v-list>-->
@@ -210,7 +210,7 @@ export default {
       if (userAuthorities) {
         for (let i = 0; i < userAuthorities.length; i++) {
           if (
-            userAuthorities[i] === "ROLE_articleR" ||
+            userAuthorities[i] === "ROLE_storyR" ||
             userAuthorities[i] === "ROLE_MODERATOR" ||
             userAuthorities[i] === "ROLE_ADMIN"
           ) {

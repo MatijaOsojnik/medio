@@ -4,7 +4,7 @@
       <v-flex xs12 justify="center" align="center">
         <v-card class="ma-12 mx-auto" max-width="1000px">
           <v-toolbar flat color="#617BE3" dark>
-            <v-toolbar-title>Edit Article</v-toolbar-title>
+            <v-toolbar-title>Edit Story</v-toolbar-title>
           </v-toolbar>
           <v-card-text>
             <v-scroll-x-transition>
@@ -18,13 +18,13 @@
                <label for="title">Title</label>
               <v-text-field
                 id="title"
-                label="Enter a title for your article"
+                label="Enter a title for your story"
                 maxlength="30"
                 counter
                 :rules="[rules.min]"
                 solo
                 aria-autocomplete="false"
-                v-model="article.title"
+                v-model="story.title"
               />
 
               <label for="shortDescription">Short Description</label>
@@ -36,15 +36,15 @@
                 clearable
                 counter
                 maxlength="60"
-                hint="This description will be used on the Article card before the user clicks on it."
+                hint="This description will be used on the Story card before the user clicks on it."
                 aria-autocomplete="false"
-                v-model="article.short_description"
+                v-model="story.short_description"
               />
               <label for="description">Description</label>
               <div style="margin: 0.5rem 0 2rem">
                 <tiptap-vuetify
                   id="description"
-                  v-model="article.description"
+                  v-model="story.description"
                   :rules="[rules.description]"
                   placeholder="Write your description here."
                   maxlength="300"
@@ -58,7 +58,7 @@
                 label="Enter Thumbnail URL"
                 solo
                 aria-autocomplete="false"
-                v-model="article.thumbnail_url"
+                v-model="story.thumbnail_url"
               />
 
               <label for="category">Category</label>
@@ -66,7 +66,7 @@
                 id="category"
                 :items="categories"
                 label="Select Category"
-                v-model="article.category_id"
+                v-model="story.category_id"
                 item-text="name"
                 item-value="id"
                 solo
@@ -74,8 +74,8 @@
 
             </v-form>
             <v-scroll-x-transition>
-              <v-alert type="success" mode="out-in" v-if="successfulArticleUpdate">
-                <span>You successfuly updated a article</span>
+              <v-alert type="success" mode="out-in" v-if="successfulStoryUpdate">
+                <span>You successfuly updated a story</span>
               </v-alert>
             </v-scroll-x-transition>
           </v-card-text>
@@ -85,7 +85,7 @@
               :disabled="waitBeforeClick"
               block
               large
-              @click="updateArticle"
+              @click="updateStory"
             >SUBMIT</v-btn>
           </v-card-actions>
         </v-card>
@@ -95,7 +95,7 @@
 </template>
 
 <script>
-import ArticleService from "@/services/ArticleService";
+import StoryService from "@/services/StoryService";
 import CategoryService from "@/services/CategoryService";
 import {
   TiptapVuetify,
@@ -126,7 +126,7 @@ export default {
       required: value => !!value || "Required.",
             min: v => v.length >= 8 || "Min 8 characters"
     },
-    article: {
+    story: {
       title: ``,
       short_description: ``,
       description: `<p>Write your description here.</p>`,
@@ -134,7 +134,7 @@ export default {
       category_id: ``,
       user_id: null
     },
-    successfulArticleUpdate: false,
+    successfulStoryUpdate: false,
     waitBeforeClick: false,
     isOwner: false,
     errors: [],
@@ -160,15 +160,15 @@ export default {
     ]
   }),
   created() {
-    this.getArticle();
+    this.getStory();
     this.getCategories();
-    this.article.user_id = this.$route.params.id;
+    this.story.user_id = this.$route.params.id;
   },
   methods: {
-    async updateArticle() {
+    async updateStory() {
       this.waitBeforeClick = true;
-      const areAllFieldsFilledIn = Object.keys(this.article).every(
-        key => !!this.article[key]
+      const areAllFieldsFilledIn = Object.keys(this.story).every(
+        key => !!this.story[key]
       );
       if (!areAllFieldsFilledIn) {
         this.errors.push("Please fill in all the fields.");
@@ -179,17 +179,17 @@ export default {
         return;
       }
       try {
-        const articleId = this.$route.params.id;
-        const response = await ArticleService.put(this.article);
+        const storyId = this.$route.params.id;
+        const response = await StoryService.put(this.story);
         if (response) {
-          this.successfulArticleUpdate = true;
+          this.successfulStoryUpdate = true;
           setTimeout(() => {
-            this.successfulArticleUpdate = false;
+            this.successfulStoryUpdate = false;
             this.waitBeforeClick = false;
             this.$router.push({
-              name: "article",
+              name: "story",
               params: {
-                id: articleId
+                id: storyId
               }
             });
           }, 3000);
@@ -210,22 +210,22 @@ export default {
         this.error = err.response.data;
       }
     },
-    async getArticle() {
+    async getStory() {
       try {
-        const articleId = this.$route.params.id;
-        const response = await ArticleService.show(articleId);
+        const storyId = this.$route.params.id;
+        const response = await StoryService.show(storyId);
         if (response.data === undefined || !response.data) {
           this.$router.push({
-            name: "articles"
+            name: "stories"
           });
         } else {
           if (this.$store.state.user) {
             if (response.data.Users[0].id === this.$store.state.user.id) {
               this.isOwner = true;
-              this.article = response.data;
+              this.story = response.data;
             } else {
               this.$router.push({
-                name: "articles"
+                name: "stories"
               });
             }
           }

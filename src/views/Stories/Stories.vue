@@ -4,13 +4,13 @@
       <Header />
     </div>
     <v-container fluid>
-      <template v-slot:articles-panel>
+      <template v-slot:stories-panel>
         <v-container fluid>
-          <span class="title" v-if="$router.history.current['name'] === 'articles'">All Articles</span>
+          <span class="title" v-if="$router.history.current['name'] === 'stories'">All Stories</span>
           <span
             class="title"
-            v-else-if="$router.history.current['name'] === 'articles-categories' && articles"
-          >{{articles[0].Category.name}}</span>
+            v-else-if="$router.history.current['name'] === 'stories-categories' && stories"
+          >{{stories[0].Category.name}}</span>
           <v-row style="z-index: 100" class="flex-sm-fill">
             <v-col
               v-if="priviliges"
@@ -20,7 +20,7 @@
                 <v-card
                   max-width="300px"
                   height="320px"
-                  :to="{path: `/articles/create/${$store.state.user.id}`}"
+                  :to="{path: `/stories/create/${$store.state.user.id}`}"
                   raised
                   :elevation="hover ? 8 : 2"
                 >
@@ -48,12 +48,12 @@
             </v-col>
             <v-col
               class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-6 d-sm-flex justify-sm-center"
-              v-for="article in articles"
-              :key="article.id"
+              v-for="story in stories"
+              :key="story.id"
             >
               <v-hover v-slot:default="{ hover }">
                 <v-card
-                  :to="{path: `/articles/${article.id}`}"
+                  :to="{path: `/stories/${story.id}`}"
                   width="300px"
                   height="320px"
                   raised
@@ -63,19 +63,19 @@
                     <v-list-item>
                       <v-list-item-avatar>
                         <v-img
-                          v-if="article.Users.length > 0 && article.Users[0].icon_url"
-                          :src="article.Users[0].icon_url"
+                          v-if="story.Users.length > 0 && story.Users[0].icon_url"
+                          :src="story.Users[0].icon_url"
                         ></v-img>
                         <v-icon v-else dark large color="indigo">mdi-account-circle</v-icon>
                       </v-list-item-avatar>
                       <v-list-item-content>
-                        <v-list-item-title class="title">{{article.title}}</v-list-item-title>
+                        <v-list-item-title class="title">{{story.title}}</v-list-item-title>
                         <!-- <v-list-item-subtitle>by Kurt Wagner</v-list-item-subtitle> -->
                       </v-list-item-content>
                     </v-list-item>
 
                     <v-img
-                      :src="article.thumbnail_url"
+                      :src="story.thumbnail_url"
                       height="194"
                       lazy-src="@/assets/blue-error-background.jpeg"
                       class="darker-img"
@@ -94,14 +94,14 @@
                     </v-img>
 
                     <v-card-text>
-                      <span style="display: block;">{{article.short_description}}</span>
-                      <!-- <span>{{article.Category.name}}</span> -->
+                      <span style="display: block;">{{story.short_description}}</span>
+                      <!-- <span>{{story.Category.name}}</span> -->
                     </v-card-text>
                   </div>
                 </v-card>
               </v-hover>
             </v-col>
-            <v-btn @click="limit = null" v-if="articles > 10">Show More</v-btn>
+            <v-btn @click="limit = null" v-if="stories > 10">Show More</v-btn>
           </v-row>
         </v-container>
       </template>
@@ -111,43 +111,43 @@
 
 <script>
 import Header from "@/components/Header/Header";
-import ArticleService from "@/services/ArticleService.js";
+import StoryService from "@/services/StoryService.js";
 export default {
   components: {
     Header
   },
   data: () => ({
-    articles: null,
+    stories: null,
     priviliges: false,
     limit: 10
   }),
   computed: {
-    articleLimit: async () => {
-      if (this.articles) {
+    storyLimit: async () => {
+      if (this.stories) {
         return (await this.limit)
-          ? this.articles.slice(0, this.limit)
-          : this.articles;
+          ? this.stories.slice(0, this.limit)
+          : this.stories;
       }
     }
   },
   mounted() {
-    this.getArticles();
+    this.getStories();
     this.checkRoles();
   },
   watch: {
     // call again the method if the route changes
-    $route: "getArticles"
+    $route: "getStories"
   },
   methods: {
-    async getArticles() {
+    async getStories() {
       let response = null;
       if (this.$route.params.categoryId) {
         const categoryId = this.$route.params.categoryId;
-        response = await ArticleService.categories(categoryId);
+        response = await StoryService.categories(categoryId);
       } else {
-        response = await ArticleService.index();
+        response = await StoryService.index();
       }
-      this.articles = response.data;
+      this.stories = response.data;
     },
     checkRoles() {
       const userAuthorities = this.$store.state.authorities;

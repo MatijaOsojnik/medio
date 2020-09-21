@@ -1,8 +1,8 @@
 <template>
-  <v-card class="ma-12 mx-auto" max-width="1200px" v-if="article">
+  <v-card class="ma-12 mx-auto" max-width="1200px" v-if="story">
     <v-progress-linear height="31" v-model="value"></v-progress-linear>
     <v-toolbar flat color="#617BE3" dark>
-      <v-toolbar-title>{{article.title}}</v-toolbar-title>
+      <v-toolbar-title>{{story.title}}</v-toolbar-title>
     </v-toolbar>
     <v-stepper v-if="content.length" v-model="stepper" vertical>
       <div v-for="(item, index) in content" :key="index">
@@ -47,7 +47,7 @@
               <div class="py-3 mt-6">
                 <span class="d-block font-weight-bold
                 pt-6 title">
-                  You completed {{article.title}}! The future is bright!
+                  You completed {{story.title}}! The future is bright!
                 </span>
                 </div>
               <v-btn class="mt-6" color="success" @click="goBack">Go Back</v-btn>
@@ -60,7 +60,7 @@
 </template>
 
 <script>
-import ArticleService from "@/services/ArticleService.js";
+import StoryService from "@/services/StoryService.js";
 import GeneralService from "@/services/GeneralService.js";
 import VuetifyAudio from "vuetify-audio";
 export default {
@@ -71,7 +71,7 @@ export default {
     value: 0,
     sheet: false,
     file: require("@/assets/testtest.mp3"),
-    article: null,
+    story: null,
     stepper: 1,
     enteredSentence: ``,
     error: null,
@@ -79,18 +79,18 @@ export default {
     imageError: false
   }),
   created() {
-    this.getArticle();
+    this.getStory();
   },
   watch: {
     // call again the method if the route changes
-    $route: "getArticle"
+    $route: "getStory"
   },
   methods: {
-    async getArticle() {
+    async getStory() {
       try {
-        const articleId = this.$route.params.id;
-        const response = await ArticleService.show(articleId);
-        this.article = response.data;
+        const storyId = this.$route.params.id;
+        const response = await StoryService.show(storyId);
+        this.story = response.data;
         response.data.Tips.forEach(value => this.content.push(value));
         response.data.Sentences.forEach(value => this.content.push(value));
         this.imageError = false;
@@ -127,13 +127,13 @@ export default {
           try {
             const response = await GeneralService.postHistory(
               this.$store.state.user.id,
-              this.article.id
+              this.story.id
             );
             if (response)
               setTimeout(() => {
                 this.sheet = false;
                 this.$router.push({
-                  path: `/articles/${this.$route.params.id}`
+                  path: `/stories/${this.$route.params.id}`
                 });
               }, 6000);
           } catch (err) {console.log(err)}
@@ -148,7 +148,7 @@ export default {
         setTimeout(() => {
           this.sheet = false;
           this.$router.push({
-            path: `/articles/${this.$route.params.id}`
+            path: `/stories/${this.$route.params.id}`
           });
         }, 6000);
       }
@@ -157,7 +157,7 @@ export default {
     goBack() {
       this.sheet = false;
       this.$router.push({
-        path: `/articles/${this.$route.params.id}`
+        path: `/stories/${this.$route.params.id}`
       });
     }
   }
@@ -173,7 +173,7 @@ export default {
 .back-link:hover {
   color: #303841;
 }
-.article-count {
+.story-count {
   color: black;
   font-size: 20px;
 }

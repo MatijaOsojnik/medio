@@ -1,32 +1,32 @@
 <template>
-  <ArticleMetadata>
-    <template v-slot:article>
-      <v-row class="ma-sm-6 ma-xl-0 ma-lg-0 ma-md-0" v-if="article">
+  <StoryMetadata>
+    <template v-slot:story>
+      <v-row class="ma-sm-6 ma-xl-0 ma-lg-0 ma-md-0" v-if="story">
         <v-col class="col-xl-8 col-lg-8 col-md-8 col-sm-12 col-12">
-          <h1 class="display-3" style="margin-top: 1rem;">{{article.title}}</h1>
+          <h1 class="display-3" style="margin-top: 1rem;">{{story.title}}</h1>
           <span class="d-block mt-2">
             By
             <router-link
-              v-if="article.Users[0]"
-              :to="{path: `/users/${article.Users[0].display_name.toLowerCase()}/${article.Users[0].id}/profile`}"
+              v-if="story.Users[0]"
+              :to="{path: `/users/${story.Users[0].display_name.toLowerCase()}/${story.Users[0].id}/profile`}"
             >
-              <span class="font-weight-bold">{{article.Users[0].display_name}}</span>
+              <span class="font-weight-bold">{{story.Users[0].display_name}}</span>
             </router-link>
             <span v-else class="font-weight-bold">Unknown</span>
           </span>
-          <router-link v-if="isOwner" :to="{name: 'article-edit', params: {id: $route.params.id}}">
+          <router-link v-if="isOwner" :to="{name: 'story-edit', params: {id: $route.params.id}}">
             <v-btn style="margin: 1.5rem 0;" icon>
               <v-icon medium color="black">mdi-pencil</v-icon>
             </v-btn>
           </router-link>
-          <router-link v-if="isOwner || adminPermissions" :to="{name: 'articles'}">
-            <v-btn style="margin: 1.5rem 0;" icon @click="deleteArticle">
+          <router-link v-if="isOwner || adminPermissions" :to="{name: 'stories'}">
+            <v-btn style="margin: 1.5rem 0;" icon @click="deleteStory">
               <v-icon medium color="black">mdi-delete-forever</v-icon>
             </v-btn>
           </router-link>
           <div style="margin: 1rem 0" class="d-flex flex-column justify-space-around">
             <div>
-              <div v-html="article.description"></div>
+              <div v-html="story.description"></div>
             </div>
           </div>
         </v-col>
@@ -35,27 +35,27 @@
         >
           <v-card max-width="350px" max-height="400px">
             <v-img
-              :src="imageError ? require('@/assets/blue-error-background.jpg') : article.thumbnail_url"
+              :src="imageError ? require('@/assets/blue-error-background.jpg') : story.thumbnail_url"
               height="250px"
               width="350px"
               @error="imageLoadError"
             ></v-img>
             <v-card-text>
               <div class="d-flex justify-space-around align-center">
-                <div>
-                  <span class="d-block article-count font-weight-bold">{{article.Tips.length}}</span>
+                <!-- <div>
+                  <span class="d-block story-count font-weight-bold">{{story.Tips.length}}</span>
                   <span class="subtitle">Useful tips</span>
                 </div>
                 <div>
-                  <span class="d-block article-count font-weight-bold">{{article.Sentences.length}}</span>
+                  <span class="d-block story-count font-weight-bold">{{story.Sentences.length}}</span>
                   <span class="subtitle">Interactive exercises</span>
-                </div>
+                </div> -->
               </div>
             </v-card-text>
             <v-card-actions class="justify-center">
               <v-hover v-slot:default="{ hover }">
                 <router-link
-                  :to="$store.state.isUserLoggedIn ? {name: 'article-action'} : {name: 'register'}"
+                  :to="$store.state.isUserLoggedIn ? {name: 'story-action'} : {name: 'register'}"
                 >
                   <v-btn :class="`${hover ? 'cta-btn-hover' : 'cta-btn-active'}`" class="mb-3">Get Started</v-btn>
                 </router-link>
@@ -66,65 +66,65 @@
       </v-row>
     </template>
     <template v-slot:similar>
-      <v-slide-group class="pa-4" show-arrows v-if="categoryArticles.length">
-        <v-slide-item v-for="article in categoryArticles" :key="article.id">
-          <CardRecommended :article="article" />
+      <v-slide-group class="pa-4" show-arrows v-if="categoryStories.length">
+        <v-slide-item v-for="story in categoryStories" :key="story.id">
+          <CardRecommended :story="story" />
         </v-slide-item>
       </v-slide-group>
     </template>
     <template v-slot:other>
-      <v-slide-group class="pa-4" show-arrows v-if="differentArticles.length">
-        <v-slide-item v-for="article in differentArticles" :key="article.id">
-          <CardRecommended :article="article" />
+      <v-slide-group class="pa-4" show-arrows v-if="differentStories.length">
+        <v-slide-item v-for="story in differentStories" :key="story.id">
+          <CardRecommended :story="story" />
         </v-slide-item>
       </v-slide-group>
     </template>
-  </ArticleMetadata>
+  </StoryMetadata>
 </template>
 
 <script>
-import ArticleService from "@/services/ArticleService.js";
-import ArticleMetadata from "@/views/Article/Metadata.vue";
+import StoryService from "@/services/StoryService.js";
+import StoryMetadata from "@/views/Story/Metadata.vue";
 import CardRecommended from "@/components/Card-Recommended";
 export default {
   components: {
-    ArticleMetadata,
+    StoryMetadata,
     CardRecommended
   },
   data: () => ({
-    article: null,
+    story: null,
     permissions: false,
     isOwner: false,
     adminPermissions: false,
     imageError: false,
-    categoryArticles: [],
-    differentArticles: []
+    categoryStories: [],
+    differentStories: []
   }),
   created() {
-    this.getArticle();
+    this.getStory();
     this.checkRoles();
   },
   watch: {
     // call again the method if the route changes
-    $route: "getArticle"
+    $route: "getStory"
   },
   methods: {
-    async getArticle() {
+    async getStory() {
       try {
-        const articleId = this.$route.params.id;
-        const responseArticle = await ArticleService.show(articleId);
-        const responseSimilarArticles = await ArticleService.showSimilar(
-          responseArticle.data.category_id,
-          articleId
+        const storyId = this.$route.params.id;
+        const responseStory = await StoryService.show(storyId);
+        const responseSimilarStories = await StoryService.showSimilar(
+          responseStory.data.category_id,
+          storyId
         );
-        const responseDifferentArticles = await ArticleService.showDifferent(
-          responseArticle.data.category_id,
-          articleId
+        const responseDifferentStories = await StoryService.showDifferent(
+          responseStory.data.category_id,
+          storyId
         );
         if (this.$store.state.user) {
-          if (responseArticle.data.Users[0]) {
+          if (responseStory.data.Users[0]) {
             if (
-              responseArticle.data.Users[0].id === this.$store.state.user.id
+              responseStory.data.Users[0].id === this.$store.state.user.id
             ) {
               this.isOwner = true;
             } else {
@@ -132,19 +132,19 @@ export default {
             }
           }
         }
-        this.article = responseArticle.data;
-        this.categoryArticles = responseSimilarArticles.data;
-        this.differentArticles = responseDifferentArticles.data;
+        this.story = responseStory.data;
+        this.categoryStories = responseSimilarStories.data;
+        this.differentStories = responseDifferentStories.data;
         this.imageError = false;
       } catch (err) {
         console.log(err);
       }
     },
-    async deleteArticle() {
+    async deleteStory() {
       try {
-        const articleId = this.$route.params.id;
+        const storyId = this.$route.params.id;
         if (this.isOwner || this.adminPermissions) {
-          await ArticleService.delete(articleId);
+          await StoryService.delete(storyId);
         }
       } catch (err) {
         console.log(err);
@@ -192,7 +192,7 @@ export default {
 .back-link:hover {
   color: #303841;
 }
-.article-count {
+.story-count {
   color: black;
   font-size: 20px;
 }

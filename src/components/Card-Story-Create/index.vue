@@ -3,7 +3,7 @@
     <v-card
       max-width="300px"
       height="320px"
-      :to="{path: `/articles/create/${$store.state.user.id}`}"
+      :to="{path: `/stories/create/${$store.state.user.id}`}"
       raised
       :elevation="hover ? 8 : 2"
     >

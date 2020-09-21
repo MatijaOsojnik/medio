@@ -156,7 +156,7 @@
 
 <script>
 import Header from "@/components/Header/Header";
-import ArticleService from "@/services/ArticleService.js";
+import StoryService from "@/services/StoryService.js";
 import Footer from "@/components/Footer/Footer";
 export default {
   components: {
@@ -164,15 +164,15 @@ export default {
     Footer,
   },
   data: () => ({
-    articles: null,
+    stories: null,
   }),
   created() {
-    this.getArticles();
+    this.getStories();
   },
   methods: {
-    async getArticles() {
-      const response = await ArticleService.index();
-      this.Articles = response.data;
+    async getStories() {
+      const response = await StoryService.index();
+      this.Stories = response.data;
     },
   },
 };

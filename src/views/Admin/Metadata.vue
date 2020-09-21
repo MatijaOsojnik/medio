@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <div>
-      <slot name="articles">
+      <slot name="stories">
         <span class="heading ma-4 d-block">Loading...</span>
       </slot>
       <slot name="users">
@@ -32,7 +32,7 @@ export default {
 .back-link:hover {
   color: #303841;
 }
-.article-count {
+.story-count {
   display: inline-block;
   font-size: 16px;
 }

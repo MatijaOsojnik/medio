@@ -101,11 +101,11 @@
               <span v-else class="d-block my-4" v-html="user.description"></span>
             </div>
             <ProfileMetadata>
-              <template v-slot:userArticles>
-                <span v-if="articles.length" class="d-block about-title">My Articles</span>
-                <v-slide-group class="pa-4" show-arrows v-if="articles.length">
-                  <v-slide-item v-for="article in articles" :key="article.id">
-                    <UserArticle :article="article" />
+              <template v-slot:userStories>
+                <span v-if="stories.length" class="d-block about-title">My Stories</span>
+                <v-slide-group class="pa-4" show-arrows v-if="stories.length">
+                  <v-slide-item v-for="story in stories" :key="story.id">
+                    <UserStory :story="story" />
                   </v-slide-item>
                 </v-slide-group>
               </template>
@@ -118,24 +118,24 @@
 </template>
 
 <script>
-import UserArticle from "@/components/Card-Recommended";
+import UserStory from "@/components/Card-Recommended";
 import ProfileMetadata from "@/views/Users/ProfileMetadata";
-import ArticleService from "@/services/ArticleService";
+import StoryService from "@/services/StoryService";
 import UserService from "@/services/UserService";
 import Header from "@/components/Header/Header";
 export default {
   components: {
     Header,
-    UserArticle,
+    UserStory,
     ProfileMetadata
   },
   data: () => ({
     user: null,
-    articles: []
+    stories: []
   }),
   mounted() {
     this.getUser();
-    this.getUserArticles();
+    this.getUserStories();
   },
   watch: {
     $route: "getAll"
@@ -143,7 +143,7 @@ export default {
   methods: {
     async getAll() {
       this.getUser();
-      this.getUserArticles();
+      this.getUserStories();
     },
     async getUser() {
       try {
@@ -154,10 +154,10 @@ export default {
         console.log(err);
       }
     },
-    async getUserArticles() {
+    async getUserStories() {
       try {
-        const response = await ArticleService.user(this.$route.params.id);
-        this.articles = response.data;
+        const response = await StoryService.user(this.$route.params.id);
+        this.stories = response.data;
       } catch (err) {
         console.log(err);
       }

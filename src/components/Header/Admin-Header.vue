@@ -28,7 +28,7 @@
           </v-list-item-content>
         </v-list-item>
         <v-list-item
-          :to="{path: '/articles'}"
+          :to="{path: '/stories'}"
           class="ma-2"
         >
           <v-list-item-action>
@@ -104,8 +104,8 @@
                 small
                 text
                 block
-                :to="{path: `/users/${($store.state.user.display_name).toLowerCase()}/${$store.state.user.id}/articles`}"
-              >My articles</v-btn>
+                :to="{path: `/users/${($store.state.user.display_name).toLowerCase()}/${$store.state.user.id}/stories`}"
+              >My stories</v-btn>
               <v-btn
                 class="ma-1"
                 depressed
@@ -137,8 +137,8 @@ export default {
       },
       {
         iconName: "mdi-animation-play",
-        linkName: "articles",
-        path: "/admin/articles"
+        linkName: "stories",
+        path: "/admin/stories"
       },
       {
         iconName: "mdi-format-list-text",

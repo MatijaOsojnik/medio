@@ -81,24 +81,25 @@ module.exports = {
             }
 
             const authorities = []
+        
 
-            const roles = await user.getRoles()
-            for (let i = 0; i < roles.length; i++) {
-                authorities.push("ROLE_" + roles[i].name.toUpperCase());
-            }
-
-            const userJson = user.toJSON();
-            res.send({
-                authorities: authorities,
-                user: user,
-                token: jwtSignUser(userJson)
-            })
-
-        } catch (err) {
-            console.log(err)
-            res.status(500).send({
-                error: `An error has occured trying to log in.`
-            })
+        const roles = await user.getRoles()
+        for (let i = 0; i < roles.length; i++) {
+            authorities.push("ROLE_" + roles[i].name.toUpperCase());
         }
+
+        const userJson = user.toJSON();
+        res.send({
+            authorities: authorities,
+            user: user,
+            token: jwtSignUser(userJson)
+        })
+
+    } catch (err) {
+        console.log(err)
+        res.status(500).send({
+            error: `An error has occured trying to log in.`
+        })
     }
+}
 }

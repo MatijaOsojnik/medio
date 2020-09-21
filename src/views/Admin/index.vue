@@ -31,7 +31,7 @@ export default {
         title: "USERS"
       },
       {
-        link: "admin-articles",
+        link: "admin-stories",
         icon: "mdi-animation-play",
         title: "ARTICLES"
       },

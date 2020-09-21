@@ -6,7 +6,7 @@
 
       <v-card>
         <v-card-title>
-          All Articles
+          All Stories
           <v-spacer></v-spacer>
           <v-text-field
             v-model="search"
@@ -35,20 +35,20 @@
                 <v-flex xs12 justify="center" align="center">
                   <v-card class="mx-auto">
                     <v-toolbar flat color="#617BE3" dark>
-                      <v-toolbar-title>Edit Article</v-toolbar-title>
+                      <v-toolbar-title>Edit Story</v-toolbar-title>
                     </v-toolbar>
-                    <v-card-text v-if="article">
+                    <v-card-text v-if="story">
                       <v-form lazy-validation>
                         <label for="title">Title</label>
                         <v-text-field
                           id="title"
-                          label="Enter a title for your article"
+                          label="Enter a title for your story"
                           maxlength="30"
                           counter
                           :rules="[rules.min]"
                           solo
                           aria-autocomplete="false"
-                          v-model="article.title"
+                          v-model="story.title"
                         />
 
                         <label for="shortDescription">Short Description</label>
@@ -60,15 +60,15 @@
                           clearable
                           counter
                           maxlength="60"
-                          hint="This description will be used on the Article card before the user clicks on it."
+                          hint="This description will be used on the Story card before the user clicks on it."
                           aria-autocomplete="false"
-                          v-model="article.short_description"
+                          v-model="story.short_description"
                         />
                         <label for="description">Description</label>
                         <div style="margin: 0.5rem 0 2rem">
                           <tiptap-vuetify
                             id="description"
-                            v-model="article.description"
+                            v-model="story.description"
                             :rules="[rules.description]"
                             placeholder="Write your description here."
                             maxlength="300"
@@ -82,7 +82,7 @@
                           label="Enter Thumbnail URL"
                           solo
                           aria-autocomplete="false"
-                          v-model="article.thumbnail_url"
+                          v-model="story.thumbnail_url"
                         />
 
                         <label for="category">Category</label>
@@ -90,15 +90,15 @@
                           id="category"
                           :items="categories"
                           label="Select Category"
-                          v-model="article.category_id"
+                          v-model="story.category_id"
                           item-text="name"
                           item-value="id"
                           solo
                         ></v-select>
                       </v-form>
                       <v-scroll-x-transition>
-                        <v-alert type="success" mode="out-in" v-if="successfulArticleUpdate">
-                          <span>You successfuly updated a article</span>
+                        <v-alert type="success" mode="out-in" v-if="successfulStoryUpdate">
+                          <span>You successfuly updated a story</span>
                         </v-alert>
                       </v-scroll-x-transition>
                       <v-scroll-x-transition>
@@ -114,7 +114,7 @@
                         color="#f4f6ff"
                         :disabled="waitBeforeClick"
                         large
-                        @click="updateArticle"
+                        @click="updateStory"
                       >SUBMIT</v-btn>
                       <v-btn
                         color="#ff6363"
@@ -131,11 +131,11 @@
              <v-layout>
                 <v-flex xs12 justify="center" align="center">
                   <v-card class="mx-auto">
-                    <v-card-text v-if="article">
-                      <span class="font-weight-bold">Are you sure you want to delete this article?</span>
+                    <v-card-text v-if="story">
+                      <span class="font-weight-bold">Are you sure you want to delete this story?</span>
                       <v-scroll-x-transition>
-                        <v-alert type="success" mode="out-in" v-if="successfulArticleDelete">
-                          <span>Article deleted</span>
+                        <v-alert type="success" mode="out-in" v-if="successfulStoryDelete">
+                          <span>Story deleted</span>
                         </v-alert>
                       </v-scroll-x-transition>
                       <v-scroll-x-transition>
@@ -150,7 +150,7 @@
                       <v-btn
                         color="#ff6363"
                         :disabled="waitBeforeClick"
-                        @click="deleteArticle"
+                        @click="deleteStory"
                       >DELETE</v-btn>
                       <v-spacer/>
                       <v-btn
@@ -165,8 +165,8 @@
             </v-dialog>
           </template>
           <template v-slot:item.actions="{ item }">
-            <v-icon small class="mr-2" @click="editArticle(item)">mdi-pencil</v-icon>
-            <v-icon small @click="deleteArticleDialog(item)">mdi-delete</v-icon>
+            <v-icon small class="mr-2" @click="editStory(item)">mdi-pencil</v-icon>
+            <v-icon small @click="deleteStoryDialog(item)">mdi-delete</v-icon>
           </template>
           <template v-slot:expanded-item="{ headers, item }">
             <td class="pa-6" :colspan="headers.length">
@@ -187,7 +187,7 @@
 </template>
 
 <script>
-import ArticleService from "@/services/ArticleService";
+import StoryService from "@/services/StoryService";
 import CategoryService from "@/services/CategoryService";
 import {
   TiptapVuetify,
@@ -214,7 +214,7 @@ export default {
     loading: true,
     dialog: false,
     deleteDialog: false,
-    article: null,
+    story: null,
     categories: [],
     errors: [],
     rules: {
@@ -226,8 +226,8 @@ export default {
       required: value => !!value || "Required.",
       min: v => v.length >= 8 || "Min 8 characters"
     },
-    successfulArticleUpdate: false,
-    successfulArticleDelete: false,
+    successfulStoryUpdate: false,
+    successfulStoryDelete: false,
     waitBeforeClick: false,
     extensions: [
       History,
@@ -265,13 +265,13 @@ export default {
     ]
   }),
   created() {
-    this.getArticles();
+    this.getStories();
     this.getCategories();
   },
   methods: {
-    async getArticles() {
+    async getStories() {
       try {
-        const response = await ArticleService.index();
+        const response = await StoryService.index();
         this.statistics = response.data;
         this.loading = false;
       } catch (err) {
@@ -288,10 +288,10 @@ export default {
         this.error = err.response.data;
       }
     },
-    async updateArticle() {
+    async updateStory() {
       this.waitBeforeClick = true;
-      const areAllFieldsFilledIn = Object.keys(this.article).every(
-        key => !!this.article[key]
+      const areAllFieldsFilledIn = Object.keys(this.story).every(
+        key => !!this.story[key]
       );
       if (!areAllFieldsFilledIn) {
         this.errors.push("Please fill in all the fields.");
@@ -302,14 +302,14 @@ export default {
         return;
       }
       try {
-        const response = await ArticleService.put(this.article);
+        const response = await StoryService.put(this.story);
         if (response) {
-          this.successfulArticleUpdate = true;
+          this.successfulStoryUpdate = true;
           setTimeout(() => {
-            this.successfulArticleUpdate = false;
+            this.successfulStoryUpdate = false;
             this.waitBeforeClick = false;
             this.dialog = false;
-            this.getArticles();
+            this.getStories();
           }, 3000);
         }
       } catch (err) {
@@ -318,26 +318,26 @@ export default {
         setTimeout(() => (this.errors = []), 5000);
       }
     },
-    editArticle(article) {
-      this.article = article;
+    editStory(story) {
+      this.story = story;
       this.dialog = true;
     },
-    deleteArticleDialog(article) {
-      this.article = article;
+    deleteStoryDialog(story) {
+      this.story = story;
       this.deleteDialog = true
-      // await articleService.delete(articleId), this.$router.go();       
+      // await storyService.delete(storyId), this.$router.go();       
     },
-    async deleteArticle() {
+    async deleteStory() {
       this.waitBeforeClick = true;
       try {
-        await ArticleService.delete(this.article.id)
+        await StoryService.delete(this.story.id)
         .then(() => {
-          this.successfularticleDelete = true;
+          this.successfulstoryDelete = true;
           setTimeout(() => {
-            this.successfularticleDelete = false;
+            this.successfulstoryDelete = false;
             this.waitBeforeClick = false;
             this.deleteDialog = false;
-            this.getArticles();
+            this.getStories();
           }, 3000);
         })
         .catch((err) => console.log(err))

@@ -1,6 +1,6 @@
 const {
   User,
-  Article,
+  Story,
   Category,
   Role,
   History,
@@ -13,7 +13,7 @@ module.exports = {
       const users = await User.findAndCountAll({
         limit: 5
       });
-      const articles = await Article.findAndCountAll({
+      const stories = await Story.findAndCountAll({
         limit: 5
       });
       const categories = await Category.findAndCountAll({
@@ -22,14 +22,14 @@ module.exports = {
       const roles = await Role.findAndCountAll({});
       res.send({
         users: users,
-        articles: articles,
+        stories: stories,
         categories: categories,
         roles: roles
       })
     } catch (error) {
       console.log(error)
       res.status(500).send({
-        error: `An error has occured trying to fetch articles`
+        error: `An error has occured trying to fetch stories`
       })
     }
   },
@@ -41,7 +41,7 @@ module.exports = {
           user_id: userId
         },
         include: [{
-          model: Article,
+          model: Story,
           include: [User]
         }],
         order: [
@@ -58,9 +58,9 @@ module.exports = {
   async postHistory(req, res) {
     try {
       const userId = req.params.userId
-      const articleId = req.params.articleId
+      const storyId = req.params.storyId
       const history = await History.create({
-        article_id: articleId,
+        story_id: storyId,
         user_id: userId
       })
       res.send(history)
@@ -71,7 +71,7 @@ module.exports = {
       })
     }
   },
-  async findBookmarks(req, res) {
+  async getBookmarks(req, res) {
         try {
           const userId = req.params.userId
           const bookmarks = await Bookmark.findAll({
@@ -79,14 +79,15 @@ module.exports = {
               user_id: userId
             },
             include: [{
-              model: Article,
+              model: Story,
               include: [User]
             }],
             order: [
               ['createdAt', 'DESC']
             ]
           })
-          res.send(bookmarks)
+          console.log(bookmarks)
+          res.send({bookmarks})
         } catch (err) {
           res.status(500).send({
             error: 'an error has occured trying to fetch the history'
@@ -96,10 +97,10 @@ module.exports = {
   async postBookmark(req, res) {
     try {
       const userId = req.params.userId
-      const articleId = req.params.articleId
-      console.log(articleId, userId)
+      const storyId = req.params.storyId
+      console.log(storyId, userId)
       const bookmark = await Bookmark.create({
-        article_id: articleId,
+        story_id: storyId,
         user_id: userId
       })
       res.send(bookmark)
@@ -113,11 +114,11 @@ module.exports = {
   async deleteBookmark(req, res) {
     try {
       const userId = req.params.userId
-      const articleId = req.params.articleId
-      console.log(articleId, userId)
+      const storyId = req.params.storyId
+      console.log(storyId, userId)
       const bookmark = await Bookmark.destroy({
         where: {
-          article_id: articleId,
+          story_id: storyId,
           user_id: userId
         }
       })

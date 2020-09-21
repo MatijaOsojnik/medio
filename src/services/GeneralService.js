@@ -7,19 +7,19 @@ export default {
     getRoles() {
         return axios.get('roles')
     },
-    postHistory(userId, articleId) {
-        return axios.post(`history/${articleId}/${userId}`)
+    postHistory(userId, storyId) {
+        return axios.post(`history/${storyId}/${userId}`)
     },
     getHistory(userId) {
         return axios.get(`history/${userId}`)
     },
-    postBookmark(userId, articleId) {
-        return axios.post(`bookmarks/${articleId}/${userId}`)
+    postBookmark(userId, storyId) {
+        return axios.post(`bookmarks/${storyId}/${userId}`)
     },
-    deleteBookmark(userId, articleId) {
-        return axios.delete(`bookmarks/${articleId}/${userId}`)
+    deleteBookmark(userId, storyId) {
+        return axios.delete(`bookmarks/${storyId}/${userId}`)
     },
     getBookmarks(userId) {
         return axios.get(`bookmarks/${userId}`)
-    }
+    },
 }

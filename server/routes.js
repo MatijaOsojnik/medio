@@ -1,5 +1,5 @@
 const AuthenticationController = require('./controllers/AuthenticationController')
-const ArticlesController = require('./controllers/ArticlesController')
+const StoriesController = require('./controllers/StoriesController')
 const CategoriesController = require('./controllers/CategoriesController')
 const RolesController = require('./controllers/RolesController')
 const UsersController = require('./controllers/UsersController')
@@ -9,7 +9,7 @@ const GeneralController = require('./controllers/GeneralController')
 
 const AuthenticationControllerPolicy = require('./policies/AuthenticationControllerPolicy')
 const UserControllerPolicy = require('./policies/UserControllerPolicy')
-const ArticleControllerPolicy = require('./policies/ArticleControllerPolicy')
+const StoryControllerPolicy = require('./policies/StoryControllerPolicy')
 
 // const UserControllerPolicy = require('./policies/UserControllerPolicy')
 const isAuthenticated = require('./policies/isAuthenticated')
@@ -75,16 +75,16 @@ module.exports = (app) => {
     app.delete('/api/users/:userId', UsersController.delete)
 
     // ARTICLE ROUTES
-    app.get('/api/articles', ArticlesController.index)
-    app.get('/api/articles/:articleId', ArticlesController.show)
-    app.get('/api/articles/users/:userId', ArticlesController.user)
-    app.get('/api/articles/categories/:categoryId', ArticlesController.showCategories)
-    app.get('/api/articles/categories/similar/:categoryId/:articleId', ArticlesController.showSimilar)
-    app.get('/api/articles/categories/other/:categoryId/:articleId', ArticlesController.showDifferent)
+    app.get('/api/stories', StoriesController.index)
+    app.get('/api/stories/:storyId', StoriesController.show)
+    app.get('/api/stories/users/:userId', StoriesController.user)
+    app.get('/api/stories/categories/:categoryId', StoriesController.showCategories)
+    app.get('/api/stories/categories/similar/:categoryId/:storyId', StoriesController.showSimilar)
+    app.get('/api/stories/categories/other/:categoryId/:storyId', StoriesController.showDifferent)
 
-    app.put('/ap/articles/:articleId', ArticleControllerPolicy.update, ArticlesController.put)
-    app.post('/api/articles/:userId', ArticleControllerPolicy.update, ArticlesController.post)
-    app.delete('/api/articles/:articleId', ArticlesController.delete)
+    app.put('/ap/stories/:storyId', StoryControllerPolicy.update, StoriesController.put)
+    app.post('/api/stories/:userId', StoryControllerPolicy.update, StoriesController.post)
+    app.delete('/api/stories/:storyId', StoriesController.delete)
 
     // CATEGORY ROUTES
     app.get('/api/categories', CategoriesController.index)
@@ -102,10 +102,10 @@ module.exports = (app) => {
 
     app.get('/api/admin/general/count', GeneralController.count)
     app.get('/api/history/:userId', GeneralController.findHistory) //TRACK USER HISTORY
-    app.post('/api/history/:articleId/:userId', GeneralController.postHistory)
-    app.post('/api/bookmarks/:articleId/:userId', GeneralController.postBookmark)
-    app.delete('/api/bookmarks/:articleId/:userId', GeneralController.deleteBookmark),
-    app.get('/api/bookmarks/:userId')
+    app.post('/api/history/:storyId/:userId', GeneralController.postHistory)
+    app.post('/api/bookmarks/:storyId/:userId', GeneralController.postBookmark)
+    app.delete('/api/bookmarks/:storyId/:userId', GeneralController.deleteBookmark),
+    app.get('/api/bookmarks/:userId', GeneralController.getBookmarks)
 
     //FILE UPLOAD ROUTE
     // app.post('/upload', upload.single('file'), (req, res) => {

@@ -3,7 +3,7 @@ import Vuex from 'vuex'
 import createPersistedState from 'vuex-persistedstate'
 
 import categories from './modules/categories'
-import articles from './modules/articles'
+import stories from './modules/stories'
 
 Vue.use(Vuex)
 
@@ -11,7 +11,7 @@ export default new Vuex.Store({
   strict: false,
   modules: {
     categories,
-    articles
+    stories
   },
   plugins: [
     createPersistedState()
@@ -20,6 +20,7 @@ export default new Vuex.Store({
     token: null,
     user: null,
     authorities: null,
+    bookmarks: null,
     isUserLoggedIn: false
   },
   mutations: {
@@ -29,6 +30,9 @@ export default new Vuex.Store({
     },
     setUser(state, user) {
       state.user = user
+    },
+    setBookmarks(state, bookmarks) {
+      state.bookmarks = bookmarks
     },
     setAuthorities(state, authorities) {
       state.authorities = authorities
@@ -52,6 +56,10 @@ export default new Vuex.Store({
       commit
     }, authorities) {
       commit('setAuthorities', authorities)
+    },
+    setBookmarks({commit}, bookmarks) {
+      commit('setBookmarks', bookmarks)
     }
   },
+  
 })

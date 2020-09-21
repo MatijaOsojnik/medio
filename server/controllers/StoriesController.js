@@ -1,9 +1,7 @@
 const {
-    Article,
+    Story,
     Category,
     User,
-    Sentence,
-    Tip
 } = require('../models')
 
 const {
@@ -13,29 +11,24 @@ const {
 module.exports = {
     async index(req, res) {
         try {
-            const articles = await Article.findAll({
-                include: [{
-                    model: Category,
-                    required: true
-                }, {
-                    model: User,
-                }]
+            const stories = await Story.findAll({
+                include: [Category, User]
             })
-            res.send(articles)
+            res.send(stories)
         } catch (error) {
             console.log(error)
             res.status(500).send({
-                error: `An error has occured trying to fetch articles`
+                error: `An error has occured trying to fetch stories`
             })
         }
     },
     async post(req, res) {
         try {
-            const article = await Article.create(req.body)
-                .then((article) => {
+            const story = await Story.create(req.body)
+                .then((story) => {
                     if (req.params.userId) {
                         User.findByPk(req.params.userId).then((user) => {
-                            article.setUsers(user)
+                            story.setUsers(user)
                         }).catch((err) => {
                             res.send({
                                 err: err
@@ -43,29 +36,29 @@ module.exports = {
                         })
                     }
                 })
-            res.send('Successful Article Creation')
+            res.send('Successful Story Creation')
         } catch (error) {
             console.log(error)
             res.status(500).send({
-                error: `An error has occured trying to create article`
+                error: `An error has occured trying to create story`
             })
         }
     },
     async show(req, res) {
         try {
-            const article = await Article.findByPk(req.params.articleId, {
-                include: [User, Tip, Sentence]
+            const story = await Story.findByPk(req.params.storyId, {
+                include: [User]
             })
-            res.send(article)
+            res.send(story)
         } catch (error) {
             res.status(500).send({
-                error: `An error has occured trying fetch a article`
+                error: `An error has occured trying fetch a story`
             })
         }
     },
     async user(req, res) {
         try {
-            const articles = await Article.findAll({
+            const stories = await Story.findAll({
                 include: [{
                     model: User,
                     where: {
@@ -73,25 +66,25 @@ module.exports = {
                     }
                 }]
             })
-            res.send(articles)
+            res.send(stories)
         } catch (error) {
             console.log(error)
             res.status(500).send({
-                error: `An error has occured trying to fetch articles`
+                error: `An error has occured trying to fetch stories`
             })
         }
     },
     async showSimilar(req, res) {
         try {
-            console.log(req.params.articleId)
-            const articles = await Article.findAll({
+            console.log(req.params.storyId)
+            const stories = await Story.findAll({
                 where: {
                     [Op.and]: [{
                             category_id: req.params.categoryId
                         },
                         {
                             id: {
-                                [Op.ne]: req.params.articleId
+                                [Op.ne]: req.params.storyId
                             }
                         }
                     ],
@@ -100,20 +93,20 @@ module.exports = {
                     model: User
                 }]
             })
-            res.send(articles)
+            res.send(stories)
         } catch (error) {
             console.log(error)
             res.status(500).send({
-                error: `An error has occured trying to fetch articles`
+                error: `An error has occured trying to fetch stories`
             })
         }
     },
     async showDifferent(req, res) {
         try {
-            const articles = await Article.findAll({
+            const stories = await Story.findAll({
                 where: {
                     id: {
-                        [Op.ne]: req.params.articleId
+                        [Op.ne]: req.params.storyId
                     }
                 },
                 order: [
@@ -123,17 +116,17 @@ module.exports = {
                     model: User
                 }]
             })
-            res.send(articles)
+            res.send(stories)
         } catch (error) {
             console.log(error)
             res.status(500).send({
-                error: `An error has occured trying to fetch articles`
+                error: `An error has occured trying to fetch stories`
             })
         }
     },
     async showCategories(req, res) {
         try {
-            const articles = await Article.findAll({
+            const stories = await Story.findAll({
                 where: {
                     category_id: req.params.categoryId
                 },
@@ -144,39 +137,39 @@ module.exports = {
                     model: User,
                 }]
             })
-            res.send(articles)
+            res.send(stories)
         } catch (error) {
             console.log(error)
             res.status(500).send({
-                error: `An error has occured trying to fetch articles`
+                error: `An error has occured trying to fetch stories`
             })
         }
     },
     async put(req, res) {
         try {
-            await Article.update(req.body, {
+            await Story.update(req.body, {
                 where: {
-                    id: req.params.articleId
+                    id: req.params.storyId
                 }
             })
             res.send(req.body)
         } catch (error) {
             res.status(500).send({
-                error: `An error has occured trying to update a article`
+                error: `An error has occured trying to update a story`
             })
         }
     },
     async delete(req, res) {
         try {
-            const article = await Article.destroy({
+            const story = await Story.destroy({
                 where: {
-                    id: req.params.articleId
+                    id: req.params.storyId
                 }
             })
-            res.send('Successful article delete')
+            res.send('Successful story delete')
         } catch (error) {
             res.status(500).send({
-                error: `An error has occured trying fetch a article`
+                error: `An error has occured trying fetch a story`
             })
         }
     }

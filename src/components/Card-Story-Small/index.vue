@@ -1,16 +1,16 @@
 <template>
   <v-hover v-slot:default="{ hover }">
-    <v-card :to="{path: `/articles/${article.id}`}" raised :elevation="hover ? 8 : 2">
+    <v-card :to="{path: `/stories/${story.id}`}" raised :elevation="hover ? 8 : 2">
       <div class="d-flex flex-no-wrap justify-space-between">
         <div>
-          <v-card-title class="headline" v-text="article.title"></v-card-title>
+          <v-card-title class="headline" v-text="story.title"></v-card-title>
 
-          <v-card-subtitle v-text="article.short_description"></v-card-subtitle>
+          <v-card-subtitle v-text="story.short_description"></v-card-subtitle>
         </div>
 
         <v-avatar class="ma-3" size="150" tile>
           <v-img
-            :src="imageError ? require('@/assets/blue-error-background.jpg') : article.thumbnail_url"
+            :src="imageError ? require('@/assets/blue-error-background.jpg') : story.thumbnail_url"
             class="darker-img"
             @error="imageLoadError"
           ></v-img>
@@ -27,7 +27,7 @@ export default {
     imageError: false,
   }),
   props: {
-    article: Object,
+    story: Object,
   },
   methods: {
     async imageLoadError() {
