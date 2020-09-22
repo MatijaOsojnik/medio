@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="container">
     <v-navigation-drawer v-model="drawer" app temporary>
       <v-list-item class="ma-2">
         <v-list-item-avatar>

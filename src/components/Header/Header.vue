@@ -11,7 +11,7 @@
     <v-toolbar-title v-else>
       <router-link :to="{name: 'landing'}" class="brand-black">Medio</router-link>
     </v-toolbar-title>
-    <v-menu
+    <!-- <v-menu
       bottom
       transition="scale-transition"
       :close-on-content-click="false"
@@ -52,7 +52,7 @@
           </div>
         </v-container>
       </v-card>
-    </v-menu>
+    </v-menu> -->
     <v-spacer></v-spacer>
     <router-link :to="{name: 'login'}">
       <v-btn

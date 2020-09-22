@@ -1,13 +1,13 @@
 <template>
   <div>
     <Header />
-    <v-app-bar dense>
-      <v-slide-group show-arrows>
+    <v-toolbar dense elevation="0" style="width: 100%;" color="#ffffff" class="mb-3">
+      <v-slide-group show-arrows class="pa-0 ma-0">
         <v-slide-item v-for="n in 25" :key="n">
-          <v-btn class="mx-2" depressed>Publication</v-btn>
+          <v-btn class="mx-2"  color="white" depressed>Publication</v-btn>
         </v-slide-item>
       </v-slide-group>
-    </v-app-bar>
+    </v-toolbar>
     <div
       class="d-flex justify-center align-center flex-column fill-height"
       style="height: 70vh;"
@@ -43,7 +43,7 @@
           class="title"
           v-else-if="$router.history.current['name'] === 'stories-categories' && stories"
         >{{stories[0].Category.name}}</span>
-        <v-row style="z-index: 100;" class="flex-sm-fill ma-3">
+        <v-row style="z-index: 100;" class="flex-sm-fill ma-1">
           <!-- <v-col
             class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-12 d-flex d-sm-flex d-md-block d-lg-block d-xl-block justify-center justify-sm-center"
             v-if="priviliges"
@@ -61,16 +61,17 @@
             <v-btn @click="limit = null" v-if="limit && stories.length > 10">Show More</v-btn>
           </v-col>-->
         </v-row>
-        <v-row class="flex-sm-fill ma-3" style="z-index: 100">
+        <v-row style="margin: 0;">
           <v-col
-            class="col-xl-8 col-lg-8 col-md-8 col-sm-12 col-12 d-flex d-sm-flex d-md-block d-lg-block d-xl-block justify-center justify-sm-center"
+          style="margin: 0;"
+            class="col-xl-8 col-lg-8 col-md-8 col-sm-12 col-12d-block justify-center justify-sm-center pa-0"
           >
             <v-col v-for="story in storyLimit" :key="story.id">
               <StoryCardSmallComponent :story="story" />
             </v-col>
           </v-col>
           <v-col
-            class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12 d-flex d-sm-flex d-md-block d-lg-block d-xl-block justify-center justify-sm-center"
+            class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12 d-block justify-center justify-sm-center pa-0"
           >
             <v-col v-for="story in storyLimit" :key="story.id">
               <StoryCardSmallComponent :story="story" />
@@ -108,6 +109,7 @@ export default {
     limit: 10,
     length: 15,
     tab: null,
+    offsetTop: 0,
   }),
   computed: {
     storyLimit() {
@@ -192,6 +194,9 @@ export default {
         this.priviliges = true;
       }
     },
+    onScroll (e) {
+        this.offsetTop = e.target.scrollTop
+      },
   },
 };
 </script>

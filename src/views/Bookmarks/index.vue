@@ -2,16 +2,16 @@
   <BookmarkMetadata>
     <template v-slot:yourBookmarks>
       <span class="title my-4 d-block">Your Bookmarks</span>
-      <v-row class="ma-3" style="z-index: 100">
+      <v-row class="ma-0">
         <v-col
-          class="col-12 d-block justify-center"
+          class="col-12 d-block justify-center pa-0"
         >
-          <v-col v-for="story in stories" :key="story.id">
+          <v-col v-for="story in stories" :key="story.id" class="px-0">
             <StoryCardSmallComponent :story="story.Story"/>
           </v-col>
         </v-col>
       </v-row>
-    </template>
+    </template> 
   </BookmarkMetadata>
 </template>
 

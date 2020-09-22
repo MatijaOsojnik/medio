@@ -2,8 +2,8 @@
   <v-app>
     <div id="app">
       <main>
-        <UserHeader v-if="$router.history.current['name'] !== 'admin-login'"/>
-          <router-view/>
+        <UserHeader :class="$store.state.user ? 'container page-container' : ''" v-if="$router.history.current['name'] !== 'admin-login'"/>
+          <router-view :class="$store.state.user ? 'container page-container' : ''"/>
         <Footer />
       </main>
     </div>
@@ -28,6 +28,10 @@ export default {
   /* max-width: 1px;
   min-width: 1200px;
   margin: 0 auto; */
+}
+
+.page-container {
+  max-width: 1150px;
 }
 
 a {

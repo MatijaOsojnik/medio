@@ -1,53 +1,16 @@
 <template>
-  <div class="container" v-if="$store.state.isUserLoggedIn">
+  <div v-if="$store.state.isUserLoggedIn">
     <v-app-bar flat color="white" hide-on-scroll>
       <v-toolbar-title class="d-xl-block d-lg-block d-md-block d-none">
-        <router-link :to="{name: 'stories'}" class="brand-black">Medio</router-link>
+        <router-link :to="{name: 'stories'}" class="brand-black pa-4">Medio</router-link>
       </v-toolbar-title>
       <v-toolbar-title class="d-xl-none d-lg-none d-md-none d-block">
-        <router-link :to="{name: 'stories'}" class="mobile-logo">
+        <router-link :to="{name: 'stories'}" class="mobile-logo ma-3">
           M
           <!-- <v-img src="@/assets/logo.png" style="border-radius: 7px;" max-width="50px"></v-img> -->
         </router-link>
       </v-toolbar-title>
 
-      <!-- <v-menu
-        bottom
-        transition="scale-transition"
-        :close-on-content-click="false"
-        v-if="$store.state.isUserLoggedIn"
-      >
-        <template v-slot:activator="{ on }">
-          <v-btn color="#ededed" v-on="on" style="margin-left: 30px;">
-            Browse
-            <v-icon small>mdi-menu-down</v-icon>
-          </v-btn>
-        </template>
-
-        <v-card max-width="200px">
-          <v-container fluid>
-            <span class="subtitle ma-2 d-block font-weight-bold text-center">Featured</span>
-            <div class="d-flex justify-center align-center flex-column ma-3">
-              <v-btn depressed small text block :to="{name: `stories`}">All stories</v-btn>
-            </div>
-            <v-divider />
-            <span class="subtitle ma-2 d-block font-weight-bold text-center">Categories</span>
-            <div
-              class="d-flex justify-center align-center flex-column ma-1"
-              v-for="category in categories"
-              :key="category.id"
-            >
-              <v-btn
-                depressed
-                small
-                text
-                block
-                :to="{path: `/stories/categories/${category.id}`}"
-              >{{category.name}}</v-btn>
-            </div>
-          </v-container>
-        </v-card>
-      </v-menu>-->
 
       <v-spacer></v-spacer>
 
@@ -66,8 +29,8 @@
         <router-link
           :to="{path: `/users/${($store.state.user.display_name).toLowerCase()}/${$store.state.user.id}/bookmarks`}"
         >
-          <v-avatar v-if="!$store.state.user.icon_url">
-            <v-icon size="33px">mdi-bookmark-multiple-outline</v-icon>
+          <v-avatar size="40px">
+            <v-icon>mdi-bookmark-multiple-outline</v-icon>
           </v-avatar>
         </router-link>
       </v-btn>
@@ -81,10 +44,10 @@
       >
         <template v-slot:activator="{ on }">
           <v-btn color="#1b262c" v-on="on" icon style="margin-right: 0.3em">
-            <v-avatar v-if="!$store.state.user.icon_url">
-              <v-icon size="33px">mdi-account-circle-outline</v-icon>
+            <v-avatar v-if="!$store.state.user.icon_url" size="40px">
+              <v-icon>mdi-account-circle-outline</v-icon>
             </v-avatar>
-            <v-avatar v-else>
+            <v-avatar v-else size="40px">
               <v-img :src="$store.state.user.icon_url" />
             </v-avatar>
           </v-btn>
@@ -239,7 +202,6 @@ export default {
   opacity: 0.9;
   font-weight: 400 !important;
   font-size: 33px !important;
-  padding: 2px;
   border-top: 1px solid;
   border-bottom: 1px solid;
 }
@@ -249,7 +211,7 @@ export default {
   opacity: 0.9;
   font-weight: 400 !important;
   font-size: 33px !important;
-  padding: 2px;
+  padding: 3px;
   border: 2px solid
 }
 .brand {

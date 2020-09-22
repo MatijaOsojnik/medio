@@ -49,7 +49,7 @@
                 <div>
                   <span class="d-block story-count font-weight-bold">{{story.Sentences.length}}</span>
                   <span class="subtitle">Interactive exercises</span>
-                </div> -->
+                </div>-->
               </div>
             </v-card-text>
             <v-card-actions class="justify-center">
@@ -57,7 +57,10 @@
                 <router-link
                   :to="$store.state.isUserLoggedIn ? {name: 'story-action'} : {name: 'register'}"
                 >
-                  <v-btn :class="`${hover ? 'cta-btn-hover' : 'cta-btn-active'}`" class="mb-3">Get Started</v-btn>
+                  <v-btn
+                    :class="`${hover ? 'cta-btn-hover' : 'cta-btn-active'}`"
+                    class="mb-3"
+                  >Get Started</v-btn>
                 </router-link>
               </v-hover>
             </v-card-actions>
@@ -89,7 +92,7 @@ import CardRecommended from "@/components/Card-Recommended";
 export default {
   components: {
     StoryMetadata,
-    CardRecommended
+    CardRecommended,
   },
   data: () => ({
     story: null,
@@ -98,7 +101,7 @@ export default {
     adminPermissions: false,
     imageError: false,
     categoryStories: [],
-    differentStories: []
+    differentStories: [],
   }),
   created() {
     this.getStory();
@@ -106,13 +109,14 @@ export default {
   },
   watch: {
     // call again the method if the route changes
-    $route: "getStory"
+    $route: "getStory",
   },
   methods: {
     async getStory() {
       try {
         const storyId = this.$route.params.id;
         const responseStory = await StoryService.show(storyId);
+
         const responseSimilarStories = await StoryService.showSimilar(
           responseStory.data.category_id,
           storyId
@@ -123,9 +127,7 @@ export default {
         );
         if (this.$store.state.user) {
           if (responseStory.data.Users[0]) {
-            if (
-              responseStory.data.Users[0].id === this.$store.state.user.id
-            ) {
+            if (responseStory.data.Users[0].id === this.$store.state.user.id) {
               this.isOwner = true;
             } else {
               this.isOwner = false;
@@ -138,6 +140,9 @@ export default {
         this.imageError = false;
       } catch (err) {
         console.log(err);
+        this.$router.push({
+          path: `/stories`,
+        });
       }
     },
     async deleteStory() {
@@ -178,8 +183,8 @@ export default {
     },
     async imageLoadError() {
       this.imageError = true;
-    }
-  }
+    },
+  },
 };
 </script>
 

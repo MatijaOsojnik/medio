@@ -50,18 +50,27 @@ const routes = [{
     path: '/stories',
     name: 'stories',
     component: Stories,
+    meta: {
+      onlyPrivilegedUser: true
+    }
   },
   {
     path: '/stories/:id',
     name: 'story',
     component: Story,
-    props: true
+    props: true,
+    meta: {
+      onlyPrivilegedUser: true
+    }
   },
   {
     path: '/stories/categories/:categoryId',
     name: 'stories-categories',
     component: Stories,
     props: true,
+    meta: {
+      onlyPrivilegedUser: true
+    }
   },
   {
     path: '/stories/create/:id',
@@ -91,6 +100,9 @@ const routes = [{
     path: '/users/:displayName/:id/profile',
     name: 'show-user',
     component: User,
+    meta: {
+      onlyPrivilegedUser: true
+    }
   },
   {
     path: '/users/:displayName/:id/edit',
@@ -110,13 +122,13 @@ const routes = [{
     }
   },
   {
-        path: '/users/:displayName/:id/bookmarks',
-          name: 'user-bookmarks',
-          component: UserBookmarks,
-          meta: {
-            onlyPrivilegedUser: true,
-            belongsToUser: true
-          }
+    path: '/users/:displayName/:id/bookmarks',
+    name: 'user-bookmarks',
+    component: UserBookmarks,
+    meta: {
+      onlyPrivilegedUser: true,
+      belongsToUser: true
+    }
   },
   {
     path: '/admin/main',
@@ -164,8 +176,28 @@ const routes = [{
     },
   },
   {
+    path: '/admin',
+    redirect: '/admin/login'
+  },
+  {
+    path: '/admin/main',
+    redirect: '/admin/login'
+  },
+  {
+    path: '/admin/categories',
+    redirect: '/admin/login'
+  },
+  {
+    path: '/admin/roles',
+    redirect: '/admin/login'
+  },
+  {
+    path: '/admin',
+    redirect: '/admin/stories'
+  },
+  {
     path: '*',
-    redirect: 'stories'
+    redirect: `${store.state.isUserLoggedIn ? '/stories' : '/'}`
   },
 ]
 
