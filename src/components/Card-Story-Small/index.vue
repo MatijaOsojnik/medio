@@ -21,6 +21,7 @@
                 </template>
                 <span>Updated at {{story.updatedAt | formatDate}}</span>
               </v-tooltip>
+              <!-- Router link to current page -->
               <router-link :to="$router.currentRoute">
                 <v-icon class="mr-3" style="z-index: 999;" @click="addBookmark(story.id)">{{bookmarkIcon}}</v-icon>
               </router-link>
