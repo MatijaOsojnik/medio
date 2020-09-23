@@ -62,62 +62,73 @@ passport.use(new FacebookStrategy({
             email
         } = profile._json
         try {
-            const user = await User.findOne({
-                where: {
-                    facebook_id: id,
-                    email: email
+            async (req, res) => {
+                const user = await User.findOne({
+                    where: {
+                        facebook_id: id,
+                        email: email
+                    }
+                })
+                if (!user) {
+                    await User.create({
+                        display_name: name,
+                        email: email,
+                        icon_url: picture.data.url,
+                        facebook_id: id
+                    }).then((user) => {
+                        user.setRoles([1]).then(async () => {
+
+                            const authorities = []
+
+                            await user.getRoles().then(roles => {
+                                for (let i = 0; i < roles.length; i++) {
+                                    authorities.push("ROLE_" + roles[i].name.toUpperCase());
+                                }
+                                const userJson = user.toJSON();
+                                res.send({
+                                    authorities: authorities,
+                                    user: user,
+                                    token: jwtSignUser(userJson)
+                                })
+                            })
+                        }).catch((req, res, err) => {
+                            res.status(500).send({
+                                error: err
+                            })
+                        })
+                    })
                 }
-            })
-            if (!user) {
-                await User.create({
-                    display_name: name,
-                    email: email,
-                    icon_url: picture.data.url,
-                    facebook_id: id
-                }).then((req, res, user) => {
 
-                    user.setRoles([1]).then(async () => {
-                        const authorities = []
+                const authorities = []
 
-                        const roles = await user.getRoles()
-                        for (let i = 0; i < roles.length; i++) {
-                            authorities.push("ROLE_" + roles[i].name.toUpperCase());
-                        }
-
-                        const userJson = user.toJSON();
-                        res.send({
-                            authorities: authorities,
-                            user: user,
-                            token: jwtSignUser(userJson)
-                        })
-                    }).catch(err => {
-                        res.status(500).send({
-                            error: err
-                        })
+                await user.getRoles().then(roles => {
+                    for (let i = 0; i < roles.length; i++) {
+                        authorities.push("ROLE_" + roles[i].name.toUpperCase());
+                    }
+                    const userJson = user.toJSON();
+                    res.send({
+                        authorities: authorities,
+                        user: user,
+                        token: jwtSignUser(userJson)
                     })
                 })
             }
 
-            const authorities = []
-
-            const roles = await user.getRoles()
-            for (let i = 0; i < roles.length; i++) {
-                authorities.push("ROLE_" + roles[i].name.toUpperCase());
-            }
-
-            const userJson = user.toJSON();
-            res.send({
-                authorities: authorities,
-                user: user,
-                token: jwtSignUser(userJson)
-            })
         } catch (err) {
             console.log(err)
         }
 
-        console.log(id, name, picture.data.url, email)
         return cb(null, profile);
     }
 ));
+
+passport.serializeUser(function (cb, user) {
+    console.log(user)
+    cb(null, user)
+});
+
+passport.deserializeUser(function (cb, obj) {
+    cb(null, obj);
+});
 
 module.exports = null

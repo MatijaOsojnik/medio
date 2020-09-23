@@ -29,7 +29,7 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
         },
         icon_url: {
-            type: DataTypes.STRING,
+            type: DataTypes.TEXT,
             // default: '@/src/assets/neighbors.svg'
         },
         facebook_id: {
@@ -45,7 +45,7 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
         },
         description: {
-            type: DataTypes.STRING,
+            type: DataTypes.TEXT,
         },
         instagram_url: {
             type: DataTypes.STRING

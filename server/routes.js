@@ -50,15 +50,15 @@ module.exports = (app) => {
     // LOGIN, REGISTER ROUTES
     app.post('/api/register', AuthenticationControllerPolicy.register, AuthenticationController.register)
     app.post('/api/login', AuthenticationController.login)
-    app.get('/api/auth/facebook', passport.authenticate('facebook'))
+    app.get('/api/auth/facebook', passport.authenticate('facebook', {scope: 'email'}))
     app.get('/api/auth/facebook/callback',
         passport.authenticate('facebook', {
-            successRedirect: "http://localhost:8080/stories",
             failureRedirect: "http://localhost:8080/login"
         }),
         function (req, res) {
+            
             // Successful authentication, redirect home.
-            res.redirect('http://localhost:8080/stories');
+            res.redirect('http://localhost:8080/');
         });
 
     //USER ROUTES

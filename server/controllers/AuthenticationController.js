@@ -82,7 +82,6 @@ module.exports = {
 
             const authorities = []
         
-
         const roles = await user.getRoles()
         for (let i = 0; i < roles.length; i++) {
             authorities.push("ROLE_" + roles[i].name.toUpperCase());
