@@ -2,16 +2,22 @@ const passport = require('passport')
 const FacebookStrategy = require('passport-facebook').Strategy
 const {
     User,
-    Role
 } = require('../models')
-const {
-    Op
-} = require("sequelize");
+
+const jwt = require('jsonwebtoken');
+
+function jwtSignUser(user) {
+    return jwt.sign({
+        user,
+    }, config.authentication.jwtSecret, {
+        expiresIn: 86400
+    })
+}
 
 const JwtStrategy = require('passport-jwt').Strategy
 const ExtractJwt = require('passport-jwt').ExtractJwt
 
-const config = require('../config')
+const config = require('../config');
 
 const jwtOptions = {
     jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
@@ -28,7 +34,7 @@ passport.use(
             })
             if (user) {
                 return done(null, user)
-            } else{
+            } else {
                 return done(null, false)
             }
         } catch (err) {
@@ -43,16 +49,75 @@ passport.use(new FacebookStrategy({
         callbackURL: config.authentication.facebookCallbackURL,
         profileFields: ['id', 'displayName', 'photos', 'emails']
     },
-  function (accessToken, refreshToken, profile, cb) {
-      // In this example, the user's Facebook profile is supplied as the user
-      // record.  In a production-quality application, the Facebook profile should
-      // be associated with a user record in the application's database, which
-      // allows for account linking and authentication with other identity
-      // providers.
-      const {id, name, picture, email} = profile._json
-      console.log(id)
-      return cb(null, profile);
-  }
+    async function (accessToken, refreshToken, profile, cb) {
+        // In this example, the user's Facebook profile is supplied as the user
+        // record.  In a production-quality application, the Facebook profile should
+        // be associated with a user record in the application's database, which
+        // allows for account linking and authentication with other identity
+        // providers.
+        const {
+            id,
+            name,
+            picture,
+            email
+        } = profile._json
+        try {
+            const user = await User.findOne({
+                where: {
+                    facebook_id: id,
+                    email: email
+                }
+            })
+            if (!user) {
+                await User.create({
+                    display_name: name,
+                    email: email,
+                    icon_url: picture.data.url,
+                    facebook_id: id
+                }).then((req, res, user) => {
+
+                    user.setRoles([1]).then(async () => {
+                        const authorities = []
+
+                        const roles = await user.getRoles()
+                        for (let i = 0; i < roles.length; i++) {
+                            authorities.push("ROLE_" + roles[i].name.toUpperCase());
+                        }
+
+                        const userJson = user.toJSON();
+                        res.send({
+                            authorities: authorities,
+                            user: user,
+                            token: jwtSignUser(userJson)
+                        })
+                    }).catch(err => {
+                        res.status(500).send({
+                            error: err
+                        })
+                    })
+                })
+            }
+
+            const authorities = []
+
+            const roles = await user.getRoles()
+            for (let i = 0; i < roles.length; i++) {
+                authorities.push("ROLE_" + roles[i].name.toUpperCase());
+            }
+
+            const userJson = user.toJSON();
+            res.send({
+                authorities: authorities,
+                user: user,
+                token: jwtSignUser(userJson)
+            })
+        } catch (err) {
+            console.log(err)
+        }
+
+        console.log(id, name, picture.data.url, email)
+        return cb(null, profile);
+    }
 ));
 
 module.exports = null
