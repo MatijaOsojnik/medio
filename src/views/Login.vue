@@ -41,14 +41,14 @@
           color="blue"
           href="http://localhost:8082/api/auth/facebook/"
         >
-          <v-icon size="40px">mdi-facebook</v-icon>
+          <v-icon size="42px">mdi-facebook</v-icon>
         </v-btn>
         <v-btn
           class="mx-4"
           icon
           color="blue"
         >
-          <v-icon size="40px">mdi-google</v-icon>
+          <v-icon size="42px">mdi-google</v-icon>
         </v-btn>
     </AuthenticationPanel>
   </div>

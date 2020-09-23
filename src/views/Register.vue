@@ -59,6 +59,22 @@
         </div>
       </form>
       <v-btn color="primary" class="submit-btn" max-width="60%" @click="register">Register</v-btn>
+      <span class="d-block ma-3 mb-4 align-center">Or sign up with</span>
+        <v-btn
+          class="mx-4"
+          icon
+          color="blue"
+          href="http://localhost:8082/api/auth/facebook/"
+        >
+          <v-icon size="42px">mdi-facebook</v-icon>
+        </v-btn>
+        <v-btn
+          class="mx-4"
+          icon
+          color="blue"
+        >
+          <v-icon size="42px">mdi-google</v-icon>
+        </v-btn>
     </AuthenticationPanel>
   </div>
 </template>
