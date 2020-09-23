@@ -27,11 +27,13 @@ module.exports = (sequelize, DataTypes) => {
         },
         password: {
             type: DataTypes.STRING,
-            allowNull: false
         },
         icon_url: {
             type: DataTypes.STRING,
             // default: '@/src/assets/neighbors.svg'
+        },
+        facebook_id: {
+            type: DataTypes.STRING,
         },
         birth_date: {
             type: DataTypes.DATE

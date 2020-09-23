@@ -1,8 +1,12 @@
 const passport = require('passport')
 const FacebookStrategy = require('passport-facebook').Strategy
 const {
-    User
+    User,
+    Role
 } = require('../models')
+const {
+    Op
+} = require("sequelize");
 
 const JwtStrategy = require('passport-jwt').Strategy
 const ExtractJwt = require('passport-jwt').ExtractJwt
@@ -36,16 +40,18 @@ passport.use(
 passport.use(new FacebookStrategy({
         clientID: config.authentication.facebookApiKey,
         clientSecret: config.authentication.facebookApiSecret,
-        callbackURL: config.authentication.facebookCallbackURL
+        callbackURL: config.authentication.facebookCallbackURL,
+        profileFields: ['id', 'displayName', 'photos', 'emails']
     },
-    function (accessToken, refreshToken, profile, done) {
-        process.nextTick(async function () {
-                // if sets to true
-            console.log(profile)
-
-            return done(null, profile);
-        });
-    }
+  function (accessToken, refreshToken, profile, cb) {
+      // In this example, the user's Facebook profile is supplied as the user
+      // record.  In a production-quality application, the Facebook profile should
+      // be associated with a user record in the application's database, which
+      // allows for account linking and authentication with other identity
+      // providers.
+      console.log
+      return cb(null, profile);
+  }
 ));
 
 module.exports = null

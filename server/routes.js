@@ -53,11 +53,12 @@ module.exports = (app) => {
     app.get('/api/auth/facebook', passport.authenticate('facebook'))
     app.get('/api/auth/facebook/callback',
         passport.authenticate('facebook', {
-            failureRedirect: '/register'
+            successRedirect: "http://localhost:8080/stories",
+            failureRedirect: "http://localhost:8080/login"
         }),
         function (req, res) {
             // Successful authentication, redirect home.
-            res.redirect('/');
+            res.redirect('http://localhost:8080/stories');
         });
 
     //USER ROUTES
@@ -115,7 +116,7 @@ module.exports = (app) => {
     app.post('/api/history/:storyId/:userId', GeneralController.postHistory)
     app.post('/api/bookmarks/:storyId/:userId', GeneralController.postBookmark)
     app.delete('/api/bookmarks/:storyId/:userId', GeneralController.deleteBookmark),
-    app.get('/api/bookmarks/:userId', GeneralController.getBookmarks)
+        app.get('/api/bookmarks/:userId', GeneralController.getBookmarks)
 
     //FILE UPLOAD ROUTE
     // app.post('/upload', upload.single('file'), (req, res) => {
