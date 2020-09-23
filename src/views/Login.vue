@@ -39,6 +39,7 @@
           class="mx-4"
           icon
           color="blue"
+          href="http://localhost:8082/api/auth/facebook/"
         >
           <v-icon size="40px">mdi-facebook</v-icon>
         </v-btn>

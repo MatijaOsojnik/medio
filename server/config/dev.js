@@ -12,6 +12,9 @@ module.exports = {
         }
     },
     authentication: {
-        jwtSecret: process.env.JWT_SECRET || 'secret'
+        jwtSecret: process.env.JWT_SECRET || 'secret',
+        facebookApiKey: '233715621400416',
+        facebookApiSecret: '9fb3e2da3243b0f48cf440c0421adfe4',
+        facebookCallbackURL: 'http://localhost:8082/api/auth/facebook/callback',
     }
 }

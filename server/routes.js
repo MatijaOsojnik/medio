@@ -6,6 +6,7 @@ const UsersController = require('./controllers/UsersController')
 const GeneralController = require('./controllers/GeneralController')
 
 // const authJwt = require('./middleware/authJwt')
+const passport = require('passport')
 
 const AuthenticationControllerPolicy = require('./policies/AuthenticationControllerPolicy')
 const UserControllerPolicy = require('./policies/UserControllerPolicy')
@@ -49,6 +50,15 @@ module.exports = (app) => {
     // LOGIN, REGISTER ROUTES
     app.post('/api/register', AuthenticationControllerPolicy.register, AuthenticationController.register)
     app.post('/api/login', AuthenticationController.login)
+    app.get('/api/auth/facebook', passport.authenticate('facebook'))
+    app.get('/api/auth/facebook/callback',
+        passport.authenticate('facebook', {
+            failureRedirect: '/register'
+        }),
+        function (req, res) {
+            // Successful authentication, redirect home.
+            res.redirect('/');
+        });
 
     //USER ROUTES
     app.get('/api/users', UsersController.index)

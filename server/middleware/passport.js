@@ -1,4 +1,5 @@
 const passport = require('passport')
+const FacebookStrategy = require('passport-facebook').Strategy
 const {
     User
 } = require('../models')
@@ -31,5 +32,20 @@ passport.use(
         }
     })
 )
+
+passport.use(new FacebookStrategy({
+        clientID: config.authentication.facebookApiKey,
+        clientSecret: config.authentication.facebookApiSecret,
+        callbackURL: config.authentication.facebookCallbackURL
+    },
+    function (accessToken, refreshToken, profile, done) {
+        process.nextTick(async function () {
+                // if sets to true
+            console.log(profile)
+
+            return done(null, profile);
+        });
+    }
+));
 
 module.exports = null
