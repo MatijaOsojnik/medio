@@ -65,7 +65,7 @@ module.exports = (app) => {
     app.post('/api/auth/facebook', passport.authenticate('facebook', {
         scope: 'email',
         session: false,
-    }))
+    }, AuthenticationController.facebookAuth))
     app.post('/auth/facebook/callback',
         passport.authenticate('facebook', {
             failureRedirect: 'http://localhost:8080/login'
@@ -75,20 +75,8 @@ module.exports = (app) => {
             res.redirect('/');
         });
 
-    app.get('/api/auth/google',
-        passport.authenticate('google', {
-            scope: ['profile', 'email'],
-            session: false
-        }));
-
-    app.get('/api/auth/google/callback',
-        passport.authenticate('google', {
-            failureRedirect: '/login'
-        }),
-        function (req, res) {
-            // Successful authentication, redirect home.
-            res.redirect('/');
-        });
+    app.post('/api/auth/google',
+        AuthenticationController.googleAuth);
 
     //USER ROUTES
     app.get('/api/users', UsersController.index)

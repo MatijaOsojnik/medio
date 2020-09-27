@@ -52,7 +52,7 @@ passport.use(new GoogleStrategy({
     async (accessToken, refreshToken, profile, cb) => {
         try {
             const {
-                id,
+                sub,
                 name,
                 picture,
                 email
@@ -66,13 +66,13 @@ passport.use(new GoogleStrategy({
                 where: {
                     email: email
                 }
-            }).then(user => {
-                return user.update({
-                        google_id: id
-                })
-            }).catch(err => {
-                console.log(err)
             })
+
+            if(user) {
+                await user.update({
+                    google_id: sub
+                })
+            }
 
 
             if (!user) {
@@ -80,10 +80,9 @@ passport.use(new GoogleStrategy({
                     display_name: name,
                     email: email,
                     icon_url: picture,
-                    google_id: id
+                    google_id: sub
                 })
             }
-            console.log(user)
             return cb(null, user)
 
         } catch (error) {
@@ -120,13 +119,13 @@ passport.use(new FacebookStrategy({
                 where: {
                     email: email
                 }
-            }).then(user => {
-                return user.update({
+            })
+
+            if(user) {
+                await user.update({
                     facebook_id: id
                 })
-            }).catch(err => {
-                console.log(err)
-            })
+            }
 
 
             if (!user) {
@@ -134,7 +133,7 @@ passport.use(new FacebookStrategy({
                     display_name: name,
                     email: email,
                     icon_url: picture.data.url,
-                    google_id: id
+                    facebook_id: id
                 })
             }
             return cb(null, user)

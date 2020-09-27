@@ -7,7 +7,10 @@ export default {
     login(credentials) {
         return axios.post('login', credentials)
     },
-    facebookLogin() {
-        return axios.get('auth/facebook')
+    facebookAuth(user) {
+        return axios.post('auth/facebook', user)
+    },
+    googleAuth(user) {
+        return axios.post('auth/google', user)
     }
 }

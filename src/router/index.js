@@ -51,7 +51,7 @@ const routes = [{
     name: 'stories',
     component: Stories,
     meta: {
-      onlyPrivilegedUser: true
+      onlyAuthUser: true
     }
   },
   {
@@ -60,7 +60,7 @@ const routes = [{
     component: Story,
     props: true,
     meta: {
-      onlyPrivilegedUser: true
+      onlyAuthUser: true
     }
   },
   {
@@ -69,7 +69,7 @@ const routes = [{
     component: Stories,
     props: true,
     meta: {
-      onlyPrivilegedUser: true
+      onlyAuthUser: true
     }
   },
   {
@@ -77,7 +77,7 @@ const routes = [{
     name: 'story-create',
     component: StoryCreate,
     meta: {
-      onlyPrivilegedUser: true
+      onlyPriviligedUser: true
     }
   },
   {
@@ -85,7 +85,7 @@ const routes = [{
     name: 'story-edit',
     component: StoryEdit,
     meta: {
-      onlyPrivilegedUser: true
+      onlyAuthUser: true
     }
   },
   {
@@ -101,7 +101,7 @@ const routes = [{
     name: 'show-user',
     component: User,
     meta: {
-      onlyPrivilegedUser: true
+      onlyAuthUser: true
     }
   },
   {
@@ -117,7 +117,7 @@ const routes = [{
     name: 'user-stories',
     component: UserStories,
     meta: {
-      onlyPrivilegedUser: true,
+      onlyAuthUser: true,
       belongsToUser: true
     }
   },
@@ -126,7 +126,7 @@ const routes = [{
     name: 'user-bookmarks',
     component: UserBookmarks,
     meta: {
-      onlyPrivilegedUser: true,
+      onlyAuthUser: true,
       belongsToUser: true
     }
   },

@@ -46,13 +46,21 @@
       <v-btn color="primary" class="submit-btn" max-width="60%" @click="login"
         >Login</v-btn
       >
+
       <span class="d-block ma-3 mb-4 align-center">Or sign in with</span>
+      <div class="flex align-center justify-center mx-4">
+        <div class="align-center">
+          <GoogleLogin
+            :params="params"
+            :renderParams="renderParams"
+            :onSuccess="googleAuth"
+            :onFailure="onFailure"
+          />
+        </div>
+      </div>
       <!-- <v-btn class="mx-4" icon color="blue" :href="facebookLoginUrl">
         <v-icon size="42px">mdi-facebook</v-icon>
       </v-btn> -->
- <v-btn class="mx-4" icon color="blue">
-        <v-icon size="42px">mdi-google</v-icon>
-      </v-btn>
     </AuthenticationPanel>
   </div>
 </template>
@@ -60,9 +68,12 @@
 <script>
 import AuthenticationPanel from "@/components/Authentication-Panel/Authentication-Panel";
 import AuthenticationService from "@/services/AuthenticationService";
+import GoogleLogin from "vue-google-login";
+
 export default {
   components: {
     AuthenticationPanel,
+    GoogleLogin,
   },
   data: () => ({
     email: "",
@@ -72,23 +83,26 @@ export default {
     showPassword: false,
     error: null,
     facebookLoginUrl: "",
-    facebookAppId: process.env.VUE_APP_FACEBOOK_API_KEY
+    facebookAppId: process.env.VUE_APP_FACEBOOK_API_KEY,
+    params: {
+      client_id: process.env.VUE_APP_GOOGLE_API_KEY,
+    },
+    renderParams: {
+      scope: "profile email",
+      width: 240,
+      height: 50,
+      longtitle: true,
+      theme: "dark",
+    },
   }),
-  mounted() {
-    
-  },
+  mounted() {},
   methods: {
     async login() {
       try {
-        let response;
-        response = await AuthenticationService.login({
+        const response = await AuthenticationService.login({
           email: this.email,
           password: this.password,
         });
-
-        response = await AuthenticationService.facebookLogin();
-
-        console.log(response);
 
         this.showPanel = true;
 
@@ -109,18 +123,37 @@ export default {
         setTimeout(() => (this.error = null), 5000);
       }
     },
-    // facebookLogin() {
-    //   const stringifiedParams = queryString.stringify({
-    //     client_id: process.env.VUE_APP_FACEBOOK_API_KEY,
-    //     redirect_uri: "http://localhost:8080/auth/facebook/",
-    //     scope: ["email", "user_friends"].join(","), // comma seperated string
-    //     response_type: "code",
-    //     auth_type: "rerequest",
-    //     display: "popup",
-    //   });
+    async googleAuth(googleUser) {
+      try {
+        const response = await AuthenticationService.googleAuth(
+          googleUser.getBasicProfile()
+        );
 
-    //   this.facebookLoginUrl = `https://www.facebook.com/v4.0/dialog/oauth?${stringifiedParams}`;
-    // },
+        this.showPanel = true;
+
+        setTimeout(() => {
+          this.loginSuccess = true;
+        }, 1500);
+
+        if (response) {
+          setTimeout(() => {
+            this.$store.dispatch("setToken", response.data.token);
+            this.$store.dispatch("setUser", response.data.user);
+            this.$store.dispatch("setAuthorities", response.data.authorities);
+            this.loginSuccess = false;
+            this.showPanel = false;
+            this.$router.push({ name: "stories" });
+          }, 2500);
+        }
+      } catch (error) {
+        this.error = error.response.data.error;
+        setTimeout(() => (this.error = null), 5000);
+      }
+    },
+    async onFailure() {
+      this.error = `Google Authentication failed.`;
+      setTimeout(() => (this.error = null), 2000);
+    },
   },
 };
 </script>
