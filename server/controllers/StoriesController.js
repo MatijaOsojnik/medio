@@ -24,19 +24,30 @@ module.exports = {
     },
     async post(req, res) {
         try {
-            const story = await Story.create(req.body)
-                .then((story) => {
-                    if (req.params.userId) {
-                        User.findByPk(req.params.userId).then((user) => {
-                            story.setUsers(user)
-                        }).catch((err) => {
-                            res.send({
-                                err: err
+            const user = await User.findOne({
+                where: {
+                    id: req.params.userId
+                }
+            })
+            if (user) {
+                const story = await Story.create(req.body)
+                    .then((story) => {
+                        if (req.params.userId) {
+                            User.findByPk(req.params.userId).then((user) => {
+                                story.setUsers(user)
+                            }).catch((err) => {
+                                res.send({
+                                    err: err
+                                })
                             })
-                        })
-                    }
+                        }
+                    })
+                res.send('Successful Story Creation')
+            } else {
+                res.status(500).send({
+                    error: `An error has occured trying to create story`
                 })
-            res.send('Successful Story Creation')
+            }
         } catch (error) {
             console.log(error)
             res.status(500).send({
