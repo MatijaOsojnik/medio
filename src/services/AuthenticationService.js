@@ -6,5 +6,8 @@ export default {
     },
     login(credentials) {
         return axios.post('login', credentials)
+    },
+    facebookLogin() {
+        return axios.get('auth/facebook')
     }
 }

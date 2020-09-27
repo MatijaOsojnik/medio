@@ -13,9 +13,21 @@ const UserControllerPolicy = require('./policies/UserControllerPolicy')
 const StoryControllerPolicy = require('./policies/StoryControllerPolicy')
 
 // const UserControllerPolicy = require('./policies/UserControllerPolicy')
-const isAuthenticated = require('./policies/isAuthenticated')
+// const isAuthenticated = require('./policies/isAuthenticated')
+
+// const jwt = require('jsonwebtoken');
+
+// const config = require('./config');
 
 const multer = require('multer');
+
+// function jwtSignUser(user) {
+//     return jwt.sign({
+//         user,
+//     }, config.authentication.jwtSecret, {
+//         expiresIn: 86400
+//     })
+// }
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -50,15 +62,16 @@ module.exports = (app) => {
     // LOGIN, REGISTER ROUTES
     app.post('/api/register', AuthenticationControllerPolicy.register, AuthenticationController.register)
     app.post('/api/login', AuthenticationController.login)
-    app.get('/api/auth/facebook', passport.authenticate('facebook', {scope: 'email'}))
-    app.get('/api/auth/facebook/callback',
+    app.post('auth/facebook', passport.authenticate('facebookToken', {
+        scope: 'email'
+    }))
+    app.post('/auth/facebook/callback',
         passport.authenticate('facebook', {
-            failureRedirect: "http://localhost:8080/login"
+            failureRedirect: 'http://localhost:8080/login'
         }),
         function (req, res) {
-            
             // Successful authentication, redirect home.
-            res.redirect('http://localhost:8080/');
+            res.redirect('/');
         });
 
     //USER ROUTES

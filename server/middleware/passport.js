@@ -61,73 +61,57 @@ passport.use(new FacebookStrategy({
             picture,
             email
         } = profile._json
-        try {
-            async (req, res) => {
-                const user = await User.findOne({
-                    where: {
-                        facebook_id: id,
-                        email: email
-                    }
-                })
-                if (!user) {
-                    await User.create({
-                        display_name: name,
-                        email: email,
-                        icon_url: picture.data.url,
-                        facebook_id: id
-                    }).then((user) => {
-                        user.setRoles([1]).then(async () => {
 
-                            const authorities = []
-
-                            await user.getRoles().then(roles => {
-                                for (let i = 0; i < roles.length; i++) {
-                                    authorities.push("ROLE_" + roles[i].name.toUpperCase());
-                                }
-                                const userJson = user.toJSON();
-                                res.send({
-                                    authorities: authorities,
-                                    user: user,
-                                    token: jwtSignUser(userJson)
-                                })
-                            })
-                        }).catch((req, res, err) => {
-                            res.status(500).send({
-                                error: err
-                            })
-                        })
-                    })
-                }
-
-                const authorities = []
-
-                await user.getRoles().then(roles => {
-                    for (let i = 0; i < roles.length; i++) {
-                        authorities.push("ROLE_" + roles[i].name.toUpperCase());
-                    }
-                    const userJson = user.toJSON();
-                    res.send({
-                        authorities: authorities,
-                        user: user,
-                        token: jwtSignUser(userJson)
-                    })
-                })
+        let user = await User.findOne({
+            where: {
+                facebook_id: id,
+                email: email
             }
+        })
 
-        } catch (err) {
-            console.log(err)
+        if (!user) {
+            user = await User.create({
+                display_name: name,
+                email: email,
+                icon_url: picture.data.url,
+                facebook_id: id
+            })
         }
+        return cb(null, user);
 
-        return cb(null, profile);
     }
 ));
 
-passport.serializeUser(function (cb, user) {
-    console.log(user)
-    cb(null, user)
+passport.serializeUser(function (user, cb) {
+    //         let newUser;
+    // user.setRoles([1]).then(async () => {
+
+    //     const authorities = []
+
+    //     let userJson;
+
+    //     await user.getRoles().then(roles => {
+    //         for (let i = 0; i < roles.length; i++) {
+    //             authorities.push("ROLE_" + roles[i].name.toUpperCase());
+    //         }
+    //         userJson = user.toJSON();
+
+    //         newUser = {
+    //             authorities: authorities,
+    //             user: user,
+    //             token: jwtSignUser(userJson)
+    //         }
+               
+    //     })
+    // }).catch((req, res, err) => {
+    //     res.status(500).send({
+    //         error: err
+    //     })
+    // })
+ cb(null, user)
 });
 
-passport.deserializeUser(function (cb, obj) {
+passport.deserializeUser(function (obj, cb) {
     cb(null, obj);
 });
 

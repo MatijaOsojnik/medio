@@ -1,7 +1,13 @@
 <template>
   <div>
     <v-overlay v-if="showPanel" absolute z-index="999" :opacity="0.1">
-      <v-progress-circular indeterminate color="green" :size="50" :width="5" v-if="!loginSuccess" />
+      <v-progress-circular
+        indeterminate
+        color="green"
+        :size="50"
+        :width="5"
+        v-if="!loginSuccess"
+      />
       <v-scroll-x-transition>
         <v-alert type="success" v-if="loginSuccess">Login successful!</v-alert>
       </v-scroll-x-transition>
@@ -20,7 +26,11 @@
       </v-scroll-x-transition>
       <form @submit.prevent="handleSubmit">
         <div>
-          <v-text-field label="E-mail" v-model="email" prepend-inner-icon="mdi-email-outline" />
+          <v-text-field
+            label="E-mail"
+            v-model="email"
+            prepend-inner-icon="mdi-email-outline"
+          />
         </div>
         <div>
           <v-text-field
@@ -33,23 +43,16 @@
           />
         </div>
       </form>
-      <v-btn color="primary" class="submit-btn" max-width="60%" @click="login">Login</v-btn>
+      <v-btn color="primary" class="submit-btn" max-width="60%" @click="login"
+        >Login</v-btn
+      >
       <span class="d-block ma-3 mb-4 align-center">Or sign in with</span>
-        <v-btn
-          class="mx-4"
-          icon
-          color="blue"
-          href="http://localhost:8082/api/auth/facebook/"
-        >
-          <v-icon size="42px">mdi-facebook</v-icon>
-        </v-btn>
-        <v-btn
-          class="mx-4"
-          icon
-          color="blue"
-        >
-          <v-icon size="42px">mdi-google</v-icon>
-        </v-btn>
+      <!-- <v-btn class="mx-4" icon color="blue" :href="facebookLoginUrl">
+        <v-icon size="42px">mdi-facebook</v-icon>
+      </v-btn> -->
+ <v-btn class="mx-4" icon color="blue">
+        <v-icon size="42px">mdi-google</v-icon>
+      </v-btn>
     </AuthenticationPanel>
   </div>
 </template>
@@ -67,15 +70,25 @@ export default {
     loginSuccess: false,
     showPanel: false,
     showPassword: false,
-    error: null
+    error: null,
+    facebookLoginUrl: "",
+    facebookAppId: process.env.VUE_APP_FACEBOOK_API_KEY
   }),
+  mounted() {
+    
+  },
   methods: {
     async login() {
       try {
-        const response = await AuthenticationService.login({
+        let response;
+        response = await AuthenticationService.login({
           email: this.email,
-          password: this.password
+          password: this.password,
         });
+
+        response = await AuthenticationService.facebookLogin();
+
+        console.log(response);
 
         this.showPanel = true;
 
@@ -95,8 +108,20 @@ export default {
         this.error = error.response.data.error;
         setTimeout(() => (this.error = null), 5000);
       }
-    }
-  }
+    },
+    // facebookLogin() {
+    //   const stringifiedParams = queryString.stringify({
+    //     client_id: process.env.VUE_APP_FACEBOOK_API_KEY,
+    //     redirect_uri: "http://localhost:8080/auth/facebook/",
+    //     scope: ["email", "user_friends"].join(","), // comma seperated string
+    //     response_type: "code",
+    //     auth_type: "rerequest",
+    //     display: "popup",
+    //   });
+
+    //   this.facebookLoginUrl = `https://www.facebook.com/v4.0/dialog/oauth?${stringifiedParams}`;
+    // },
+  },
 };
 </script>
 
