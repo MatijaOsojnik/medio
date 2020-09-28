@@ -62,7 +62,7 @@
         class="title d-block my-6"
         v-if="$router.history.current['name'] === 'stories'"
         ><v-icon>{{ "mdi-chevron-up-box-outline" }}</v-icon
-        >Top Trending</span
+        > Top Trending</span
       >
 
       <v-row class="flex-sm-fill">
@@ -81,7 +81,7 @@
         class="title d-block my-6"
         v-if="$router.history.current['name'] === 'stories'"
         ><v-icon>{{ "mdi-book-open-page-variant" }}</v-icon
-        >Based On Your Recent Reading</span
+        > Based On Your Recent Reading</span
       >
 
       <v-row class="flex-sm-fill">
