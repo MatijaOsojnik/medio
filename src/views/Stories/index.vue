@@ -24,7 +24,7 @@
       <v-progress-circular indeterminate color="primary" class="d-block ma-5"></v-progress-circular>
     </div>
     <v-container fluid v-if="stories && !loading">
-        <span class="title d-block my-6" v-if="$router.history.current['name'] === 'stories'">Editor Choice</span>
+        <span class="title d-block my-6" v-if="$router.history.current['name'] === 'stories'"><v-icon>{{'mdi-bullseye-arrow'}}</v-icon> Editor's Choice</span>
         <span
           class="title"
           v-else-if="$router.history.current['name'] === 'stories-categories' && stories"
@@ -39,7 +39,7 @@
           </v-col>
         </v-row>
         <v-divider class="my-12"/>
-                <span class="title d-block my-6" v-if="$router.history.current['name'] === 'stories'">Editor Choice</span>
+                <span class="title d-block my-6" v-if="$router.history.current['name'] === 'stories'"><v-icon>{{'mdi-chevron-up-box-outline'}}</v-icon>Top Trending</span>
 
         <v-row class="flex-sm-fill">
           

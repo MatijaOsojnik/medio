@@ -148,7 +148,7 @@ export default {
     this.getCategories();
   },
   methods: {
-    async logout() {
+    logout() {
       this.$store.dispatch("setToken", null);
       this.$store.dispatch("setUser", null);
       this.$store.dispatch("setAuthorities", null);

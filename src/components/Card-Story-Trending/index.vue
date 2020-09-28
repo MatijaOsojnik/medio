@@ -7,11 +7,15 @@
       :elevation="hover ? 8 : 2"
     >
       <div>
-        <v-card-actions style="padding-bottom: 0;">
+        <v-card-actions style="padding-bottom: 0">
           <v-list-item>
             <router-link
               v-if="story.Users[0]"
-              :to="{path: `/users/${story.Users[0].display_name.toLowerCase()}/${story.Users[0].id}/profile`}"
+              :to="{
+                path: `/users/${story.Users[0].display_name.toLowerCase()}/${
+                  story.Users[0].id
+                }/profile`,
+              }"
             >
               <v-list-item-avatar size="28px" color="grey darken-3">
                 <v-img
@@ -38,24 +42,25 @@
             </router-link>
           </v-list-item>
         </v-card-actions>
-        <v-card-actions style="margin: 0; padding: 0 8px;">
-        <v-card-title>{{ story.title }}</v-card-title>
+        <v-card-actions style="margin: 0; padding: 0 8px">
+          <v-card-title>{{ story.title }}</v-card-title>
         </v-card-actions>
-        <v-card-actions style="padding-top: 0px;">
-
-        <div class="d-flex justify-space-between">
-          <v-tooltip top>
-            <template v-slot:activator="{ on, attrs }">
-              <span
-                class="subtitle-2 px-4 mb-2   blue-grey--text d-inline-block"
-                v-bind="attrs"
-                v-on="on"
-                >{{ story.createdAt | formatDate }} · {{Math.floor(story.description.length/200)}} min read</span
-              >
-            </template>
-            <span>Updated at {{ story.updatedAt | formatDate }}</span>
-          </v-tooltip>
-        </div>
+        <v-card-actions style="padding-top: 0px">
+          <div class="d-flex justify-space-between">
+            <v-tooltip top>
+              <template v-slot:activator="{ on, attrs }">
+                <span
+                  class="subtitle-2 px-4 mb-2 blue-grey--text d-inline-block"
+                  v-bind="attrs"
+                  v-on="on"
+                  >{{ story.createdAt | formatDate }} ·
+                  {{ readingTime }}
+                  min read</span
+                >
+              </template>
+              <span>Updated at {{ story.updatedAt | formatDate }}</span>
+            </v-tooltip>
+          </div>
         </v-card-actions>
       </div>
     </v-card>
@@ -69,12 +74,14 @@ export default {
   data: () => ({
     imageError: false,
     bookmarkIcon: "mdi-bookmark-outline",
+    readingTime: 0,
   }),
   props: {
     story: Object,
   },
   created() {
     this.checkBookmark();
+    this.totalReadingTime(this.story.description)
   },
   methods: {
     async imageLoadError() {
@@ -119,6 +126,14 @@ export default {
         } catch (err) {
           console.log(err);
         }
+      }
+    },
+    totalReadingTime(content) {
+      const time = content.split(" ").length / 200;
+      if (time < 1) {
+        this.readingTime = 1;
+      } else {
+        this.readingTime = Math.round(time);
       }
     },
   },
