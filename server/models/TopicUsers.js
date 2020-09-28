@@ -1,9 +1,9 @@
 module.exports = (sequelize, DataTypes) => {
-    const PublicationUsers = sequelize.define('PublicationUsers', {
-        PublicationId: {
+    const TopicUsers = sequelize.define('TopicUsers', {
+        TopicId: {
             type: DataTypes.INTEGER,
             references: {
-                model: 'Publications',
+                model: 'Topics',
                 key: 'id'
             }
         },
@@ -16,5 +16,5 @@ module.exports = (sequelize, DataTypes) => {
         }
     });
 
-    return PublicationUsers;
+    return TopicUsers;
 }

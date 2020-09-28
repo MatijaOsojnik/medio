@@ -4,7 +4,6 @@ module.exports = {
     update(req, res, next) {
         const schema = Joi.object({
             display_name: Joi.string()
-                .alphanum()
                 .min(3)
                 .max(30)
                 .messages({

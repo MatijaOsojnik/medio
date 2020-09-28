@@ -9,7 +9,10 @@
         <span class="heading ma-4 d-block">Looks like you don't have any stories bookmarked yet..</span>
       </slot>
     </div>
-    <div></div>
+    <div>
+      <span class="title ma-4 d-block">Your Bookmarks</span>
+        <span class="heading ma-4 d-block">Looks like you don't have any stories bookmarked yet..</span>
+    </div>
   </v-container>
 </template>
 
@@ -27,9 +30,5 @@ export default {
 }
 .back-link:hover {
   color: #303841;
-}
-.story-count {
-  display: inline-block;
-  font-size: 16px;
 }
 </style>

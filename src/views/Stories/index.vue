@@ -62,11 +62,16 @@
           </v-col>-->
         </v-row>
         <v-row style="margin: 0;">
+          <v-col v-for="story in stories" :key="story.id" class="col-xl-4 col-lg-4 col-md-3 col-sm-6 col-12" style="margin:0;">
+            <StoryCardTrendingComponent :story="story"/>
+          </v-col>
+        </v-row>
+        <v-row style="margin: 0;">
           <v-col
           style="margin: 0;"
             class="col-xl-8 col-lg-8 col-md-8 col-sm-12 col-12d-block justify-center justify-sm-center pa-0"
           >
-            <v-col v-for="story in storyLimit" :key="story.id">
+            <v-col v-for="story in stories" :key="story.id">
               <StoryCardSmallComponent :story="story" />
             </v-col>
           </v-col>
@@ -86,6 +91,7 @@
 import StoryService from "@/services/StoryService.js";
 import StoryCardComponent from "@/components/Card-Story";
 import StoryCardSmallComponent from "@/components/Card-Story-Small";
+import StoryCardTrendingComponent from "@/components/Card-Story-Trending";
 import GeneralService from "@/services/GeneralService";
 // import Metadata from "@/views/Stories/Metadata";
 import Header from "@/components/Header/Header.vue";
@@ -93,6 +99,7 @@ export default {
   components: {
     StoryCardComponent,
     StoryCardSmallComponent,
+    StoryCardTrendingComponent,
     // Metadata,
     Header,
   },
