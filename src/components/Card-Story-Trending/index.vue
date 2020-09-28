@@ -47,10 +47,10 @@
           <v-tooltip top>
             <template v-slot:activator="{ on, attrs }">
               <span
-                class="subtitle-2 px-4 mb-2 d-inline-block"
+                class="subtitle-2 px-4 mb-2   blue-grey--text d-inline-block"
                 v-bind="attrs"
                 v-on="on"
-                >{{ story.createdAt | formatDate }}</span
+                >{{ story.createdAt | formatDate }} · {{Math.floor(story.description.length/200)}} min read</span
               >
             </template>
             <span>Updated at {{ story.updatedAt | formatDate }}</span>

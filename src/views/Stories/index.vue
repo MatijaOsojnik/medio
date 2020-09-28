@@ -24,32 +24,12 @@
       <v-progress-circular indeterminate color="primary" class="d-block ma-5"></v-progress-circular>
     </div>
     <v-container fluid v-if="stories && !loading">
-        <!-- <Metadata>
-          <template v-slot:completed-stories>
-            <span class="title" v-if="userStories.length > 0">Completed Stories</span>
-            <v-row style="z-index: 100" v-if="userStories" class="flex-sm-fill">
-              <v-col
-                class="col-xl-3 col-lg-3 col-md-3 col-sm-6 col-12 d-flex d-sm-flex d-md-block d-lg-block d-xl-block justify-center justify-sm-center"
-                v-for="story in userStories"
-                :key="story.Story.id"
-              >
-                <StoryCardComponent :story="story.Story" />
-              </v-col>
-            </v-row>
-          </template>
-        </Metadata> -->
-        <span class="title ma-4" v-if="$router.history.current['name'] === 'stories'">All Stories</span>
+        <span class="title d-block my-6" v-if="$router.history.current['name'] === 'stories'">Editor Choice</span>
         <span
           class="title"
           v-else-if="$router.history.current['name'] === 'stories-categories' && stories"
         >{{stories[0].Category.name}}</span>
-        <v-row style="z-index: 100;" class="flex-sm-fill ma-1">
-          <!-- <v-col
-            class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-12 d-flex d-sm-flex d-md-block d-lg-block d-xl-block justify-center justify-sm-center"
-            v-if="priviliges"
-          >
-            <StoryCardCreateComponent :card="card" />
-          </v-col>-->
+        <v-row style="z-index: 100;" class="flex-sm-fill">
           <v-col
             class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12 d-flex d-sm-flex d-md-block d-lg-block d-xl-block justify-center justify-sm-center"
             v-for="story in storyLimit"
@@ -57,16 +37,19 @@
           >
             <StoryCardComponent :story="story" />
           </v-col>
-          <!-- <v-col class="col-12 text-center">
-            <v-btn @click="limit = null" v-if="limit && stories.length > 10">Show More</v-btn>
-          </v-col>-->
         </v-row>
-        <v-row style="margin: 0;">
+        <v-divider class="my-12"/>
+                <span class="title d-block my-6" v-if="$router.history.current['name'] === 'stories'">Editor Choice</span>
+
+        <v-row class="flex-sm-fill">
+          
           <v-col v-for="story in stories" :key="story.id" class="col-xl-4 col-lg-4 col-md-3 col-sm-6 col-12" style="margin:0;">
             <StoryCardTrendingComponent :story="story"/>
           </v-col>
         </v-row>
-        <v-row style="margin: 0;">
+                <v-divider class="my-12"/>
+
+        <v-row class="flex-sm-fill" >
           <v-col
           style="margin: 0;"
             class="col-xl-8 col-lg-8 col-md-8 col-sm-12 col-12d-block justify-center justify-sm-center pa-0"
