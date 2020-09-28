@@ -27,7 +27,7 @@
 
       <v-btn color="#1b262c" icon style="margin-right: 0.3em" class="ma-4">
         <router-link
-          :to="{path: `/users/${($store.state.user.display_name).toLowerCase()}/${$store.state.user.id}/bookmarks`}"
+          :to="{path: `/users/${($store.state.user.display_name).toLowerCase().replace(/\s/g,'')}/${$store.state.user.id}/bookmarks`}"
         >
           <v-avatar size="40px">
             <v-icon>mdi-bookmark-multiple-outline</v-icon>
@@ -41,7 +41,7 @@
         transition="scroll-y-transition"
         :close-on-content-click="false"
         v-if="$store.state.isUserLoggedIn"
-      >
+      > 
         <template v-slot:activator="{ on }">
           <v-btn color="#1b262c" v-on="on" icon style="margin-right: 0.3em">
             <v-avatar v-if="!$store.state.user.icon_url" size="40px">
@@ -57,7 +57,7 @@
           <v-container fluid>
             <div class="d-flex justify-center align-center flex-column ma-3">
               <router-link
-                :to="{path: `/users/${($store.state.user.display_name).toLowerCase()}/${$store.state.user.id}/profile`}"
+                :to="{path: `/users/${($store.state.user.display_name).toLowerCase().replace(/\s/g,'')}/${$store.state.user.id}/profile`}"
               >
                 <v-avatar v-if="!$store.state.user.icon_url">
                   <v-icon large>mdi-account-circle</v-icon>
@@ -69,7 +69,7 @@
               <router-link
                 class="d-block ma-2 bold"
                 style="font-size: 16px;"
-                :to="{path: `/users/${($store.state.user.display_name).toLowerCase()}/${$store.state.user.id}/profile`}"
+                :to="{path: `/users/${($store.state.user.display_name).toLowerCase().replace(/\s/g,'')}/${$store.state.user.id}/profile`}"
               >
                 <span>{{$store.state.user.display_name}}</span>
               </router-link>
@@ -78,7 +78,7 @@
                 small
                 block
                 text
-                :to="{path: `/users/${($store.state.user.display_name).toLowerCase()}/${$store.state.user.id}/profile`}"
+                :to="{path: `/users/${($store.state.user.display_name).toLowerCase().replace(/\s/g,'')}/${$store.state.user.id}/profile`}"
               >View profile</v-btn>
             </div>
             <v-divider />
@@ -94,22 +94,20 @@
             <v-divider v-if="adminPermissions" />
             <div class="d-flex justify-center align-center flex-column ma-3">
               <v-btn
-                v-if="permissions"
                 class="ma-1"
                 depressed
                 small
                 text
                 block
-                :to="{path: `/users/${($store.state.user.display_name).toLowerCase()}/${$store.state.user.id}/stories`}"
+                :to="{path: `/stories/create/${$store.state.user.id}`}"
               >New Story</v-btn>
               <v-btn
-                v-if="permissions"
                 class="ma-1"
                 depressed
                 small
                 text
                 block
-                :to="{path: `/users/${($store.state.user.display_name).toLowerCase()}/${$store.state.user.id}/stories`}"
+                :to="{path: `/users/${($store.state.user.display_name).toLowerCase().replace(/\s/g,'')}/${$store.state.user.id}/stories`}"
               >My stories</v-btn>
               <v-btn
                 class="ma-1"
@@ -117,7 +115,7 @@
                 small
                 text
                 block
-                :to="{path: `/users/${($store.state.user.display_name).toLowerCase()}/${$store.state.user.id}/edit`}"
+                :to="{path: `/users/${($store.state.user.display_name).toLowerCase().replace(/\s/g,'')}/${$store.state.user.id}/edit`}"
               >Edit account</v-btn>
 
               <v-btn class="ma-1" depressed small text block @click="logout">Log out</v-btn>
@@ -150,12 +148,17 @@ export default {
     this.getCategories();
   },
   methods: {
-    async logout() {
+    logout() {
       this.$store.dispatch("setToken", null);
       this.$store.dispatch("setUser", null);
       this.$store.dispatch("setAuthorities", null);
       this.permissions = false;
       this.adminPermissions = false;
+          var auth2 = window.gapi.auth2.getAuthInstance();
+    auth2.signOut().then(function () {
+      console.log('User signed out.');
+    });
+
       this.$router.push({
         name: "login",
       });

@@ -35,6 +35,9 @@ module.exports = (sequelize, DataTypes) => {
         facebook_id: {
             type: DataTypes.STRING,
         },
+        google_id: {
+            type: DataTypes.STRING
+        },
         birth_date: {
             type: DataTypes.DATE
         },
@@ -81,6 +84,7 @@ module.exports = (sequelize, DataTypes) => {
     const Category = sequelize.models.Category;
     const Tag = sequelize.models.Tag;
     const Bookmark = sequelize.models.Bookmark
+    const Topic = sequelize.models.Topic
 
     Role.belongsToMany(User, {
         through: 'RoleUsers'
@@ -143,6 +147,20 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'story_id',
         targetKey: 'id'
     });
+
+    Topic.belongsToMany(User, {
+        through: 'StoryTags'
+    })
+    User.belongsToMany(Topic, {
+        through: 'StoryTags'
+    })
+
+    Topic.belongsToMany(Story, {
+        through: 'StoryTopics'
+    })
+    Story.belongsToMany(Topic, {
+        through: 'StoryTopics'
+    })
 
     return User;
 }

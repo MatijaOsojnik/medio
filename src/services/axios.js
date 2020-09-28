@@ -12,7 +12,7 @@ const axiosInstance = axios.create({
 })
 
 axiosInstance.interceptors.request.use((config) => {
-    const token = localStorage.getItem('thinq-jwt') || ''
+    const token = localStorage.getItem('medio-jwt') || ''
     if (token) {
         config.headers.Authorization = `Bearer ${token}`
     }

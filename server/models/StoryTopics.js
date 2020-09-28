@@ -1,20 +1,19 @@
 module.exports = (sequelize, DataTypes) => {
-    const PublicationUsers = sequelize.define('PublicationUsers', {
-        PublicationId: {
+    const StoryTopics = sequelize.define('StoryTopics', {
+        StoryId: {
             type: DataTypes.INTEGER,
             references: {
-                model: 'Publications',
+                model: 'Stories',
                 key: 'id'
             }
         },
-        UserId: {
+        TopicId: {
             type: DataTypes.INTEGER,
             references: {
-                model: 'Users',
+                model: 'Topics',
                 key: 'id'
             }
         }
     });
-
-    return PublicationUsers;
+    return StoryTopics;
 }

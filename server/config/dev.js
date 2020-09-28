@@ -16,5 +16,8 @@ module.exports = {
         facebookApiKey: process.env.FACEBOOK_API_KEY,
         facebookApiSecret: process.env.FACEBOOK_API_SECRET,
         facebookCallbackURL: process.env.FACEBOOK_API_CALLBACK_URL,
+        googleApiKey: process.env.GOOGLE_API_KEY,
+        googleApiSecret: process.env.GOOGLE_API_SECRET,
+        googleCallbackURL: process.env.GOOGLE_API_CALLBACK_URL,
     }
 }

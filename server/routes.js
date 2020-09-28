@@ -62,9 +62,10 @@ module.exports = (app) => {
     // LOGIN, REGISTER ROUTES
     app.post('/api/register', AuthenticationControllerPolicy.register, AuthenticationController.register)
     app.post('/api/login', AuthenticationController.login)
-    app.post('auth/facebook', passport.authenticate('facebookToken', {
-        scope: 'email'
-    }))
+    app.post('/api/auth/facebook', passport.authenticate('facebook', {
+        scope: 'email',
+        session: false,
+    }, AuthenticationController.facebookAuth))
     app.post('/auth/facebook/callback',
         passport.authenticate('facebook', {
             failureRedirect: 'http://localhost:8080/login'
@@ -73,6 +74,9 @@ module.exports = (app) => {
             // Successful authentication, redirect home.
             res.redirect('/');
         });
+
+    app.post('/api/auth/google',
+        AuthenticationController.googleAuth);
 
     //USER ROUTES
     app.get('/api/users', UsersController.index)

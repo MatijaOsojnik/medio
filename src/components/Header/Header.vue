@@ -78,8 +78,16 @@ export default {
     async logout() {
       this.$store.dispatch("setToken", null);
       this.$store.dispatch("setUser", null);
+      this.$store.dispatch("setAuthorities", null);
+      this.permissions = false;
+      this.adminPermissions = false;
+          var auth2 = window.gapi.auth2.getAuthInstance();
+    auth2.signOut().then(function () {
+      console.log('User signed out.');
+    });
+
       this.$router.push({
-        name: "login"
+        name: "login",
       });
     },
     async getCategories() {

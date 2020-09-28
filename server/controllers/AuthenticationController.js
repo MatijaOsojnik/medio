@@ -81,24 +81,98 @@ module.exports = {
             }
 
             const authorities = []
-        
-        const roles = await user.getRoles()
-        for (let i = 0; i < roles.length; i++) {
-            authorities.push("ROLE_" + roles[i].name.toUpperCase());
+
+            const roles = await user.getRoles()
+            for (let i = 0; i < roles.length; i++) {
+                authorities.push("ROLE_" + roles[i].name.toUpperCase());
+            }
+
+            const userJson = user.toJSON();
+            res.send({
+                authorities: authorities,
+                user: user,
+                token: jwtSignUser(userJson)
+            })
+
+        } catch (err) {
+            console.log(err)
+            res.status(500).send({
+                error: `An error has occured trying to log in.`
+            })
+        }
+    },
+    async googleAuth(req, res) {
+        const {
+            LT,
+            Ad,
+            $J,
+            Xt
+        } = req.body
+
+        let user = await User.findOne({
+            where: {
+                email: Xt
+            }
+        })
+
+        if (user) {
+            await user.update({
+                google_id: LT
+            })
         }
 
-        const userJson = user.toJSON();
-        res.send({
-            authorities: authorities,
-            user: user,
-            token: jwtSignUser(userJson)
-        })
+        if (!user) {
+            user = await User.create({
+                display_name: Ad,
+                email: Xt,
+                icon_url: $J,
+                google_id: LT
+            })
+            user.setRoles([1]).then(() => {
+                res.send({
+                    message: "User was registered successfully!"
+                });
+            }).catch(err => {
+                res.status(500).send({
+                    error: err
+                })
+            })
+        }
+            const token = jwtSignUser(user.toJSON());
+            // res.cookie('access_token', token, {
+            //     httpOnly: true
+            // });
+            const authorities = []
 
-    } catch (err) {
-        console.log(err)
-        res.status(500).send({
-            error: `An error has occured trying to log in.`
-        })
-    }
-},
+            const roles = await user.getRoles()
+            for (let i = 0; i < roles.length; i++) {
+                authorities.push("ROLE_" + roles[i].name.toUpperCase());
+            }
+
+            res.status(200).json({
+                authorities: authorities,
+                user: user,
+                token: token
+            })
+    },
+      async facebookAuth (req, res) {
+            const user = req.user
+            const token = jwtSignUser(req.user.toJSON());
+            res.cookie('access_token', token, {
+                httpOnly: true
+            });
+            const authorities = []
+
+            const roles = await user.getRoles()
+            for (let i = 0; i < roles.length; i++) {
+                authorities.push("ROLE_" + roles[i].name.toUpperCase());
+            }
+
+            res.status(200).json({
+                authorities: authorities,
+                user: user,
+                token: token
+            })
+      },
+
 }
