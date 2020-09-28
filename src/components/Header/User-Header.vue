@@ -1,6 +1,6 @@
 <template>
   <div v-if="$store.state.isUserLoggedIn">
-    <v-app-bar flat color="white" hide-on-scroll>
+    <v-app-bar flat color="white" :hide-on-scroll="$router.history.current['name'] === 'story-create' || $router.history.current['name'] === 'story-update' ? false : true">
       <v-toolbar-title class="d-xl-block d-lg-block d-md-block d-none">
         <router-link :to="{name: 'stories'}" class="brand-black pa-4">Medio</router-link>
       </v-toolbar-title>
@@ -15,7 +15,8 @@
       <v-spacer></v-spacer>
 
       <v-text-field
-      class="d-xl-flex d-lg-flex d-md-flex d-none"
+        :class="$router.history.current['name'] === 'story-create' || $router.history.current['name'] === 'story-update' ? 'd-none' : ''"
+        class="d-xl-flex d-lg-flex d-md-flex d-none"
         color="#A2D5F2"
         hide-details
         outlined
@@ -24,6 +25,7 @@
         style="max-width: 250px;"
         single-line
       ></v-text-field>
+
 
       <v-btn color="#1b262c" icon style="margin-right: 0.3em" class="ma-4">
         <router-link
@@ -154,10 +156,12 @@ export default {
       this.$store.dispatch("setAuthorities", null);
       this.permissions = false;
       this.adminPermissions = false;
-          var auth2 = window.gapi.auth2.getAuthInstance();
-    auth2.signOut().then(function () {
-      console.log('User signed out.');
-    });
+      if(window.gapi){
+        const auth2 = window.gapi.auth2.getAuthInstance();
+      auth2.signOut().then(function () {
+        console.log('User signed out.');
+      });
+      }
 
       this.$router.push({
         name: "login",

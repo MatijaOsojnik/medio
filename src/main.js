@@ -4,6 +4,16 @@ import router from './router'
 import store from './store'
 import vuetify from './plugins/vuetify';
 
+import {
+  TiptapVuetifyPlugin
+} from "tiptap-vuetify";
+
+Vue.use(TiptapVuetifyPlugin, {
+  vuetify,
+  iconsGroup: 'mdi'
+});
+
+
 import moment from 'moment'
 
 Vue.filter('formatDate', function (value) {

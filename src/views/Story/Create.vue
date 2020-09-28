@@ -1,5 +1,4 @@
 <template>
-  <v-app>
     <v-layout>
       <v-flex xs12 justify="center" align="center">
         <!-- <v-stepper v-model="stepper">
@@ -172,125 +171,106 @@
             </v-stepper-content>
 
             <v-stepper-content step="3"> -->
-              <v-card class="ma-12 mx-auto" max-width="1000px">
-                <v-toolbar flat color="#617BE3" dark>
-                  <v-toolbar-title>General Information</v-toolbar-title>
-                </v-toolbar>
-                <v-card-text>
-                  <v-form lazy-validation>
-                    <label for="title">Title</label>
-                    <v-text-field
-                      id="title"
-                      label="Enter a title for your story"
-                      maxlength="30"
-                      :rules="[rules.min]"
-                      counter
-                      solo
-                      aria-autocomplete="false"
-                      v-model="story.title"
-                    />
+        <!-- <v-card class="ma-12 mx-auto" max-width="1000px">
+          <v-toolbar flat color="#617BE3" dark>
+            <v-toolbar-title>General Information</v-toolbar-title>
+          </v-toolbar>
+          <v-card-text>
+            <v-form lazy-validation>
+              <label for="title">Title</label>
+              <v-text-field
+                id="title"
+                label="Enter a title for your story"
+                maxlength="30"
+                :rules="[rules.min]"
+                counter
+                solo
+                aria-autocomplete="false"
+                v-model="story.title"
+              />
 
-                    <label for="shortDescription">Short Description</label>
-                    <v-text-field
-                      id="shortDescription"
-                      :rules="[rules.short_description]"
-                      label="Write your short description here"
-                      solo
-                      clearable
-                      counter
-                      maxlength="60"
-                      hint="This description will be used on the Story card before the user clicks on it."
-                      aria-autocomplete="false"
-                      v-model="story.short_description"
-                    />
-                    <label for="description">Description</label>
-                    <div style="margin: 0.5rem 0 2rem">
-                      <tiptap-vuetify
-                        id="description"
-                        v-model="story.description"
-                        :rules="[rules.description]"
-                        placeholder="Write your description here."
-                        maxlength="300"
-                        :extensions="extensions"
-                      />
-                    </div>
+              <label for="shortDescription">Short Description</label>
+              <v-text-field
+                id="shortDescription"
+                :rules="[rules.short_description]"
+                label="Write your short description here"
+                solo
+                clearable
+                counter
+                maxlength="60"
+                hint="This description will be used on the Story card before the user clicks on it."
+                aria-autocomplete="false"
+                v-model="story.short_description"
+              />
+              <label for="description">Description</label> -->
+              <div class="text-editor-container">
+                <TextEditor/>
+              </div>
 
-                    <label for="category">Category</label>
-                    <v-select
-                      id="category"
-                      :items="categories"
-                      label="Select Category"
-                      v-model="story.category_id"
-                      item-text="name"
-                      item-value="id"
-                      solo
-                    ></v-select>
-                  </v-form>
-                  <v-scroll-x-transition>
-                    <v-alert elevation="2" type="warning" v-if="errors.length">
-                      <ul>
-                        <li v-for="error in errors" :key="error">{{ error }}</li>
-                      </ul>
-                    </v-alert>
-                  </v-scroll-x-transition>
-                  <v-scroll-x-transition>
-                    <v-alert type="success" mode="out-in" v-if="successfulStoryPost">
-                      <span>You successfuly posted a story</span>
-                    </v-alert>
-                  </v-scroll-x-transition>
-                </v-card-text>
-                <v-card-actions>
-                  <v-btn
-                    color="primary"
-                    :disabled="waitBeforeClick"
-                    block
-                    large
-                    @click="createStory"
-                  >COMPLETE</v-btn>
-                </v-card-actions>
-              </v-card>
-            <!-- </v-stepper-content>
+              <!-- <label for="category">Category</label>
+              <v-select
+                id="category"
+                :items="categories"
+                label="Select Category"
+                v-model="story.category_id"
+                item-text="name"
+                item-value="id"
+                solo
+              ></v-select>
+            </v-form>
+            <v-scroll-x-transition>
+              <v-alert elevation="2" type="warning" v-if="errors.length">
+                <ul>
+                  <li v-for="error in errors" :key="error">{{ error }}</li>
+                </ul>
+              </v-alert>
+            </v-scroll-x-transition>
+            <v-scroll-x-transition>
+              <v-alert type="success" mode="out-in" v-if="successfulStoryPost">
+                <span>You successfuly posted a story</span>
+              </v-alert>
+            </v-scroll-x-transition>
+          </v-card-text>
+          <v-card-actions>
+            <v-btn
+              color="primary"
+              :disabled="waitBeforeClick"
+              block
+              large
+              @click="createStory"
+              >COMPLETE</v-btn
+            >
+          </v-card-actions>
+        </v-card> -->
+        <!-- </v-stepper-content>
           </v-stepper-items>
         </v-stepper> -->
       </v-flex>
     </v-layout>
-  </v-app>
 </template>
 
 <script>
 import StoryService from "@/services/StoryService";
 import CategoryService from "@/services/CategoryService";
-import {
-  TiptapVuetify,
-  Heading,
-  Bold,
-  Italic,
-  Paragraph,
-  BulletList,
-  OrderedList,
-  ListItem,
-  HardBreak,
-  History,
-  Link
-} from "tiptap-vuetify";
+import TextEditor from "@/components/Text-Editor"
 
 export default {
   components: {
-    TiptapVuetify
+    TextEditor
   },
 
   data: () => ({
     stepper: 1,
     steps: 3,
     rules: {
-      short_description: text => text.length <= 60 || "Max 60 characters",
-      description: text => text.length <= 300 || "Max 300 characters",
-      file: value =>
+      short_description: (text) => text.length <= 60 || "Max 60 characters",
+      description: (text) => text.length <= 300 || "Max 300 characters",
+      file: (value) =>
         !value ||
         value.size < 2000000 ||
         "Thumbnail size should be less than 2 MB!",
-      required: value => !!value || "Required.",
-      min: v => v.length >= 8 || "Min 8 characters"
+      required: (value) => !!value || "Required.",
+      min: (v) => v.length >= 8 || "Min 8 characters",
     },
     story: {
       title: ``,
@@ -303,25 +283,6 @@ export default {
     successfulStoryPost: false,
     errors: [],
     categories: [],
-    extensions: [
-      History,
-      Bold,
-      Italic,
-      ListItem,
-      Link,
-      BulletList,
-      OrderedList,
-      [
-        Heading,
-        {
-          options: {
-            levels: [1, 2, 3]
-          }
-        }
-      ],
-      Paragraph,
-      HardBreak
-    ]
   }),
   mounted() {
     this.findCategories();
@@ -340,11 +301,11 @@ export default {
     //     }, 3000);
     //     return;
     //   }
-      // this.story.Tips.push(this.tip);
-      // this.tip = {
-      //   title: ``,
-      //   content: ``
-      // };
+    // this.story.Tips.push(this.tip);
+    // this.tip = {
+    //   title: ``,
+    //   content: ``
+    // };
     // },
     // removeTip(index) {
     //   this.story.Tips.splice(index, 1);
@@ -374,7 +335,7 @@ export default {
     async createStory() {
       this.waitBeforeClick = true;
       const areAllFieldsFilledIn = Object.keys(this.story).every(
-        key => !!this.story[key]
+        (key) => !!this.story[key]
       );
       if (!areAllFieldsFilledIn) {
         this.errors.push("Please fill in all the fields.");
@@ -393,7 +354,7 @@ export default {
             this.successfulStoryPost = false;
             this.waitBeforeClick = false;
             this.$router.push({
-              name: "stories"
+              name: "stories",
             });
           }, 3000);
         }
@@ -406,7 +367,7 @@ export default {
     async findCategories() {
       const response = await CategoryService.index();
 
-      response.data.map(category => {
+      response.data.map((category) => {
         this.categories.push({ name: category.name, id: category.id });
       });
     },
@@ -414,14 +375,20 @@ export default {
       if (this.$store.state.user) {
         if (this.$route.params.id != this.$store.state.user.id) {
           this.$router.push({
-            name: "stories"
+            name: "stories",
           });
         }
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
 <style>
+.text-editor-container {
+  max-width: 740px;
+padding-left: 20px;
+padding-right: 20px;
+margin: auto;
+}
 </style>
