@@ -17,9 +17,9 @@
                     class="subtitle-2 px-4 mb-2 d-inline-block"
                     v-bind="attrs"
                     v-on="on"
-                  >{{story.createdAt | formatDate}}</span>
+                  >{{story.createdAt | formatStoryDate}}</span>
                 </template>
-                <span>Updated at {{story.updatedAt | formatDate}}</span>
+                <span>Updated at {{story.updatedAt | formatStoryDate}}</span>
               </v-tooltip>
               <!-- Router link to current page -->
               <router-link :to="$router.currentRoute">

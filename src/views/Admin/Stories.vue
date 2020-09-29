@@ -64,7 +64,7 @@
                           aria-autocomplete="false"
                           v-model="story.short_description"
                         />
-                        <label for="description">Description</label>
+                        <label for="description">Story</label>
                         <div style="margin: 0.5rem 0 2rem">
                           <tiptap-vuetify
                             id="description"
@@ -95,16 +95,29 @@
                           item-value="id"
                           solo
                         ></v-select>
+
+                        <v-checkbox v-model="story.featured" label="Featured">
+                        </v-checkbox>
                       </v-form>
                       <v-scroll-x-transition>
-                        <v-alert type="success" mode="out-in" v-if="successfulStoryUpdate">
+                        <v-alert
+                          type="success"
+                          mode="out-in"
+                          v-if="successfulStoryUpdate"
+                        >
                           <span>You successfuly updated a story</span>
                         </v-alert>
                       </v-scroll-x-transition>
                       <v-scroll-x-transition>
-                        <v-alert elevation="2" type="warning" v-if="errors.length">
+                        <v-alert
+                          elevation="2"
+                          type="warning"
+                          v-if="errors.length"
+                        >
                           <ul>
-                            <li v-for="error in errors" :key="error">{{ error }}</li>
+                            <li v-for="error in errors" :key="error">
+                              {{ error }}
+                            </li>
                           </ul>
                         </v-alert>
                       </v-scroll-x-transition>
@@ -115,33 +128,47 @@
                         :disabled="waitBeforeClick"
                         large
                         @click="updateStory"
-                      >SUBMIT</v-btn>
+                        >SUBMIT</v-btn
+                      >
                       <v-btn
                         color="#ff6363"
                         large
                         :disabled="waitBeforeClick"
                         @click="dialog = false"
-                      >CLOSE</v-btn>
+                        >CLOSE</v-btn
+                      >
                     </v-card-actions>
                   </v-card>
                 </v-flex>
               </v-layout>
             </v-dialog>
             <v-dialog v-model="deleteDialog" max-width="200px">
-             <v-layout>
+              <v-layout>
                 <v-flex xs12 justify="center" align="center">
                   <v-card class="mx-auto">
                     <v-card-text v-if="story">
-                      <span class="font-weight-bold">Are you sure you want to delete this story?</span>
+                      <span class="font-weight-bold"
+                        >Are you sure you want to delete this story?</span
+                      >
                       <v-scroll-x-transition>
-                        <v-alert type="success" mode="out-in" v-if="successfulStoryDelete">
+                        <v-alert
+                          type="success"
+                          mode="out-in"
+                          v-if="successfulStoryDelete"
+                        >
                           <span>Story deleted</span>
                         </v-alert>
                       </v-scroll-x-transition>
                       <v-scroll-x-transition>
-                        <v-alert elevation="2" type="warning" v-if="errors.length">
+                        <v-alert
+                          elevation="2"
+                          type="warning"
+                          v-if="errors.length"
+                        >
                           <ul>
-                            <li v-for="error in errors" :key="error">{{ error }}</li>
+                            <li v-for="error in errors" :key="error">
+                              {{ error }}
+                            </li>
                           </ul>
                         </v-alert>
                       </v-scroll-x-transition>
@@ -151,13 +178,15 @@
                         color="#ff6363"
                         :disabled="waitBeforeClick"
                         @click="deleteStory"
-                      >DELETE</v-btn>
-                      <v-spacer/>
+                        >DELETE</v-btn
+                      >
+                      <v-spacer />
                       <v-btn
                         color="#f4f6ff"
                         :disabled="waitBeforeClick"
                         @click="deleteDialog = false"
-                      >CLOSE</v-btn>
+                        >CLOSE</v-btn
+                      >
                     </v-card-actions>
                   </v-card>
                 </v-flex>
@@ -165,7 +194,9 @@
             </v-dialog>
           </template>
           <template v-slot:item.actions="{ item }">
-            <v-icon small class="mr-2" @click="editStory(item)">mdi-pencil</v-icon>
+            <v-icon small class="mr-2" @click="editStory(item)"
+              >mdi-pencil</v-icon
+            >
             <v-icon small @click="deleteStoryDialog(item)">mdi-delete</v-icon>
           </template>
           <template v-slot:expanded-item="{ headers, item }">
@@ -200,14 +231,14 @@ import {
   ListItem,
   Link,
   HardBreak,
-  History
+  History,
 } from "tiptap-vuetify";
 import AdminHeader from "@/components/Header/Admin-Header.vue";
 
 export default {
   components: {
     AdminHeader,
-    TiptapVuetify
+    TiptapVuetify,
   },
   data: () => ({
     statistics: null,
@@ -218,13 +249,13 @@ export default {
     categories: [],
     errors: [],
     rules: {
-      short_description: text => text.length <= 80 || "Max 80 characters",
-      file: value =>
+      short_description: (text) => text.length <= 80 || "Max 80 characters",
+      file: (value) =>
         !value ||
         value.size < 2000000 ||
         "Thumbnail size should be less than 2 MB!",
-      required: value => !!value || "Required.",
-      min: v => v.length >= 8 || "Min 8 characters"
+      required: (value) => !!value || "Required.",
+      min: (v) => v.length >= 8 || "Min 8 characters",
     },
     successfulStoryUpdate: false,
     successfulStoryDelete: false,
@@ -241,30 +272,31 @@ export default {
         Heading,
         {
           options: {
-            levels: [1, 2, 3]
-          }
-        }
+            levels: [1, 2, 3],
+          },
+        },
       ],
       Paragraph,
-      HardBreak
+      HardBreak,
     ],
     search: "",
     headers: [
       {
         text: "ID",
-        value: "id"
+        value: "id",
       },
       {
         text: "Title",
         align: "start",
-        value: "title"
+        value: "title",
       },
       { text: "Creator ID", value: "Users[0].id" },
+      { text: "Featured", value: "featured" },
       { text: "Category", value: "Category.name" },
-      { text: "Actions", value: "actions", sortable: false }
-    ]
+      { text: "Actions", value: "actions", sortable: false },
+    ],
   }),
-  created() {
+  mounted() {
     this.getStories();
     this.getCategories();
   },
@@ -281,7 +313,7 @@ export default {
     async getCategories() {
       try {
         const response = await CategoryService.index();
-        response.data.map(category => {
+        response.data.map((category) => {
           this.categories.push({ name: category.name, id: category.id });
         });
       } catch (err) {
@@ -291,7 +323,7 @@ export default {
     async updateStory() {
       this.waitBeforeClick = true;
       const areAllFieldsFilledIn = Object.keys(this.story).every(
-        key => !!this.story[key]
+        (key) => !!this.story[key]
       );
       if (!areAllFieldsFilledIn) {
         this.errors.push("Please fill in all the fields.");
@@ -324,30 +356,30 @@ export default {
     },
     deleteStoryDialog(story) {
       this.story = story;
-      this.deleteDialog = true
-      // await storyService.delete(storyId), this.$router.go();       
+      this.deleteDialog = true;
+      // await storyService.delete(storyId), this.$router.go();
     },
     async deleteStory() {
       this.waitBeforeClick = true;
       try {
         await StoryService.delete(this.story.id)
-        .then(() => {
-          this.successfulstoryDelete = true;
-          setTimeout(() => {
-            this.successfulstoryDelete = false;
-            this.waitBeforeClick = false;
-            this.deleteDialog = false;
-            this.getStories();
-          }, 3000);
-        })
-        .catch((err) => console.log(err))
+          .then(() => {
+            this.successfulstoryDelete = true;
+            setTimeout(() => {
+              this.successfulstoryDelete = false;
+              this.waitBeforeClick = false;
+              this.deleteDialog = false;
+              this.getStories();
+            }, 3000);
+          })
+          .catch((err) => console.log(err));
       } catch (err) {
         this.errors = err.response.data;
         setTimeout(() => (this.waitBeforeClick = false), 3000);
         setTimeout(() => (this.errors = []), 5000);
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

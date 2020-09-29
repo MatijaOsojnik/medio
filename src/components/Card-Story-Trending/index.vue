@@ -58,7 +58,7 @@
                   min read</span
                 >
               </template>
-              <span>Updated at {{ story.updatedAt | formatDate }}</span>
+              <span>Updated at {{ story.updatedAt | formatStoryDate }}</span>
             </v-tooltip>
           </div>
         </v-card-actions>

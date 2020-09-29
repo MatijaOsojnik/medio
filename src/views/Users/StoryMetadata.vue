@@ -5,8 +5,8 @@
     </router-link>
     <div>
       <slot name="yourStories">
-        <span class="title ma-4 d-block">Your stories</span>
-        <span class="heading ma-4 d-block">Looks like you haven't made any stories yet..</span>
+        <span class="title ma-4 d-block">Latest</span>
+        <span class="heading ma-4 d-block">Seems like you haven't written any stories yet..</span>
       </slot>
     </div>
     <div></div>

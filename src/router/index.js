@@ -105,6 +105,22 @@ const routes = [{
     }
   },
   {
+    path: '/users/:displayName/:id/profile/followers',
+    name: 'user-followers',
+    component: User,
+    meta: {
+      onlyAuthUser: true
+    }
+  },
+  {
+    path: '/users/:displayName/:id/profile/following',
+    name: 'user-following',
+    component: User,
+    meta: {
+      onlyAuthUser: true
+    }
+  },
+  {
     path: '/users/:displayName/:id/edit',
     name: 'edit-user',
     component: EditUser,

@@ -103,7 +103,7 @@ module.exports = (app) => {
     app.put('/api/users/:userId', UserControllerPolicy.update, UsersController.put)
     app.delete('/api/users/:userId', UsersController.delete)
 
-    // ARTICLE ROUTES
+    // STORY ROUTES
     app.get('/api/stories', StoriesController.index)
     app.get('/api/stories/:storyId', StoriesController.show)
     app.get('/api/stories/users/:userId', StoriesController.user)
@@ -111,7 +111,7 @@ module.exports = (app) => {
     app.get('/api/stories/categories/similar/:categoryId/:storyId', StoriesController.showSimilar)
     app.get('/api/stories/categories/other/:categoryId/:storyId', StoriesController.showDifferent)
 
-    app.put('/ap/stories/:storyId', StoryControllerPolicy.update, StoriesController.put)
+    app.put('/api/stories/:storyId', StoryControllerPolicy.update, StoriesController.put)
     app.post('/api/stories/:userId', StoryControllerPolicy.update, StoriesController.post)
     app.delete('/api/stories/:storyId', StoriesController.delete)
 

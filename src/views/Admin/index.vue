@@ -33,7 +33,7 @@ export default {
       {
         link: "admin-stories",
         icon: "mdi-animation-play",
-        title: "ARTICLES"
+        title: "STORIES"
       },
       {
         link: "admin-categories",

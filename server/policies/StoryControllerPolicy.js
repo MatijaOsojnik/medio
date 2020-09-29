@@ -37,6 +37,7 @@ module.exports = {
             thumbnail_url: Joi.string()
                 .allow(''),
             category_id: Joi.allow('', null),
+            featured: Joi.allow('', null)
         }).unknown(true)
 
         const {

@@ -1,25 +1,57 @@
 <template>
-  <div class="py-12">
-    <v-card class="mx-auto my-6" max-width="1000px" max-height="1500px">
+  <div class="">
+    <v-card class="mx-auto" tile max-width="680px">
       <v-container v-if="user">
         <v-row>
           <v-col
-            class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12 d-sm-flex justify-sm-center"
+            class="col-xl-9 col-lg-9 col-md-9 col-sm-12 col-12 d-sm-flex justify-sm-center"
           >
             <v-container fluid>
-              <div class="d-flex justify-center align-center flex-column ma-3">
-                <v-avatar size="150" v-if="!user.icon_url">
-                  <v-img src="@/assets/blue-error-background.jpg"></v-img>
-                </v-avatar>
-                <v-avatar v-else size="150">
-                  <v-img :src="user.icon_url" />
-                </v-avatar>
-                <span class="d-block my-2 text-capitalize title">{{
-                  user.display_name
-                }}</span>
-                <span v-if="user.title" class="d-block ma-1 subtitle-2">{{
+              <div class="d-flex justify-center flex-column">
+                <div class="d-flex align-center">
+                  <div>
+                    <span class="text-capitalize font-weight-bold display-1">{{
+                      user.display_name
+                    }}</span>
+                  </div>
+                  <div>
+                    <v-btn
+                      small
+                      white
+                      outlined
+                      class="ml-5"
+                      v-if="$store.state.user.id != $route.params.id"
+                      @click="!isFollower ? addFollow() : deleteFollow()"
+                    >
+                      {{ isFollowerText }}
+                    </v-btn>
+                  </div>
+                </div>
+
+                <span v-if="!user.description" class="d-block my-4 description"
+                  >Hi, I'm {{ user.display_name }}.</span
+                >
+                <span
+                  v-else
+                  class="d-block my-4"
+                  v-html="user.description"
+                ></span>
+                <span class="blue-grey--text text">
+                  Medium member since {{ user.createdAt | formatUserDate }}
+                </span>
+                <router-link
+                  :to="{ name: 'user-followers' }"
+                  class="inline-block"
+                >
+                </router-link>
+                <router-link
+                  :to="{ name: 'user-following' }"
+                  class="inline-block"
+                >
+                </router-link>
+                <!-- <span v-if="user.title" class="d-block ma-1 subtitle-2">{{
                   user.title.toUpperCase()
-                }}</span>
+                }}</span> -->
                 <v-btn
                   small
                   absolute
@@ -38,12 +70,11 @@
                   <v-icon>mdi-pencil</v-icon>
                 </v-btn>
               </div>
-              <v-divider />
-              <div class="d-flex justify-center align-center">
+              <div class="d-flex align-center">
                 <v-btn
                   icon
                   v-if="user.facebook_url"
-                  class="ma-4"
+                  class="mr-4"
                   large
                   target="_blank"
                   :href="user.facebook_url"
@@ -54,7 +85,7 @@
                   icon
                   large
                   v-if="user.instagram_url"
-                  class="ma-4"
+                  class="mr-4"
                   target="_blank"
                   :href="user.instagram_url"
                 >
@@ -64,7 +95,7 @@
                   icon
                   large
                   v-if="user.linkedin_url"
-                  class="ma-4"
+                  class="mr-4"
                   target="_blank"
                   :href="user.linkedin_url"
                 >
@@ -74,14 +105,14 @@
                   large
                   icon
                   v-if="user.twitter_url"
-                  class="ma-4"
+                  class="mr-4"
                   target="_blank"
                   :href="user.twitter_url"
                 >
                   <v-icon color="#4267B2">mdi-twitter</v-icon>
                 </v-btn>
               </div>
-              <div v-if="$route.params.id == $store.state.user.id">
+              <!-- <div v-if="$route.params.id == $store.state.user.id">
                 <v-btn
                   v-if="!user.title"
                   block
@@ -106,53 +137,39 @@
                   }"
                   >Add Description</v-btn
                 >
-              </div>
-              <div>
-                <v-btn
-                  block
-                  white
-                  text
-                  class="mt-5"
-                  v-if="$store.state.user.id != $route.params.id"
-                  @click="!isFollower ? addFollow() : deleteFollow()"
-                >
-                  {{ isFollowerText }}
-                </v-btn>
-              </div>
+              </div> -->
 
               <!-- <div class="d-flex justify-center align-center flex-column ma-3">
               </div>-->
             </v-container>
           </v-col>
-          <v-col class="col-xl-8 col-lg-8 col-md-8 col-sm-12 col-12">
-            <div height="300px">
-              <div>
+          <v-col class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+            <div>
+              <v-avatar size="120" v-if="!user.icon_url">
+                <v-img src="@/assets/blue-error-background.jpg"></v-img>
+              </v-avatar>
+              <v-avatar v-else size="120">
+                <v-img :src="user.icon_url" />
+              </v-avatar>
+              <!-- <div>
                 <span class="d-block about-title">About Me</span>
-              </div>
-              <span v-if="!user.description" class="d-block my-4"
-                >Hi, I'm {{ user.display_name }}.</span
-              >
-              <span
-                v-else
-                class="d-block my-4"
-                v-html="user.description"
-              ></span>
+              </div> -->
             </div>
-            <ProfileMetadata>
-              <template v-slot:userStories>
-                <span v-if="stories.length" class="d-block about-title"
-                  >My Stories</span
-                >
-                <v-slide-group class="pa-4" show-arrows v-if="stories.length">
-                  <v-slide-item v-for="story in stories" :key="story.id">
-                    <UserStory :story="story" />
-                  </v-slide-item>
-                </v-slide-group>
-              </template>
-            </ProfileMetadata>
           </v-col>
         </v-row>
       </v-container>
+    </v-card>
+    <v-card class="mx-auto my-10" tile flat max-width="680px">
+      <ProfileMetadata>
+        <template v-slot:userStories>
+          <span v-if="stories.length" class="d-block title"
+            >My Stories</span
+          >
+          <div v-for="story in stories" :key="story.id">
+            <UserStory :story="story" />
+          </div>
+        </template>
+      </ProfileMetadata>
     </v-card>
   </div>
 </template>
