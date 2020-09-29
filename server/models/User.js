@@ -85,6 +85,7 @@ module.exports = (sequelize, DataTypes) => {
     const Tag = sequelize.models.Tag;
     const Bookmark = sequelize.models.Bookmark
     const Topic = sequelize.models.Topic
+    const Follower = sequelize.models.Follower
 
     Role.belongsToMany(User, {
         through: 'RoleUsers'
@@ -147,6 +148,15 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'story_id',
         targetKey: 'id'
     });
+
+        Follower.belongsTo(User, {
+            foreignKey: 'follower_id',
+            targetKey: 'id'
+        });
+        Follower.belongsTo(User, {
+            foreignKey: 'followed_id',
+            targetKey: 'id'
+        });
 
     Topic.belongsToMany(User, {
         through: 'StoryTags'

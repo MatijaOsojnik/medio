@@ -421,4 +421,8 @@ h3 {
     max-width: 100%;
     border-radius: 3px;
 }
+
+.tiptap-vuetify-editor__content {
+  padding: 2em;
+}
 </style>
