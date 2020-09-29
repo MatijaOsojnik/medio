@@ -139,10 +139,10 @@ module.exports = (app) => {
 
     // FOLLOW ROUTE
 
-    app.get('/api/followers/single', FollowerController.findFollower)
+    app.post('/api/followers/single', FollowerController.findFollower)
     app.get('/api/followers', FollowerController.getFollowers)
     app.post('/api/followers', FollowerController.postFollow)
-    app.delete('/api/followers', FollowerController.deleteFollow)
+    app.delete('/api/followers/:followerId/:followedId', FollowerController.deleteFollow)
 
     //FILE UPLOAD ROUTE
     // app.post('/upload', upload.single('file'), (req, res) => {

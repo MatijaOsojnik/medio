@@ -108,16 +108,16 @@
                 >
               </div>
               <div>
-                            <v-btn
-                block
-                white
-                text
-                class="mt-5"
-                v-if="$store.state.user.id != $route.params.id"
-                @click="isFollower ? addFollow : removeFollow"
-              >
-                {{isFollowerText}}
-              </v-btn>
+                <v-btn
+                  block
+                  white
+                  text
+                  class="mt-5"
+                  v-if="$store.state.user.id != $route.params.id"
+                  @click="!isFollower ? addFollow() : deleteFollow()"
+                >
+                  {{ isFollowerText }}
+                </v-btn>
               </div>
 
               <!-- <div class="d-flex justify-center align-center flex-column ma-3">
@@ -171,12 +171,14 @@ export default {
   data: () => ({
     user: null,
     isFollower: false,
-    isFollowerText: 'FOLLOW',
+    isFollowerText: "FOLLOW",
     stories: [],
   }),
   mounted() {
     this.getUser();
     this.getUserStories();
+  },
+  created() {
     this.isFollowing();
   },
   watch: {
@@ -207,41 +209,44 @@ export default {
     async isFollowing() {
       const followerId = this.$store.state.user.id;
       const followedId = this.$route.params.id;
-      const response = await FollowService.findFollower(followerId, followedId)
-      if(response === true) {
-       this.isFollower = true;
-       this.isFollowerText = 'UNFOLLOW'
+      const response = await FollowService.findFollower(followerId, followedId);
+      if (response.data) {
+        this.isFollower = true;
+        this.isFollowerText = "UNFOLLOW";
+      } else {
+        this.isFollower = false;
+        this.isFollowerText = "FOLLOW";
       }
     },
-    // async addFollow(storyId) {
-    //   // If no bookmark, add a new bookmark
-    //   if (this.bookmarkIcon === "mdi-bookmark-outline") {
-    //     try {
-    //       const response = await GeneralService.postBookmark(
-    //         this.$store.state.user.id,
-    //         storyId
-    //       );
-    //       if (response) {
-    //         this.bookmarkIcon = "mdi-bookmark";
-    //       }
-    //     } catch (err) {
-    //       console.log(err);
-    //     }
-    //     // If bookmark, remove bookmark
-    //   } else {
-    //     try {
-    //       const response = await GeneralService.deleteBookmark(
-    //         this.$store.state.user.id,
-    //         storyId
-    //       );
-    //       if (response) {
-    //         this.bookmarkIcon = "mdi-bookmark-outline";
-    //       }
-    //     } catch (err) {
-    //       console.log(err);
-    //     }
-    //   }
-    // },
+    async addFollow() {
+      try {
+        const followerId = this.$store.state.user.id;
+        const followedId = this.$route.params.id;
+        const response = await FollowService.postFollow(followerId, followedId);
+        if (response) {
+          this.isFollower = true;
+          this.isFollowerText = "UNFOLLOW";
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    async deleteFollow() {
+      try {
+        const followerId = this.$store.state.user.id;
+        const followedId = this.$route.params.id;
+        const response = await FollowService.deleteFollow(
+          followerId,
+          followedId
+        );
+        if (response.data) {
+          this.isFollower = false;
+          this.isFollowerText = "FOLLOW";
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    },
   },
 };
 </script>

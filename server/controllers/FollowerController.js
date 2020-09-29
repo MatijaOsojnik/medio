@@ -6,10 +6,8 @@ const {
 module.exports = {
     async findFollower(req, res) {
         try {
-            console.log(req.body)
             const followerId = req.body.followerId;
             const followedId = req.body.followedId;
-            console.log('followerId' + followerId)
             const isFollowing = await Follower.findOne({
                 where: {
                     follower_id: followerId,
@@ -18,8 +16,8 @@ module.exports = {
             })
             if (isFollowing) {
                 res.send(true)
-            } else {
-                res.send(false)
+            }else{
+                res.send(null)
             }
 
         } catch (error) {
@@ -30,7 +28,7 @@ module.exports = {
     },
     async getFollowers(req, res) {
         try {
-            const userId = req.body.followerId
+            const userId = req.params.followerId
             const followers = await Follower.findAll({
                 where: {
                     follower_id: userId
@@ -42,7 +40,6 @@ module.exports = {
                     ['createdAt', 'DESC']
                 ]
             })
-            console.log(followers)
             res.send({
                 followers
             })
@@ -73,8 +70,9 @@ module.exports = {
 
     async deleteFollow(req, res) {
         try {
-            const followerId = req.body.followerId
+            const followerId = req.params.followerId
             const followedId = req.params.followedId
+            console.log(followerId, followedId)
             const follow = await Follower.destroy({
                 where: {
                     follower_id: followerId,

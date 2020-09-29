@@ -167,7 +167,6 @@ export default {
       if (this.$route.params.categoryId) {
         const categoryId = this.$route.params.categoryId;
         response = await StoryService.categories(categoryId);
-        console.log(response);
         if (response) {
           this.loading = false;
           if (response.data.length > 0) {

@@ -67,7 +67,6 @@ export default {
       const response = await GeneralService.getBookmarks(
         this.$store.state.user.id
       );
-      console.log(response.data.bookmarks);
       response.data.bookmarks.map((bookmark) => {
         if (bookmark.story_id === this.story.id) {
           this.bookmarkIcon = "mdi-bookmark";

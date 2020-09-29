@@ -2,7 +2,7 @@ import axios from '@/services/axios'
 
 export default {
     findFollower(followerId, followedId) {
-        return axios.get(`followers/single`, {
+        return axios.post(`followers/single`, {
             followerId,
             followedId
         })
@@ -14,12 +14,11 @@ export default {
         })
     },
     deleteFollow(followerId, followedId) {
-        return axios.delete(`followers`, {
-            followerId,
-            followedId
+        return axios.delete(`followers/${followerId}/${followedId}`, {
+            
         })
         },
     getFollowers(followerId) {
-        return axios.get(`followers`, {followerId})
+        return axios.get(`followers/${followerId}`)
     },
 }
