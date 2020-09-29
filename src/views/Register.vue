@@ -1,21 +1,15 @@
 <template>
   <div>
-    <v-overlay v-if="showPanel" absolute z-index="999" :opacity="0.1">
+<v-overlay v-if="showPanel" absolute z-index="999" :opacity="0.1">
       <v-progress-circular
         indeterminate
-        transition="scroll-x-transition"
         color="green"
         :size="50"
         :width="5"
-        v-if="!registerSuccess"
+        v-if="!loginSuccess"
       />
       <v-scroll-x-transition>
-        <v-alert
-          type="success"
-          transition="scroll-x-transition"
-          v-if="registerSuccess"
-          >Registration successful!</v-alert
-        >
+        <v-alert type="success" v-if="loginSuccess">Registration successful!</v-alert>
       </v-scroll-x-transition>
     </v-overlay>
     <AuthenticationPanel

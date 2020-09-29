@@ -4,6 +4,7 @@ const CategoriesController = require('./controllers/CategoriesController')
 const RolesController = require('./controllers/RolesController')
 const UsersController = require('./controllers/UsersController')
 const GeneralController = require('./controllers/GeneralController')
+const FollowerController = require('./controllers/FollowerController');
 
 // const authJwt = require('./middleware/authJwt')
 const passport = require('passport')
@@ -134,6 +135,14 @@ module.exports = (app) => {
     app.post('/api/bookmarks/:storyId/:userId', GeneralController.postBookmark)
     app.delete('/api/bookmarks/:storyId/:userId', GeneralController.deleteBookmark),
         app.get('/api/bookmarks/:userId', GeneralController.getBookmarks)
+
+
+    // FOLLOW ROUTE
+
+    app.get('/api/followers/single', FollowerController.findFollower)
+    app.get('/api/followers', FollowerController.getFollowers)
+    app.post('/api/followers', FollowerController.postFollow)
+    app.delete('/api/followers', FollowerController.deleteFollow)
 
     //FILE UPLOAD ROUTE
     // app.post('/upload', upload.single('file'), (req, res) => {

@@ -156,6 +156,9 @@ export default {
       this.$store.dispatch("setAuthorities", null);
       this.permissions = false;
       this.adminPermissions = false;
+            this.$router.push({
+        name: "login",
+      });
       if(window.gapi){
         const auth2 = window.gapi.auth2.getAuthInstance();
       auth2.signOut().then(function () {
@@ -163,9 +166,6 @@ export default {
       });
       }
 
-      this.$router.push({
-        name: "login",
-      });
     },
     async getCategories() {
       try {

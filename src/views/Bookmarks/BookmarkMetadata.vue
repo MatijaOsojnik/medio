@@ -9,10 +9,6 @@
         <span class="heading ma-4 d-block">Looks like you don't have any stories bookmarked yet..</span>
       </slot>
     </div>
-    <div>
-      <span class="title ma-4 d-block">Your Bookmarks</span>
-        <span class="heading ma-4 d-block">Looks like you don't have any stories bookmarked yet..</span>
-    </div>
   </v-container>
 </template>
 
