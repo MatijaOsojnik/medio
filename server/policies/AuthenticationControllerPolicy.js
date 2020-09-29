@@ -5,7 +5,6 @@ module.exports = {
         const schema = Joi.object({
             roles: Joi.array().max(1),
             display_name: Joi.string()
-                .alphanum()
                 .min(3)
                 .max(30)
                 .required()

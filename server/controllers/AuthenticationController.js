@@ -36,17 +36,37 @@ module.exports = {
                                 }
                             }
                         }).then(roles => {
-                            user.setRoles(roles).then(() => {
+                            user.setRoles(roles).then(async () => {
+                                const authorities = []
+
+                                const roles = await user.getRoles()
+                                for (let i = 0; i < roles.length; i++) {
+                                    authorities.push("ROLE_" + roles[i].name.toUpperCase());
+                                }
+
+                                const userJson = user.toJSON();
                                 res.send({
-                                    message: "User was registered successfully!"
-                                });
+                                    authorities: authorities,
+                                    user: user,
+                                    token: jwtSignUser(userJson)
+                                })
                             });
                         });
                     } else {
-                        user.setRoles([1]).then(() => {
+                        user.setRoles([1]).then(async () => {
+                            const authorities = []
+
+                            const roles = await user.getRoles()
+                            for (let i = 0; i < roles.length; i++) {
+                                authorities.push("ROLE_" + roles[i].name.toUpperCase());
+                            }
+
+                            const userJson = user.toJSON();
                             res.send({
-                                message: "User was registered successfully!"
-                            });
+                                authorities: authorities,
+                                user: user,
+                                token: jwtSignUser(userJson)
+                            })
                         }).catch(err => {
                             res.status(500).send({
                                 error: err
@@ -138,41 +158,41 @@ module.exports = {
                 })
             })
         }
-            const token = jwtSignUser(user.toJSON());
-            // res.cookie('access_token', token, {
-            //     httpOnly: true
-            // });
-            const authorities = []
+        const token = jwtSignUser(user.toJSON());
+        // res.cookie('access_token', token, {
+        //     httpOnly: true
+        // });
+        const authorities = []
 
-            const roles = await user.getRoles()
-            for (let i = 0; i < roles.length; i++) {
-                authorities.push("ROLE_" + roles[i].name.toUpperCase());
-            }
+        const roles = await user.getRoles()
+        for (let i = 0; i < roles.length; i++) {
+            authorities.push("ROLE_" + roles[i].name.toUpperCase());
+        }
 
-            res.status(200).json({
-                authorities: authorities,
-                user: user,
-                token: token
-            })
+        res.status(200).json({
+            authorities: authorities,
+            user: user,
+            token: token
+        })
     },
-      async facebookAuth (req, res) {
-            const user = req.user
-            const token = jwtSignUser(req.user.toJSON());
-            res.cookie('access_token', token, {
-                httpOnly: true
-            });
-            const authorities = []
+    async facebookAuth(req, res) {
+        const user = req.user
+        const token = jwtSignUser(req.user.toJSON());
+        res.cookie('access_token', token, {
+            httpOnly: true
+        });
+        const authorities = []
 
-            const roles = await user.getRoles()
-            for (let i = 0; i < roles.length; i++) {
-                authorities.push("ROLE_" + roles[i].name.toUpperCase());
-            }
+        const roles = await user.getRoles()
+        for (let i = 0; i < roles.length; i++) {
+            authorities.push("ROLE_" + roles[i].name.toUpperCase());
+        }
 
-            res.status(200).json({
-                authorities: authorities,
-                user: user,
-                token: token
-            })
-      },
+        res.status(200).json({
+            authorities: authorities,
+            user: user,
+            token: token
+        })
+    },
 
 }

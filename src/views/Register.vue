@@ -118,7 +118,7 @@ export default {
   methods: {
     async register() {
       try {
-        await AuthenticationService.register({
+        const response = await AuthenticationService.register({
           display_name: this.display_name,
           email: this.email,
           password: this.password,
@@ -127,14 +127,19 @@ export default {
         this.showPanel = true;
 
         setTimeout(() => {
-          this.registerSuccess = true;
+          this.loginSuccess = true;
         }, 1500);
 
-        setTimeout(() => {
-          this.registerSuccess = false;
-          this.showPanel = false;
-          this.$router.push({ name: "login" });
-        }, 2500);
+        if (response) {
+          setTimeout(() => {
+            this.$store.dispatch("setToken", response.data.token);
+            this.$store.dispatch("setUser", response.data.user);
+            this.$store.dispatch("setAuthorities", response.data.authorities);
+            this.loginSuccess = false;
+            this.showPanel = false;
+            this.$router.push({ name: "stories" });
+          }, 2500);
+        }
       } catch (error) {
         this.errors = error.response.data;
         setTimeout(() => (this.errors = []), 5000);
