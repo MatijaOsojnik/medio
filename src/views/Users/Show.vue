@@ -3,6 +3,19 @@
     <v-card class="mx-auto" tile max-width="680px">
       <v-container v-if="user">
         <v-row>
+                    <v-col class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12 d-xl-none d-lg-none d-md-none d-block">
+            <div>
+              <v-avatar size="120" v-if="!user.icon_url">
+                <v-img src="@/assets/blue-error-background.jpg"></v-img>
+              </v-avatar>
+              <v-avatar v-else size="120">
+                <v-img :src="user.icon_url" />
+              </v-avatar>
+              <!-- <div>
+                <span class="d-block about-title">About Me</span>
+              </div> -->
+            </div>
+          </v-col>
           <v-col
             class="col-xl-9 col-lg-9 col-md-9 col-sm-12 col-12 d-sm-flex justify-sm-center"
           >
@@ -49,9 +62,6 @@
                   class="inline-block"
                 >
                 </router-link>
-                <!-- <span v-if="user.title" class="d-block ma-1 subtitle-2">{{
-                  user.title.toUpperCase()
-                }}</span> -->
                 <v-btn
                   small
                   absolute
@@ -112,38 +122,9 @@
                   <v-icon color="#4267B2">mdi-twitter</v-icon>
                 </v-btn>
               </div>
-              <!-- <div v-if="$route.params.id == $store.state.user.id">
-                <v-btn
-                  v-if="!user.title"
-                  block
-                  text
-                  class="my-2"
-                  :to="{
-                    path: `/users/${$store.state.user.display_name
-                      .toLowerCase()
-                      .replace(/\s/g, '')}/${$store.state.user.id}/edit`,
-                  }"
-                  >Add Title</v-btn
-                >
-                <v-btn
-                  v-if="!user.description"
-                  block
-                  text
-                  class="mt-5"
-                  :to="{
-                    path: `/users/${$store.state.user.display_name
-                      .toLowerCase()
-                      .replace(/\s/g, '')}/${$store.state.user.id}/edit`,
-                  }"
-                  >Add Description</v-btn
-                >
-              </div> -->
-
-              <!-- <div class="d-flex justify-center align-center flex-column ma-3">
-              </div>-->
             </v-container>
           </v-col>
-          <v-col class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+          <v-col class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12 d-xl-block d-lg-block d-md-block d-none">
             <div>
               <v-avatar size="120" v-if="!user.icon_url">
                 <v-img src="@/assets/blue-error-background.jpg"></v-img>
