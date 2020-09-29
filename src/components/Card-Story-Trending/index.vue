@@ -53,7 +53,7 @@
                   class="subtitle-2 px-4 mb-2 blue-grey--text d-inline-block"
                   v-bind="attrs"
                   v-on="on"
-                  >{{ story.createdAt | formatDate }} ·
+                  >{{ story.createdAt | formatStoryDate }} ·
                   {{ readingTime }}
                   min read</span
                 >
