@@ -4,7 +4,7 @@
       :to="{ path: `/stories/${story.id}` }"
       raised
       :elevation="hover ? 8 : 2"
-      class="my-4"
+      class="my-6"
     >
       <v-row class="px-5 pt-2">
         <v-col class="col-12 d-flex align-center">
@@ -67,6 +67,21 @@
                   </div>
                   <!-- <v-icon class="mr-3">mdi-share-variant</v-icon> -->
                 </div>
+                <div class="d-flex align-center justify-center ml-5">
+                                                        <v-btn
+                      small
+                      white
+                      outlined
+                      class="inline-block"
+                      v-if="isOwner"
+                      :to="{
+                        name: 'story-edit',
+                        params: { id: $route.params.id },
+                      }"
+                    >
+                      EDIT
+                    </v-btn>
+                </div>
                 <v-spacer />
                 <v-icon v-if="story.featured" size="25px">{{
                   "mdi-star"
@@ -116,9 +131,11 @@
 import GeneralService from "@/services/GeneralService";
 export default {
   data: () => ({
+    isOwner: false,
     imageError: false,
     bookmarkIcon: "mdi-bookmark-outline",
     readingTime: 0,
+
     // formatedDate: formatDate(this.story.createdAt)
   }),
   props: {
@@ -126,11 +143,23 @@ export default {
   },
   mounted() {
     this.checkBookmark();
+    this.checkOwner();
     this.totalReadingTime(this.story.description);
   },
   methods: {
     async imageLoadError() {
       this.imageError = true;
+    },
+    async checkOwner() {
+      if (this.$store.state.user) {
+        if (this.story.Users[0]) {
+          if (this.story.Users[0].id === this.$store.state.user.id) {
+            this.isOwner = true;
+          } else {
+            this.isOwner = false;
+          }
+        }
+      }
     },
     async checkBookmark() {
       const response = await GeneralService.getBookmarks(

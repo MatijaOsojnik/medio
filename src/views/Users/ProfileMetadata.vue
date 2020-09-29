@@ -1,8 +1,8 @@
 <template>
     <div>
       <slot name="userStories">
-        <span class="title ma-4 d-block">My stories</span>
-        <span class="heading ma-4 d-block">Looks like I haven't made any stories yet..</span>
+        <span class="title ma-4 d-block">Latest</span>
+        <span class="heading ma-4 d-block">Seems like I haven't written any stories yet... </span>
       </slot>
     </div>
 </template>

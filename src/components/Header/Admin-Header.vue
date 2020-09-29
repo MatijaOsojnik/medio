@@ -191,13 +191,12 @@ export default {
       this.$store.dispatch("setUser", null);
       this.$store.dispatch("setAuthorities", null);
       this.adminPermissions = false;
+            this.$router.push({
+        name: "login",
+      });
       var auth2 = window.gapi.auth2.getAuthInstance();
       auth2.signOut().then(function () {
         console.log("User signed out.");
-      });
-
-      this.$router.push({
-        name: "login",
       });
     },
     checkRoles() {
