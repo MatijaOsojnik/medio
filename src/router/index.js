@@ -77,7 +77,7 @@ const routes = [{
     name: 'story-create',
     component: StoryCreate,
     meta: {
-      onlyPriviligedUser: true
+      onlyAuthUser: true
     }
   },
   {

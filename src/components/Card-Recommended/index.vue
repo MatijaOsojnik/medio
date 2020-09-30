@@ -68,19 +68,19 @@
                   <!-- <v-icon class="mr-3">mdi-share-variant</v-icon> -->
                 </div>
                 <div class="d-flex align-center justify-center ml-5">
-                                                        <v-btn
-                      small
-                      white
-                      outlined
-                      class="inline-block"
-                      v-if="isOwner"
-                      :to="{
-                        name: 'story-edit',
-                        params: { id: $route.params.id },
-                      }"
-                    >
-                      EDIT
-                    </v-btn>
+                  <v-btn
+                    small
+                    white
+                    outlined
+                    class="inline-block"
+                    v-if="isOwner"
+                    :to="{
+                      name: 'story-edit',
+                      params: { id: $route.params.id },
+                    }"
+                  >
+                    EDIT
+                  </v-btn>
                 </div>
                 <v-spacer />
                 <v-icon v-if="story.featured" size="25px">{{

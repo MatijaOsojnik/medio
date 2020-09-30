@@ -1,35 +1,54 @@
 <template>
   <div v-if="$store.state.isUserLoggedIn">
-    <v-app-bar flat color="white" :hide-on-scroll="$router.history.current['name'] === 'story-create' || $router.history.current['name'] === 'story-update' ? false : true">
+    <v-app-bar
+      flat
+      color="white"
+      :hide-on-scroll="
+        $router.history.current['name'] === 'story-create' ||
+        $router.history.current['name'] === 'story-update'
+          ? false
+          : true
+      "
+    >
       <v-toolbar-title class="d-xl-block d-lg-block d-md-block d-none">
-        <router-link :to="{name: 'stories'}" class="brand-black pa-4">Medio</router-link>
+        <router-link :to="{ name: 'stories' }" class="brand-black pa-4"
+          >Medio</router-link
+        >
       </v-toolbar-title>
       <v-toolbar-title class="d-xl-none d-lg-none d-md-none d-block">
-        <router-link :to="{name: 'stories'}" class="mobile-logo ma-3">
+        <router-link :to="{ name: 'stories' }" class="mobile-logo ma-3">
           M
           <!-- <v-img src="@/assets/logo.png" style="border-radius: 7px;" max-width="50px"></v-img> -->
         </router-link>
       </v-toolbar-title>
 
-
       <v-spacer></v-spacer>
 
       <v-text-field
-        :class="$router.history.current['name'] === 'story-create' || $router.history.current['name'] === 'story-update' ? 'd-none' : ''"
+        v-if="
+          currentRouteName !== 'story-create' &&
+          currentRouteName !== 'story-edit'
+        "
         class="d-xl-flex d-lg-flex d-md-flex d-none"
         color="#A2D5F2"
         hide-details
         outlined
         dense
         prepend-icon="mdi-magnify"
-        style="max-width: 250px;"
+        style="max-width: 250px"
         single-line
       ></v-text-field>
-
+      <v-btn v-else small white outlined class="inline-block" @click="publish">
+        PUBLISH
+      </v-btn>
 
       <v-btn color="#1b262c" icon style="margin-right: 0.3em" class="ma-4">
         <router-link
-          :to="{path: `/users/${($store.state.user.display_name).toLowerCase().replace(/\s/g,'')}/${$store.state.user.id}/bookmarks`}"
+          :to="{
+            path: `/users/${$store.state.user.display_name
+              .toLowerCase()
+              .replace(/\s/g, '')}/${$store.state.user.id}/bookmarks`,
+          }"
         >
           <v-avatar size="40px">
             <v-icon>mdi-bookmark-multiple-outline</v-icon>
@@ -43,7 +62,7 @@
         transition="scroll-y-transition"
         :close-on-content-click="false"
         v-if="$store.state.isUserLoggedIn"
-      > 
+      >
         <template v-slot:activator="{ on }">
           <v-btn color="#1b262c" v-on="on" icon style="margin-right: 0.3em">
             <v-avatar v-if="!$store.state.user.icon_url" size="40px">
@@ -59,7 +78,11 @@
           <v-container fluid>
             <div class="d-flex justify-center align-center flex-column ma-3">
               <router-link
-                :to="{path: `/users/${($store.state.user.display_name).toLowerCase().replace(/\s/g,'')}/${$store.state.user.id}/profile`}"
+                :to="{
+                  path: `/users/${$store.state.user.display_name
+                    .toLowerCase()
+                    .replace(/\s/g, '')}/${$store.state.user.id}/profile`,
+                }"
               >
                 <v-avatar v-if="!$store.state.user.icon_url">
                   <v-icon large>mdi-account-circle</v-icon>
@@ -70,18 +93,27 @@
               </router-link>
               <router-link
                 class="d-block ma-2 bold"
-                style="font-size: 16px;"
-                :to="{path: `/users/${($store.state.user.display_name).toLowerCase().replace(/\s/g,'')}/${$store.state.user.id}/profile`}"
+                style="font-size: 16px"
+                :to="{
+                  path: `/users/${$store.state.user.display_name
+                    .toLowerCase()
+                    .replace(/\s/g, '')}/${$store.state.user.id}/profile`,
+                }"
               >
-                <span>{{$store.state.user.display_name}}</span>
+                <span>{{ $store.state.user.display_name }}</span>
               </router-link>
               <v-btn
                 depressed
                 small
                 block
                 text
-                :to="{path: `/users/${($store.state.user.display_name).toLowerCase().replace(/\s/g,'')}/${$store.state.user.id}/profile`}"
-              >View profile</v-btn>
+                :to="{
+                  path: `/users/${$store.state.user.display_name
+                    .toLowerCase()
+                    .replace(/\s/g, '')}/${$store.state.user.id}/profile`,
+                }"
+                >View profile</v-btn
+              >
             </div>
             <v-divider />
             <v-btn
@@ -91,8 +123,9 @@
               small
               text
               block
-              :to="{name: 'admin-main'}"
-            >Admin Panel</v-btn>
+              :to="{ name: 'admin-main' }"
+              >Admin Panel</v-btn
+            >
             <v-divider v-if="adminPermissions" />
             <div class="d-flex justify-center align-center flex-column ma-3">
               <v-btn
@@ -101,26 +134,39 @@
                 small
                 text
                 block
-                :to="{path: `/stories/create/${$store.state.user.id}`}"
-              >New Story</v-btn>
+                :to="{ path: `/stories/create/${$store.state.user.id}` }"
+                >New Story</v-btn
+              >
               <v-btn
                 class="ma-1"
                 depressed
                 small
                 text
                 block
-                :to="{path: `/users/${($store.state.user.display_name).toLowerCase().replace(/\s/g,'')}/${$store.state.user.id}/stories`}"
-              >My stories</v-btn>
+                :to="{
+                  path: `/users/${$store.state.user.display_name
+                    .toLowerCase()
+                    .replace(/\s/g, '')}/${$store.state.user.id}/stories`,
+                }"
+                >My stories</v-btn
+              >
               <v-btn
                 class="ma-1"
                 depressed
                 small
                 text
                 block
-                :to="{path: `/users/${($store.state.user.display_name).toLowerCase().replace(/\s/g,'')}/${$store.state.user.id}/edit`}"
-              >Edit account</v-btn>
+                :to="{
+                  path: `/users/${$store.state.user.display_name
+                    .toLowerCase()
+                    .replace(/\s/g, '')}/${$store.state.user.id}/edit`,
+                }"
+                >Edit account</v-btn
+              >
 
-              <v-btn class="ma-1" depressed small text block @click="logout">Log out</v-btn>
+              <v-btn class="ma-1" depressed small text block @click="logout"
+                >Log out</v-btn
+              >
             </div>
             <!-- <v-list-item @click="toPath">My stories</v-list-item>
                 <v-list-item @click="toPath">Settings</v-list-item>
@@ -149,6 +195,11 @@ export default {
     this.checkRoles();
     this.getCategories();
   },
+  computed: {
+    currentRouteName() {
+      return this.$route.name;
+    },
+  },
   methods: {
     logout() {
       this.$store.dispatch("setToken", null);
@@ -156,16 +207,15 @@ export default {
       this.$store.dispatch("setAuthorities", null);
       this.permissions = false;
       this.adminPermissions = false;
-            this.$router.push({
+      this.$router.push({
         name: "login",
       });
-      if(window.gapi){
+      if (window.gapi) {
         const auth2 = window.gapi.auth2.getAuthInstance();
-      auth2.signOut().then(function () {
-        console.log('User signed out.');
-      });
+        auth2.signOut().then(function () {
+          console.log("User signed out.");
+        });
       }
-
     },
     async getCategories() {
       try {
@@ -213,13 +263,13 @@ export default {
   border-bottom: 1px solid;
 }
 .mobile-logo {
-    font-family: "Julius Sans One", sans-serif;
+  font-family: "Julius Sans One", sans-serif;
   color: #1b262c !important;
   opacity: 0.9;
   font-weight: 400 !important;
   font-size: 33px !important;
   padding: 3px;
-  border: 2px solid
+  border: 2px solid;
 }
 .brand {
   font-family: "Julius Sans One", sans-serif;
