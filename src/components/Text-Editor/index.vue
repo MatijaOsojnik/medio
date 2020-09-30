@@ -1,9 +1,6 @@
 <template>
   <div class="editor">
-    <editor-floating-menu
-      :editor="editor"
-      v-slot="{ commands, menu }"
-    >
+    <editor-floating-menu :editor="editor" v-slot="{ commands, menu }">
       <div
         class="editor__floating-menu"
         :class="{ 'is-active': menu.isActive }"
@@ -145,6 +142,7 @@
     </editor-menu-bubble>
 
     <editor-content class="editor__content" :editor="editor" />
+
   </div>
 </template>
 
@@ -185,6 +183,11 @@ export default {
   },
   data() {
     return {
+      title: ``,
+      short_description: ``,
+      description: ``,
+      thumbnail_url: ``,
+      category_id: ``,
       keepInBounds: true,
       editor: new Editor({
         extensions: [
@@ -217,12 +220,20 @@ export default {
             },
           }),
         ],
+        onUpdate: ({ getJSON }) => {
+          this.$store.dispatch("setCurrentStory", getJSON());
+        },
         autoFocus: true,
-        content: ``,
+        content: this.story.description,
       }),
       linkUrl: null,
       linkMenuIsActive: false,
+            json: 'Update content to see changes',
+      html: 'Update content to see changes',
     };
+  },
+  props: {
+    story: Object,
   },
   methods: {
     showLinkMenu(attrs) {
@@ -415,11 +426,10 @@ h3 {
   &:focus {
     outline: none;
   }
-  
 }
 .editor__content img {
-    max-width: 100%;
-    border-radius: 3px;
+  max-width: 100%;
+  border-radius: 3px;
 }
 
 .tiptap-vuetify-editor__content {

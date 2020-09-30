@@ -38,7 +38,7 @@
         style="max-width: 250px"
         single-line
       ></v-text-field>
-      <v-btn v-else small white outlined class="inline-block" @click="publish">
+      <v-btn v-else :disabled="!$store.state.currentStory" small white outlined class="inline-block" @click="publish($store.state.currentStory)">
         PUBLISH
       </v-btn>
 
@@ -188,9 +188,13 @@ export default {
     adminPermissions: false,
     isChecking: true,
   }),
+  props: {
+    story: Object
+  },
   watch: {
     $route: "checkRoles",
   },
+
   created() {
     this.checkRoles();
     this.getCategories();
@@ -217,6 +221,9 @@ export default {
         });
       }
     },
+    // async publish(data) {
+     
+    // },
     async getCategories() {
       try {
         const response = await CategoryService.index();

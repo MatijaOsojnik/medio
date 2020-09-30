@@ -1,7 +1,8 @@
 <template>
-    <v-layout>
-      <v-flex xs12 justify="center" align="center">
-        <!-- <v-stepper v-model="stepper">
+  <div>
+    <UserHeader class='container page-container' :story="story"/>
+    <v-flex xs12 justify="center" align="center">
+      <!-- <v-stepper v-model="stepper">
           <v-stepper-header>
             <v-stepper-step :complete="stepper> 1" editable step="1">Story</v-stepper-step>
 
@@ -171,7 +172,7 @@
             </v-stepper-content>
 
             <v-stepper-content step="3"> -->
-        <!-- <v-card class="ma-12 mx-auto" max-width="1000px">
+      <!-- <v-card class="ma-12 mx-auto" max-width="1000px">
           <v-toolbar flat color="#617BE3" dark>
             <v-toolbar-title>General Information</v-toolbar-title>
           </v-toolbar>
@@ -203,11 +204,11 @@
                 v-model="story.short_description"
               />
               <label for="description">Description</label> -->
-              <div class="text-editor-container">
-                <TextEditor/>
-              </div>
+      <div class="text-editor-container">
+        <TextEditor :story="story" />
+      </div>
 
-              <!-- <label for="category">Category</label>
+      <!-- <label for="category">Category</label>
               <v-select
                 id="category"
                 :items="categories"
@@ -242,21 +243,23 @@
             >
           </v-card-actions>
         </v-card> -->
-        <!-- </v-stepper-content>
+      <!-- </v-stepper-content>
           </v-stepper-items>
         </v-stepper> -->
-      </v-flex>
-    </v-layout>
+    </v-flex>
+  </div>
 </template>
 
 <script>
 import StoryService from "@/services/StoryService";
 import CategoryService from "@/services/CategoryService";
-import TextEditor from "@/components/Text-Editor"
+import TextEditor from "@/components/Text-Editor";
+import UserHeader from "@/components/Header/User-Header";
 
 export default {
   components: {
-    TextEditor
+    TextEditor,
+    UserHeader,
   },
 
   data: () => ({
@@ -387,8 +390,8 @@ export default {
 <style>
 .text-editor-container {
   max-width: 740px;
-padding-left: 20px;
-padding-right: 20px;
-margin: auto;
+  padding-left: 20px;
+  padding-right: 20px;
+  margin: auto;
 }
 </style>
