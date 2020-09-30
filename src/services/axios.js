@@ -1,7 +1,7 @@
 import axios from 'axios'
 let baseurl = ''
 if(process.env.NODE_ENV === 'production'){
-    baseurl = 'https://thinq-language-learning.herokuapp.com/api'
+    baseurl = 'https://matijaosojnik.si/api'
 }else {
     baseurl = 'http://localhost:8082/api'
 }
