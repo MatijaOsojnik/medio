@@ -123,30 +123,30 @@ module.exports = {
     },
     async googleAuth(req, res) {
         const {
-            LT,
+            aU,
             Ad,
-            $J,
-            Xt
+            jK,
+            bu
         } = req.body
 
         let user = await User.findOne({
             where: {
-                email: Xt
+                email: bu
             }
         })
 
         if (user) {
             await user.update({
-                google_id: LT
+                google_id: aU
             })
         }
 
         if (!user) {
             user = await User.create({
                 display_name: Ad,
-                email: Xt,
-                icon_url: $J,
-                google_id: LT
+                email: bu,
+                icon_url: jK,
+                google_id: aU
             })
             user.setRoles([1]).then(() => {
                 res.send({
