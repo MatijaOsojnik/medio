@@ -120,7 +120,7 @@ module.exports = {
             let url = ``
 
             if (process.env.NODE_ENV === 'production') {
-                url = `https://matijaosojnik.si/static/${req.file.originalname}`
+                url = `https://medioapp.herokuapp.com/static/${req.file.originalname}`
             } else {
                 url = `http://localhost:8082/static/${req.file.originalname}`
             }

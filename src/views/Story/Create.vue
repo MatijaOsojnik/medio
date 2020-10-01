@@ -1,6 +1,5 @@
 <template>
   <div>
-    <UserHeader class='container page-container' :story="story"/>
     <v-flex xs12 justify="center" align="center">
       <!-- <v-stepper v-model="stepper">
           <v-stepper-header>
@@ -205,7 +204,7 @@
               />
               <label for="description">Description</label> -->
       <div class="text-editor-container">
-        <TextEditor :story="story" />
+        <TextEditor />
       </div>
 
       <!-- <label for="category">Category</label>
@@ -254,17 +253,13 @@
 import StoryService from "@/services/StoryService";
 import CategoryService from "@/services/CategoryService";
 import TextEditor from "@/components/Text-Editor";
-import UserHeader from "@/components/Header/User-Header";
 
 export default {
   components: {
     TextEditor,
-    UserHeader,
   },
 
   data: () => ({
-    stepper: 1,
-    steps: 3,
     rules: {
       short_description: (text) => text.length <= 60 || "Max 60 characters",
       description: (text) => text.length <= 300 || "Max 300 characters",
@@ -274,13 +269,6 @@ export default {
         "Thumbnail size should be less than 2 MB!",
       required: (value) => !!value || "Required.",
       min: (v) => v.length >= 8 || "Min 8 characters",
-    },
-    story: {
-      title: ``,
-      short_description: ``,
-      description: ``,
-      thumbnail_url: ``,
-      category_id: ``,
     },
     waitBeforeClick: false,
     successfulStoryPost: false,

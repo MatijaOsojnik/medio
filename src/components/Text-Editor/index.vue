@@ -220,16 +220,15 @@ export default {
             },
           }),
         ],
-        onUpdate: ({ getJSON }) => {
-          this.$store.dispatch("setCurrentStory", getJSON());
+        onUpdate: ({ getJSON, getHTML }) => {
+          this.$store.dispatch("setCurrentStoryJSON", getJSON());
+          this.$store.dispatch("setCurrentStoryHTML", getHTML());
         },
         autoFocus: true,
-        content: this.story.description,
+        content: ``,
       }),
       linkUrl: null,
       linkMenuIsActive: false,
-            json: 'Update content to see changes',
-      html: 'Update content to see changes',
     };
   },
   props: {

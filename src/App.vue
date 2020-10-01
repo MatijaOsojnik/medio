@@ -2,7 +2,7 @@
   <v-app>
     <div id="app">
       <main>
-        <UserHeader :class="$store.state.user ? 'container page-container' : ''" v-if="$router.history.current['name'] !== 'admin-login' && $router.history.current['name'] !== 'story-create'"/>
+        <UserHeader :class="$store.state.user ? 'container page-container' : ''" v-if="$router.history.current['name'] !== 'admin-login'"/>
           <router-view :class="$store.state.user ? 'container page-container' : ''"/>
         <Footer />
       </main>

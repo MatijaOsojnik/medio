@@ -21,7 +21,10 @@ export default new Vuex.Store({
     user: null,
     authorities: null,
     bookmarks: null,
-    currentStory: null,
+    currentStory: {
+      HTML: null,
+      JSON: null
+    },
     isUserLoggedIn: false
   },
   mutations: {
@@ -38,9 +41,13 @@ export default new Vuex.Store({
     setAuthorities(state, authorities) {
       state.authorities = authorities
     },
-    setCurrentStory(state, story) {
-      state.currentStory = story
+    setCurrentStoryHTML(state, story) {
+      state.currentStory.HTML = story
     },
+    setCurrentStoryJSON(state, story) {
+      state.currentStory.JSON = story
+    },
+
 
     // setItems(state, {resource, items}) {
     //   state[resource].items = items
@@ -67,10 +74,15 @@ export default new Vuex.Store({
     }, bookmarks) {
       commit('setBookmarks', bookmarks)
     },
-    setCurrentStory({
+    setCurrentStoryJSON({
       commit
     }, story) {
-      commit('setCurrentStory', story)
+      commit('setCurrentStoryJSON', story)
+    },
+    setCurrentStoryHTML({
+      commit
+    }, story) {
+      commit('setCurrentStoryHTML', story)
     }
   },
 

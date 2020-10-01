@@ -9,6 +9,7 @@ import Story from '@/views/Story'
 import StoryCreate from '@/views/Story/Create'
 import StoryEdit from '@/views/Story/Edit'
 import StoryAction from '@/views/Story/Action'
+import StoryPublish from '@/views/Story/Publish'
 import User from '@/views/Users/Show'
 import Admin from '@/views/Admin'
 import AdminLogin from '@/views/Admin/Login'
@@ -76,6 +77,14 @@ const routes = [{
     path: '/stories/create/:id',
     name: 'story-create',
     component: StoryCreate,
+    meta: {
+      onlyAuthUser: true
+    }
+  },
+  {
+    path: '/stories/create/:id/publish',
+    name: 'story-publish',
+    component: StoryPublish,
     meta: {
       onlyAuthUser: true
     }

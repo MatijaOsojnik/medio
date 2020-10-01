@@ -38,7 +38,7 @@
         style="max-width: 250px"
         single-line
       ></v-text-field>
-      <v-btn v-else :disabled="!$store.state.currentStory" small white outlined class="inline-block" @click="publish($store.state.currentStory)">
+      <v-btn v-else :disabled="!$store.state.currentStory" small white outlined class="inline-block" :to="{path: `stories/create/${$store.state.user.id}/publish`}">
         PUBLISH
       </v-btn>
 
