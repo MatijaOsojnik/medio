@@ -8,8 +8,6 @@ const {
 } = require("./models")
 const config = require("./config")
 
-const passport = require('passport')
-
 const path = require("path")
 
 const app = express()
@@ -19,7 +17,6 @@ app.use("/static", express.static(path.join(__dirname, 'static')))
 app.use(express.json())
 app.use(morgan("combined"))
 app.use(cors())
-app.use(passport.initialize())
 
 require('./middleware/passport')
 
