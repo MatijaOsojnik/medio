@@ -1,7 +1,7 @@
 import axios from 'axios'
 let baseurl = ''
 if(process.env.NODE_ENV === 'production'){
-    baseurl = 'https://matijaosojnik.si/api'
+    baseurl = 'https://medioapp.herokuapp.com/api'
 }else {
     baseurl = 'http://localhost:8082/api'
 }
