@@ -6,7 +6,7 @@ module.exports = {
             title: Joi.string()
                 .pattern(new RegExp("^[a-zA-Z0-9_,.!?': ]*$"))
                 .min(8)
-                .max(30)
+                .max(40)
                 .messages({
                     'string.pattern.base': 'Title can only contain these special characters (. / ! / ? / ,)',
                     'string.base': 'Title should be a type of text',
@@ -17,8 +17,6 @@ module.exports = {
                 }),
             short_description: Joi.string()
                 .pattern(new RegExp("^[a-zA-Z0-9_,.!?': ]*$"))
-                .min(20)
-                .max(60)
                 .messages({
                     'string.pattern.base': 'Short description can only contain these special characters (. / ! / ? / ,)',
                     'string.base': 'Short description should be a type of text',
@@ -27,8 +25,6 @@ module.exports = {
                     'string.max': `Short description must be maximum 60 characters long`
                 }),
             description: Joi.string()
-                .min(50)
-                .max(500)
                 .messages({
                     'string.min': `Description must be longer than 50 characters`,
                     'string.max': `Display name must be shorter than 300 characters`,

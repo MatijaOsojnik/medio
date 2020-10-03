@@ -82,7 +82,7 @@ const routes = [{
     }
   },
   {
-    path: '/stories/create/:id/publish',
+    path: '/stories/publish/:id',
     name: 'story-publish',
     component: StoryPublish,
     meta: {

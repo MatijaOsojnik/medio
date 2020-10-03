@@ -1,118 +1,101 @@
 <template>
   <div>
-                    <v-layout>
-                <v-flex xs12 justify="center" align="center">
-                  <v-card class="mx-auto">
-                    <v-toolbar flat color="#617BE3" dark>
-                      <v-toolbar-title>Edit Story</v-toolbar-title>
-                    
-                    </v-toolbar>
-                    <v-card-text v-if="story">
-                      <v-form lazy-validation>
-                        <label>Description</label>
-                        <p>{{$store.state.currentStory.HTML}}</p>
-                        <label for="title">Title</label>
-                        <v-text-field
-                          id="title"
-                          label="Enter a title for your story"
-                          maxlength="30"
-                          counter
-                          :rules="[rules.min]"
-                          solo
-                          aria-autocomplete="false"
-                          v-model="story.title"
-                        />
+    <v-layout>
+      <v-flex xs12 justify="center" align="center">
+        <v-card class="mx-auto">
+          <v-toolbar flat color="#617BE3" dark>
+            <v-toolbar-title>Edit Story</v-toolbar-title>
+          </v-toolbar>
+          <v-card-text>
+            <v-form lazy-validation>
+              <!-- <label>Description</label>
+                        <p v-html="$store.state.currentStory.HTML"></p>
+                        <label>Title</label>
+                        <p>{{$store.state.currentStory.JSON.content[0].content[0].text}}</p> -->
+              <label for="title">Title</label>
+              <v-text-field
+                id="title"
+                label="Enter a title for your story"
+                maxlength="30"
+                counter
+                :rules="[rules.min]"
+                solo
+                aria-autocomplete="false"
+                v-model="story.title"
+              />
 
-                        <label for="shortDescription">Short Description</label>
-                        <v-text-field
-                          id="shortDescription"
-                          :rules="[rules.short_description]"
-                          label="Write your short description here"
-                          solo
-                          clearable
-                          counter
-                          maxlength="60"
-                          hint="This description will be used on the Story card before the user clicks on it."
-                          aria-autocomplete="false"
-                          v-model="story.short_description"
-                        />
-                        <label for="description">Story</label>
-                        <div style="margin: 0.5rem 0 2rem">
-                          <tiptap-vuetify
-                            id="description"
-                            v-model="story.description"
-                            :rules="[rules.description]"
-                            placeholder="Write your description here."
-                            maxlength="300"
-                            :extensions="extensions"
-                          />
-                        </div>
+              <label for="shortDescription">Short Description</label>
+              <v-text-field
+                id="shortDescription"
+                :rules="[rules.short_description]"
+                label="Write your short description here"
+                solo
+                clearable
+                counter
+                maxlength="60"
+                hint="This description will be used on the Story card before the user clicks on it."
+                aria-autocomplete="false"
+                v-model="story.short_description"
+              />
 
-                        <label for="thumbnailURL">Thumbnail URL</label>
-                        <v-text-field
-                          id="thumbnailURL"
-                          label="Enter Thumbnail URL"
-                          solo
-                          aria-autocomplete="false"
-                          v-model="story.thumbnail_url"
-                        />
+              <label for="thumbnailURL">Thumbnail URL</label>
+              <v-text-field
+                id="thumbnailURL"
+                label="Enter Thumbnail URL"
+                solo
+                aria-autocomplete="false"
+                v-model="story.thumbnail_url"
+              />
 
-                        <label for="category">Category</label>
-                        <v-select
-                          id="category"
-                          :items="categories"
-                          label="Select Category"
-                          v-model="story.category_id"
-                          item-text="name"
-                          item-value="id"
-                          solo
-                        ></v-select>
-
-                        <v-checkbox v-model="story.featured" label="Featured">
-                        </v-checkbox>
-                      </v-form>
-                      <v-scroll-x-transition>
-                        <v-alert
-                          type="success"
-                          mode="out-in"
-                          v-if="successfulStoryUpdate"
-                        >
-                          <span>You successfuly updated a story</span>
-                        </v-alert>
-                      </v-scroll-x-transition>
-                      <v-scroll-x-transition>
-                        <v-alert
-                          elevation="2"
-                          type="warning"
-                          v-if="errors.length"
-                        >
-                          <ul>
-                            <li v-for="error in errors" :key="error">
-                              {{ error }}
-                            </li>
-                          </ul>
-                        </v-alert>
-                      </v-scroll-x-transition>
-                    </v-card-text>
-                    <v-card-actions class="pa-4">
-                      <v-btn
-                        color="#f4f6ff"
-                        :disabled="waitBeforeClick"
-                        large
-                        @click="updateStory"
-                        >SUBMIT</v-btn
-                      >
-                      <v-btn
-                        color="#ff6363"
-                        large
-                        :disabled="waitBeforeClick"
-                        @click="dialog = false"
-                        >CLOSE</v-btn
-                      >
-                    </v-card-actions>
-                  </v-card>
-                </v-flex>
-              </v-layout>
+              <label for="category">Category</label>
+              <v-select
+                id="category"
+                :items="categories"
+                label="Select Category"
+                v-model="story.category_id"
+                item-text="name"
+                item-value="id"
+                solo
+              ></v-select>
+            </v-form>
+            <v-scroll-x-transition>
+              <v-alert
+                type="success"
+                mode="out-in"
+                v-if="successfulStoryPost"
+              >
+                <span>You successfuly posted a story</span>
+              </v-alert>
+            </v-scroll-x-transition>
+            <v-scroll-x-transition>
+              <v-alert elevation="2" type="warning" v-if="errors.length">
+                <ul>
+                  <li v-for="error in errors" :key="error">
+                    {{ error }}
+                  </li>
+                </ul>
+              </v-alert>
+            </v-scroll-x-transition>
+          </v-card-text>
+          <v-card-actions class="pa-4">
+            <v-btn
+              color="#f4f6ff"
+              :disabled="waitBeforeClick"
+              large
+              @click="createStory"
+              >SUBMIT</v-btn
+            >
+            <v-btn
+              color="#ff6363"
+              large
+              :disabled="waitBeforeClick"
+              @click="dialog = false"
+              >CLOSE</v-btn
+            >
+          </v-card-actions>
+        </v-card>
+      </v-flex>
+    </v-layout>
   </div>
 </template>
 
@@ -121,11 +104,16 @@ import StoryService from "@/services/StoryService";
 import CategoryService from "@/services/CategoryService";
 
 export default {
-  components:{
-    
-  },
+  components: {},
 
   data: () => ({
+    story: {
+      title: ``,
+      short_description: ``,
+      description: ``,
+      thumbnail_url: ``,
+      category_id: ``,
+    },
     rules: {
       short_description: (text) => text.length <= 60 || "Max 60 characters",
       description: (text) => text.length <= 300 || "Max 300 characters",
@@ -140,12 +128,18 @@ export default {
     successfulStoryPost: false,
     errors: [],
     categories: [],
-  }), 
+  }),
   mounted() {
     this.findCategories();
     this.checkUser();
+    this.fillStoryData();
   },
   methods: {
+    fillStoryData() {
+      this.story.title = this.$store.state.currentStory.JSON.content[0].content[0].text;
+      this.story.short_description = this.$store.state.currentStory.JSON.content[1].content[0].text;
+      this.story.description = this.$store.state.currentStory.HTML;
+    },
     // addTip() {
     //   const areAllFieldsFilledIn = Object.keys(this.tip).every(
     //     key => !!this.tip[key]
@@ -203,7 +197,7 @@ export default {
         return;
       }
       try {
-        const userId = this.$route.params.id;
+        const userId = this.$store.state.user.id;
         const response = await StoryService.post(this.story, userId);
         if (response) {
           this.successfulStoryPost = true;

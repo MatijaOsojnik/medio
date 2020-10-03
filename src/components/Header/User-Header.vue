@@ -27,7 +27,8 @@
       <v-text-field
         v-if="
           currentRouteName !== 'story-create' &&
-          currentRouteName !== 'story-edit'"
+          currentRouteName !== 'story-edit'
+        "
         class="d-xl-flex d-lg-flex d-md-flex d-none"
         color="#A2D5F2"
         hide-details
@@ -37,7 +38,15 @@
         style="max-width: 250px"
         single-line
       ></v-text-field>
-      <v-btn v-else :disabled="!$store.state.currentStory.HTML || !$store.state.currentStory.JSON" small white outlined class="inline-block" :to="{path: `stories/create/${$store.state.user.id}/publish`}">
+      <v-btn
+        v-else
+        :disabled="$store.state.currentStory.JSON.content.length <= 2"
+        small
+        white
+        outlined
+        class="inline-block"
+        :to="{ path: `/stories/publish/${$store.state.user.id}` }"
+      >
         PUBLISH
       </v-btn>
 
@@ -186,9 +195,10 @@ export default {
     permissions: false,
     adminPermissions: false,
     isChecking: true,
+    isContent: false,
   }),
   props: {
-    story: Object
+    story: Object,
   },
   watch: {
     $route: "checkRoles",
@@ -202,6 +212,14 @@ export default {
     currentRouteName() {
       return this.$route.name;
     },
+    // isContent: () => {
+    //   return this.$store.state.currentStory.HTML
+    //   // if ($store.state.currentStory.JSON.length < 10) {
+    //   //   return false;
+    //   // } else {
+    //   //   return true;
+    //   // }
+    // },
   },
   methods: {
     logout() {
@@ -221,7 +239,7 @@ export default {
       }
     },
     // async publish(data) {
-     
+
     // },
     async getCategories() {
       try {
