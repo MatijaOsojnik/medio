@@ -22,7 +22,7 @@ export default new Vuex.Store({
     authorities: null,
     bookmarks: null,
     currentStory: {
-      HTML: null,
+      HTML: ``,
       JSON: null
     },
     isUserLoggedIn: false

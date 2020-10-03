@@ -5,9 +5,12 @@
                   <v-card class="mx-auto">
                     <v-toolbar flat color="#617BE3" dark>
                       <v-toolbar-title>Edit Story</v-toolbar-title>
+                    
                     </v-toolbar>
                     <v-card-text v-if="story">
                       <v-form lazy-validation>
+                        <label>Description</label>
+                        <p>{{$store.state.currentStory.HTML}}</p>
                         <label for="title">Title</label>
                         <v-text-field
                           id="title"
@@ -137,7 +140,7 @@ export default {
     successfulStoryPost: false,
     errors: [],
     categories: [],
-  }),
+  }), 
   mounted() {
     this.findCategories();
     this.checkUser();

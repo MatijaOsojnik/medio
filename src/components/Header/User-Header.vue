@@ -27,8 +27,7 @@
       <v-text-field
         v-if="
           currentRouteName !== 'story-create' &&
-          currentRouteName !== 'story-edit'
-        "
+          currentRouteName !== 'story-edit'"
         class="d-xl-flex d-lg-flex d-md-flex d-none"
         color="#A2D5F2"
         hide-details
@@ -38,7 +37,7 @@
         style="max-width: 250px"
         single-line
       ></v-text-field>
-      <v-btn v-else :disabled="!$store.state.currentStory" small white outlined class="inline-block" :to="{path: `stories/create/${$store.state.user.id}/publish`}">
+      <v-btn v-else :disabled="!$store.state.currentStory.HTML || !$store.state.currentStory.JSON" small white outlined class="inline-block" :to="{path: `stories/create/${$store.state.user.id}/publish`}">
         PUBLISH
       </v-btn>
 

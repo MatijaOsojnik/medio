@@ -141,8 +141,11 @@
       </div>
     </editor-menu-bubble>
 
-    <editor-content class="editor__content" :editor="editor" />
-
+    <editor-content
+      class="editor__content"
+      :editor="editor"
+      v-model="story_content"
+    />
   </div>
 </template>
 
@@ -183,6 +186,7 @@ export default {
   },
   data() {
     return {
+      story_content: ``,
       title: ``,
       short_description: ``,
       description: ``,
@@ -220,21 +224,25 @@ export default {
             },
           }),
         ],
-        onUpdate: ({ getJSON, getHTML }) => {
+        onUpdate: ({ getJSON, getHTML, }) => {
           this.$store.dispatch("setCurrentStoryJSON", getJSON());
           this.$store.dispatch("setCurrentStoryHTML", getHTML());
         },
+        content:  this.$store.state.currentStory.HTML,
         autoFocus: true,
-        content: ``,
       }),
       linkUrl: null,
       linkMenuIsActive: false,
     };
   },
-  props: {
-    story: Object,
+  // props: {
+  //   story: Object,
+  // },
+  created() {
+    this.checkContent();
   },
   methods: {
+    async checkContent() {},
     showLinkMenu(attrs) {
       this.linkUrl = attrs.href;
       this.linkMenuIsActive = true;
