@@ -25,10 +25,6 @@
       <v-spacer></v-spacer>
 
       <v-text-field
-        v-if="
-          currentRouteName !== 'story-create' &&
-          currentRouteName !== 'story-edit'
-        "
         class="d-xl-flex d-lg-flex d-md-flex d-none"
         color="#8d93ab"
         hide-details
@@ -39,6 +35,53 @@
         single-line
         v-model="keyword"
       ></v-text-field>
+
+      <v-menu
+        offset-y
+        v-if="
+          currentRouteName !== 'story-create' &&
+          currentRouteName !== 'story-edit'"
+        transition="scroll-y-transition"
+        :close-on-content-click="false"
+        v-model="showMenu"
+      >
+        <v-card>
+          <v-list>
+            <div v-if="profiles.length > 0">
+              <span class="subtitle d-block pa-4 font-weight-bold">PEOPLE</span>
+              <v-divider />
+              <v-list-item v-for="profile in profiles" :key="profile.id">
+                <v-card class="pa-2 flat tile">
+                  <div class="d-flex justify-lg-space-between">
+                    <div>
+                      <v-avatar v-if="!profile.icon_url" size="40px">
+                        <v-icon>mdi-account-circle-outline</v-icon>
+                      </v-avatar>
+                      <v-avatar v-else size="40px">
+                        <v-img :src="profile.icon_url" />
+                      </v-avatar>
+                    </div>
+                    <div>
+                      <span class="d-block">{{ profile.display_name }}</span>
+                    </div>
+                  </div>
+                </v-card>
+              </v-list-item>
+            </div>
+            <div v-if="stories.length > 0">
+              <span class="subtitle d-block pa-4 font-weight-bold"
+                >STORIES</span
+              >
+              <v-divider />
+              <v-list-item v-for="story in stories" :key="story.id">
+                <v-list-item-content>
+                  {{ story.title }}
+                </v-list-item-content>
+              </v-list-item>
+            </div>
+          </v-list>
+        </v-card>
+      </v-menu>
 
       <v-btn
         v-else
@@ -51,25 +94,6 @@
       >
         PUBLISH
       </v-btn>
-
-      <v-list>
-        <div v-if="profiles.length > 0">
-          <v-list-item-title>Profiles</v-list-item-title>
-          <v-list-item v-for="profile in profiles" :key="profile.id">
-            <v-list-item-content>
-              {{ profile.display_name }}
-            </v-list-item-content>
-          </v-list-item>
-        </div>
-        <div v-if="stories.length > 0">
-          <v-list-item-title>Profiles</v-list-item-title>
-          <v-list-item v-for="story in stories" :key="story.id">
-            <v-list-item-content>
-              {{ story.title }}
-            </v-list-item-content>
-          </v-list-item>
-        </div>
-      </v-list>
 
       <v-btn color="#1b262c" icon style="margin-right: 0.3em" class="ma-4">
         <router-link
@@ -213,9 +237,7 @@ import CategoryService from "@/services/CategoryService";
 import GeneralService from "@/services/GeneralService";
 // import { debounce } from "lodash"
 export default {
-  components: {
-
-  },
+  components: {},
   data: () => ({
     categories: null,
     permissions: false,
@@ -225,6 +247,9 @@ export default {
     keyword: "",
     profiles: [],
     stories: [],
+    showMenu: false,
+    x: 0,
+    y: 0,
   }),
 
   watch: {
@@ -254,12 +279,17 @@ export default {
   },
   methods: {
     async contentSearch() {
-      const response = await GeneralService.search(this.keyword);
-      if (response.data.stories.length > 0) {
-        this.stories = response.data.stories
-      }
-      if(response.data.users.length > 0) {
-        this.profiles = response.data.users
+      const response = await GeneralService.search(this.keyword.toLowerCase());
+      if(response) {
+        this.showMenu = true
+        if (response.data.stories.length > 0) {
+          this.stories = response.data.stories;
+        }
+        if (response.data.users.length > 0) {
+          this.profiles = response.data.users;
+        }
+      } else {
+        this.showMenu = false
       }
     },
     logout() {
