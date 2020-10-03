@@ -2,7 +2,7 @@
   <v-hover v-slot:default="{ hover }">
     <v-card :to="{path: `/stories/${story.id}`}" raised :elevation="hover ? 8 : 2">
       <v-row>
-        <v-col class="col-9 d-flex align-center">
+        <v-col class="col-10 d-flex align-center">
           <div class="d-flex flex-column justify-space-between" style="width: 100%; height: 100%;">
             <div>
               <v-card-title class="headline" v-text="story.title"></v-card-title>
@@ -30,7 +30,8 @@
             </div>
           </div>
         </v-col>
-        <v-col class="col-3 py-6">
+        <v-col class="col-2 py-6">
+          
           <v-avatar size="150" tile>
             <v-img
               :src="imageError ? require('@/assets/blue-error-background.jpg') : story.thumbnail_url"

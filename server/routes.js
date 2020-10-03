@@ -136,6 +136,8 @@ module.exports = (app) => {
     app.delete('/api/bookmarks/:storyId/:userId', GeneralController.deleteBookmark),
         app.get('/api/bookmarks/:userId', GeneralController.getBookmarks)
 
+        app.post('/api/search', GeneralController.search)
+
 
     // FOLLOW ROUTE
 

@@ -22,4 +22,7 @@ export default {
     getBookmarks(userId) {
         return axios.get(`bookmarks/${userId}`)
     },
+    search(content) {
+        return axios.post(`search`, {content})
+    }
 }

@@ -20,7 +20,8 @@
           <v-list-item>
             <router-link
               v-if="story.Users[0]"
-              :to="{path: `/users/${story.Users[0].display_name.toLowerCase()}/${story.Users[0].id}/profile`}"
+              :to="{path: `/users/${story.Users[0].display_name.toLowerCase()
+              .replace(/\s/g, '')}/${story.Users[0].id}/profile`}"
             >
               <v-list-item-avatar color="grey darken-3">
                 <v-img
@@ -33,7 +34,8 @@
 
             <router-link
               v-if="story.Users[0]"
-              :to="{path: `/users/${story.Users[0].display_name.toLowerCase()}/${story.Users[0].id}/profile`}"
+              :to="{path: `/users/${story.Users[0].display_name.toLowerCase()
+              .replace(/\s/g, '')}/${story.Users[0].id}/profile`}"
             >
               <v-list-item-content>
                 <v-list-item-title>{{story.Users[0].display_name}}</v-list-item-title>

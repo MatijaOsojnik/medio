@@ -8,6 +8,10 @@ const {
   Follower
 } = require('../models')
 
+const {
+  Op
+} = require("sequelize");
+
 module.exports = {
   async count(req, res) {
     try {
@@ -193,5 +197,38 @@ module.exports = {
           })
         }
       },
+
+      async search(req, res) {
+        try {
+          const content = req.body.content
+          const users = await User.findAll({
+            limit: 6,
+            where: {
+              display_name: {
+                [Op.like]: '%' + content + '%'
+              }
+            }
+          })
+          const stories = await Story.findAll({
+            limit: 6,
+            where: {
+              title: {
+                [Op.like]: '%' + content + '%'
+              }
+            }
+          })
+
+          res.status(200).send({
+            users,
+            stories
+          })
+
+        } catch (err) {
+          console.log(err)
+          res.status(500).send({
+            error: 'an error has occured trying to create the bookmark object'
+          })
+        }
+      }
 
 }

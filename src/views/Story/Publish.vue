@@ -230,6 +230,12 @@ export default {
           });
         }
       }
+    if(this.$store.state.currentStory.JSON.content.length <= 2) {
+          this.$router.push({
+            name: "stories",
+          });
+    }
+
     },
   },
 };

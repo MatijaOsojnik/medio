@@ -40,7 +40,7 @@
                 aria-autocomplete="false"
                 v-model="story.short_description"
               />
-              <label for="description">Description</label>
+              <!-- <label for="description">Description</label>
               <div style="margin: 0.5rem 0 2rem">
                 <tiptap-vuetify
                   id="description"
@@ -50,7 +50,7 @@
                   maxlength="300"
                   :extensions="extensions"
                 />
-              </div>
+              </div> -->
 
               <label for="thumbnailURL">Thumbnail URL</label>
               <v-text-field
@@ -97,23 +97,23 @@
 <script>
 import StoryService from "@/services/StoryService";
 import CategoryService from "@/services/CategoryService";
-import {
-  TiptapVuetify,
-  Heading,
-  Bold,
-  Italic,
-  Paragraph,
-  BulletList,
-  OrderedList,
-  ListItem,
-  Link,
-  HardBreak,
-  History
-} from "tiptap-vuetify";
+// import {
+//   TiptapVuetify,
+//   Heading,
+//   Bold,
+//   Italic,
+//   Paragraph,
+//   BulletList,
+//   OrderedList,
+//   ListItem,
+//   Link,
+//   HardBreak,
+//   History
+// } from "tiptap-vuetify";
 
 export default {
   components: {
-    TiptapVuetify
+    // TiptapVuetify
   },
 
   data: () => ({
@@ -132,55 +132,54 @@ export default {
       description: `<p>Write your description here.</p>`,
       thumbnail_url: ``,
       category_id: ``,
-      user_id: null
     },
     successfulStoryUpdate: false,
     waitBeforeClick: false,
     isOwner: false,
     errors: [],
     categories: [],
-    extensions: [
-      History,
-      Bold,
-      Italic,
-      Link,
-      ListItem,
-      BulletList,
-      OrderedList,
-      [
-        Heading,
-        {
-          options: {
-            levels: [1, 2, 3]
-          }
-        }
-      ],
-      Paragraph,
-      HardBreak
-    ]
+    // extensions: [
+    //   History,
+    //   Bold,
+    //   Italic,
+    //   Link,
+    //   ListItem,
+    //   BulletList,
+    //   OrderedList,
+    //   [
+    //     Heading,
+    //     {
+    //       options: {
+    //         levels: [1, 2, 3]
+    //       }
+    //     }
+    //   ],
+    //   Paragraph,
+    //   HardBreak
+    // ]
   }),
   created() {
     this.getStory();
     this.getCategories();
-    this.story.user_id = this.$route.params.id;
   },
   methods: {
     async updateStory() {
       this.waitBeforeClick = true;
-      const areAllFieldsFilledIn = Object.keys(this.story).every(
-        key => !!this.story[key]
-      );
-      if (!areAllFieldsFilledIn) {
-        this.errors.push("Please fill in all the fields.");
-        setTimeout(() => {
-          this.errors = [];
-          this.waitBeforeClick = false;
-        }, 3000);
-        return;
-      }
+      // const areAllFieldsFilledIn = Object.keys(this.story).every(
+      //   key => !!this.story[key]
+      // );
+      // if (!areAllFieldsFilledIn) {
+      //   this.errors.push("Please fill in all the fields.");
+      //   setTimeout(() => {
+      //     this.errors = [];
+      //     this.waitBeforeClick = false;
+      //   }, 3000);
+      //   return;
+      // }
       try {
         const storyId = this.$route.params.id;
         const response = await StoryService.put(this.story);
+        console.log(response)
         if (response) {
           this.successfulStoryUpdate = true;
           setTimeout(() => {
@@ -195,6 +194,7 @@ export default {
           }, 3000);
         }
       } catch (err) {
+        console.log(err)
         this.errors = err.response.data;
         setTimeout(() => (this.waitBeforeClick = false), 3000);
         setTimeout(() => (this.errors = []), 5000);

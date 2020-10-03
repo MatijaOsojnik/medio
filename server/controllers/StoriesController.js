@@ -14,7 +14,16 @@ module.exports = {
             const stories = await Story.findAll({
                 include: [Category, User]
             })
-            res.send(stories)
+            const storiesFeatured = await Story.findAll({
+                where: {
+                    featured: true
+                },
+                include: [Category, User]
+            })
+            res.send({
+                stories,
+                storiesFeatured
+            })
         } catch (error) {
             console.log(error)
             res.status(500).send({

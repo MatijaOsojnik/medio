@@ -30,14 +30,16 @@
           currentRouteName !== 'story-edit'
         "
         class="d-xl-flex d-lg-flex d-md-flex d-none"
-        color="#A2D5F2"
+        color="#8d93ab"
         hide-details
         outlined
         dense
         prepend-icon="mdi-magnify"
         style="max-width: 250px"
         single-line
+        v-model="keyword"
       ></v-text-field>
+
       <v-btn
         v-else
         :disabled="$store.state.currentStory.JSON.content.length <= 2"
@@ -49,6 +51,25 @@
       >
         PUBLISH
       </v-btn>
+
+      <v-list>
+        <div v-if="profiles.length > 0">
+          <v-list-item-title>Profiles</v-list-item-title>
+          <v-list-item v-for="profile in profiles" :key="profile.id">
+            <v-list-item-content>
+              {{ profile.display_name }}
+            </v-list-item-content>
+          </v-list-item>
+        </div>
+        <div v-if="stories.length > 0">
+          <v-list-item-title>Profiles</v-list-item-title>
+          <v-list-item v-for="story in stories" :key="story.id">
+            <v-list-item-content>
+              {{ story.title }}
+            </v-list-item-content>
+          </v-list-item>
+        </div>
+      </v-list>
 
       <v-btn color="#1b262c" icon style="margin-right: 0.3em" class="ma-4">
         <router-link
@@ -189,24 +210,34 @@
 
 <script>
 import CategoryService from "@/services/CategoryService";
+import GeneralService from "@/services/GeneralService";
+// import { debounce } from "lodash"
 export default {
+  components: {
+
+  },
   data: () => ({
     categories: null,
     permissions: false,
     adminPermissions: false,
     isChecking: true,
     isContent: false,
+    keyword: "",
+    profiles: [],
+    stories: [],
   }),
-  props: {
-    story: Object,
-  },
+
   watch: {
     $route: "checkRoles",
+    keyword() {
+      this.contentSearch();
+    },
   },
 
   created() {
     this.checkRoles();
     this.getCategories();
+    // this.debounceName = debounce(this.contentSearch, 1000)
   },
   computed: {
     currentRouteName() {
@@ -222,10 +253,21 @@ export default {
     // },
   },
   methods: {
+    async contentSearch() {
+      const response = await GeneralService.search(this.keyword);
+      if (response.data.stories.length > 0) {
+        this.stories = response.data.stories
+      }
+      if(response.data.users.length > 0) {
+        this.profiles = response.data.users
+      }
+    },
     logout() {
       this.$store.dispatch("setToken", null);
       this.$store.dispatch("setUser", null);
       this.$store.dispatch("setAuthorities", null);
+      this.$store.dispatch("setCurrentStoryHTML", null);
+      this.$store.dispatch("setCurrentStoryJSON", null);
       this.permissions = false;
       this.adminPermissions = false;
       this.$router.push({

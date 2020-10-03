@@ -12,7 +12,8 @@
             <router-link
               v-if="story.Users[0]"
               :to="{
-                path: `/users/${story.Users[0].display_name.toLowerCase()}/${
+                path: `/users/${story.Users[0].display_name.toLowerCase()
+              .replace(/\s/g, '')}/${
                   story.Users[0].id
                 }/profile`,
               }"
@@ -29,7 +30,8 @@
             <router-link
               v-if="story.Users[0]"
               :to="{
-                path: `/users/${story.Users[0].display_name.toLowerCase()}/${
+                path: `/users/${story.Users[0].display_name.toLowerCase()
+              .replace(/\s/g, '')}/${
                   story.Users[0].id
                 }/profile`,
               }"

@@ -44,14 +44,12 @@
       <span
         class="title"
         v-else-if="
-          $router.history.current['name'] === 'stories-categories' && stories
-        "
-        >{{ stories[0].Category.name }}</span
-      >
+          $router.history.current['name'] === 'stories-categories' && stories"
+        >{{ stories[0].Category.name }}</span>
       <v-row style="z-index: 100" class="flex-sm-fill">
         <v-col
           class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12 d-flex d-sm-flex d-md-block d-lg-block d-xl-block justify-center justify-sm-center"
-          v-for="story in storyLimit"
+          v-for="story in storiesFeatured"
           :key="story.id"
         >
           <StoryCardComponent :story="story" />
@@ -61,8 +59,7 @@
       <span
         class="title d-block my-6"
         v-if="$router.history.current['name'] === 'stories'"
-        ><v-icon>{{ "mdi-chevron-up-box-outline" }}</v-icon
-        > Top Trending</span
+        ><v-icon>{{ "mdi-chevron-up-box-outline" }}</v-icon> Top Trending</span
       >
 
       <v-row class="flex-sm-fill">
@@ -80,8 +77,8 @@
       <span
         class="title d-block my-6"
         v-if="$router.history.current['name'] === 'stories'"
-        ><v-icon>{{ "mdi-book-open-page-variant" }}</v-icon
-        > Based On Your Recent Reading</span
+        ><v-icon>{{ "mdi-book-open-page-variant" }}</v-icon> Based On Your
+        Recent Reading</span
       >
 
       <v-row class="flex-sm-fill">
@@ -128,6 +125,7 @@ export default {
       url: "/stories/create/",
     },
     stories: null,
+    storiesFeatured: null,
     userStories: null,
     loading: false,
     priviliges: false,
@@ -140,8 +138,8 @@ export default {
     storyLimit() {
       if (this.stories) {
         if (this.limit) {
-          const splitStories = this.stories.slice(0, 3);
-          return splitStories;
+          const splitStoriesFeatured = this.stories.slice(0, 3);
+          return splitStoriesFeatured;
         } else {
           return this.stories;
         }
@@ -149,6 +147,20 @@ export default {
         return this.stories;
       }
     },
+    // storyFeatured() {
+    //   if(this.stories) {
+    //     const featuredStories = this.stories.map(story => {
+    //       if(story.featured) {
+    //         return story
+    //       } else {
+    //         return null
+    //       }
+    //     })
+    //       return featuredStories
+    //   } else {
+    //       return null
+    //     }
+    // }
   },
   created() {
     this.getStories();
@@ -169,6 +181,7 @@ export default {
         response = await StoryService.categories(categoryId);
         if (response) {
           this.loading = false;
+
           if (response.data.length > 0) {
             this.stories = response.data;
           } else {
@@ -182,7 +195,8 @@ export default {
         if (response) {
           this.loading = false;
         }
-        this.stories = response.data;
+        this.stories = response.data.stories;
+        this.storiesFeatured = response.data.storiesFeatured
       }
     },
     async getBookmarks() {

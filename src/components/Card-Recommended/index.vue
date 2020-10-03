@@ -14,7 +14,8 @@
                 <router-link
                   v-if="story.Users[0]"
                   :to="{
-                    path: `/users/${story.Users[0].display_name.toLowerCase()}/${
+                    path: `/users/${story.Users[0].display_name.toLowerCase()
+              .replace(/\s/g, '')}/${
                       story.Users[0].id
                     }/profile`,
                   }"
@@ -36,7 +37,8 @@
                   <router-link
                     v-if="story.Users[0]"
                     :to="{
-                      path: `/users/${story.Users[0].display_name.toLowerCase()}/${
+                      path: `/users/${story.Users[0].display_name.toLowerCase()
+              .replace(/\s/g, '')}/${
                         story.Users[0].id
                       }/profile`,
                     }"
@@ -76,7 +78,7 @@
                     v-if="isOwner"
                     :to="{
                       name: 'story-edit',
-                      params: { id: $route.params.id },
+                      params: { id: story.id },
                     }"
                   >
                     EDIT
@@ -106,7 +108,7 @@
             </span>
             <div class="d-flex justify-space-between my-3">
               <span class="d-block">
-                <v-icon size="24px">{{ bookmarkIcon }}</v-icon>
+                <v-icon size="24px">{{ 'mdi-heart-outline' }}</v-icon>
               </span>
               <span class="d-block">
                 <router-link :to="$router.currentRoute">
