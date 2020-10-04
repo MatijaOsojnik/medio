@@ -97,8 +97,7 @@
             :src="
               imageError
                 ? require('@/assets/blue-error-background.jpg')
-                : story.thumbnail_url
-            "
+                : story.thumbnail_url"
             class="darker-img px-4"
             @error="imageLoadError"
             max-height="600px"
@@ -138,21 +137,82 @@
             </span>
           </v-list-item>
         </div>
+        <v-divider></v-divider>
+        <div>
+          <v-list-item class="py-6 pl-0 ml-0">
+            <router-link
+              v-if="story.Users[0]"
+              :to="{
+                path: `/users/${story.Users[0].display_name
+                  .toLowerCase()
+                  .replace(/\s/g, '')}/${story.Users[0].id}/profile`,
+              }"
+              style="z-index: 999"
+              class="pb-2"
+            >
+              <v-list-item-avatar size="80px" color="grey darken-3">
+                <v-img
+                  v-if="story.Users.length > 0 && story.Users[0].icon_url"
+                  :src="story.Users[0].icon_url"
+                ></v-img>
+                <v-img v-else src="@/assets/blue-error-background.jpg"></v-img>
+              </v-list-item-avatar>
+            </router-link>
+
+            <div class="">
+              <span
+                class="d-block font-weight-light"
+                style="color: #393b44; font-size: 12px"
+                >WRITTEN BY</span
+              >
+              <router-link
+                v-if="story.Users[0]"
+                :to="{
+                  path: `/users/${story.Users[0].display_name
+                    .toLowerCase()
+                    .replace(/\s/g, '')}/${story.Users[0].id}/profile`,
+                }"
+                style="z-index: 999"
+              >
+                <span class="font-weight-bold title d-block">{{
+                  story.Users[0].display_name
+                }}</span>
+              </router-link>
+
+              <div class="d-flex justify-space-between">
+                <span class="subtitle-2 mb-2 d-inline-block font-weight-light" v-html="story.Users[0].description"> </span>
+              </div>
+              <!-- <v-icon class="mr-3">mdi-share-variant</v-icon> -->
+            </div>
+            
+          </v-list-item>
+        </div>
       </div>
     </template>
     <template v-slot:similar>
-      <v-slide-group class="pa-4" show-arrows v-if="categoryStories.length">
-        <v-slide-item v-for="story in categoryStories" :key="story.id">
-          <CardStoryTrending :story="story" />
-        </v-slide-item>
-      </v-slide-group>
+
+     <v-row style="z-index: 100" class="flex-sm-fill" v-if="categoryStories.length">
+        <v-col
+          class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12 d-flex d-sm-flex d-md-block d-lg-block d-xl-block justify-center justify-sm-center"
+          v-for="story in categoryStories"
+          :key="story.id"
+        >
+          <CardStory :story="story" />
+        </v-col>
+      </v-row>
+
+
     </template>
     <template v-slot:other>
-      <v-slide-group class="pa-4" show-arrows v-if="differentStories.length">
-        <v-slide-item v-for="story in differentStories" :key="story.id">
-          <CardStoryTrending :story="story" />
-        </v-slide-item>
-      </v-slide-group>
+<v-row style="z-index: 100" class="flex-sm-fill" v-if="differentStories.length">
+        <v-col
+          class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12 d-flex d-sm-flex d-md-block d-lg-block d-xl-block justify-center justify-sm-center"
+          v-for="story in differentStories"
+          :key="story.id"
+        >
+          <CardStory :story="story" />
+        </v-col>
+      </v-row>
     </template>
   </StoryMetadata>
 </template>
@@ -161,11 +221,12 @@
 import StoryService from "@/services/StoryService";
 import GeneralService from "@/services/GeneralService";
 import StoryMetadata from "@/views/Story/Metadata.vue";
-import CardStoryTrending from "@/components/Card-Story-Trending";
+import CardStory from "@/components/Card-Story";
 export default {
   components: {
     StoryMetadata,
-    CardStoryTrending,
+    CardStory,
+
   },
   data: () => ({
     story: null,
