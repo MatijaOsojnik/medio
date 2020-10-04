@@ -56,7 +56,7 @@
             :onSuccess="googleAuth"
             :onFailure="onFailure"
           />
-          <div class="fb-login-button pa-4" data-size="large" data-button-type="continue_with" data-layout="default" data-auto-logout-link="false" data-use-continue-as="false" data-width=""></div>
+          <v-btn @click="facebookAuth"> FACEBOOK LOGIN </v-btn>
         </div>
       </div>
       <!-- <v-btn class="mx-4" icon color="blue" :href="facebookLoginUrl">
@@ -70,6 +70,7 @@
 import AuthenticationPanel from "@/components/Authentication-Panel/Authentication-Panel";
 import AuthenticationService from "@/services/AuthenticationService";
 import GoogleLogin from "vue-google-login";
+import axios from "axios";
 
 export default {
   components: {
@@ -150,6 +151,51 @@ export default {
         this.error = error.response.data.error;
         setTimeout(() => (this.error = null), 5000);
       }
+    },
+    async facebookAuth() {
+      window.FB.login(
+        function (response) {
+          const token = response.authResponse.accessToken;
+          async function getFacebookUserData(access_token) {
+      const { data } = await axios({
+        url: "https://graph.facebook.com/me",
+        method: "get",
+        params: {
+          fields: ["id", "email", "first_name", "last_name", "picture"].join(","),
+          access_token: access_token,
+        },
+      });
+      
+      try {
+        const response = await AuthenticationService.facebookAuth(
+          data
+        );
+
+        this.showPanel = true;
+
+        setTimeout(() => {
+          this.loginSuccess = true;
+        }, 1500);
+
+        if (response) {
+          setTimeout(() => {
+            this.$store.dispatch("setToken", response.data.token);
+            this.$store.dispatch("setUser", response.data.user);
+            this.$store.dispatch("setAuthorities", response.data.authorities);
+            this.loginSuccess = false;
+            this.showPanel = false;
+            this.$router.push({ name: "stories" });
+          }, 2500);
+        }
+      } catch (error) {
+        this.error = error.response.data.error;
+        setTimeout(() => (this.error = null), 5000);
+      }
+    }
+    getFacebookUserData(token);
+        },
+        { scope: "public_profile,email" }
+      );
     },
     async onFailure() {
       this.error = `Google Authentication failed.`;
