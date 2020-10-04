@@ -197,9 +197,10 @@ module.exports = {
         async getLikes(req, res) {
             try {
               const storyId = req.params.storyId
+              const userId = req.params.userId
               const likes = await Like.findAll({
                 where: {
-                  story_id: storyId
+                  user_id: userId
                 },
                 include: [{
                   model: Story,

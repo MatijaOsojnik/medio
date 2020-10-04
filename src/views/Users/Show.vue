@@ -49,6 +49,11 @@
                   class="d-block my-4"
                   v-html="user.description"
                 ></span>
+                <div>
+                  <span> {{followersCount}} Following</span>
+                  <span> {{followingCount}} Followers</span>
+                  <span></span>
+                </div>
                 <span class="blue-grey--text text">
                   Medium member since {{ user.createdAt | formatUserDate }}
                 </span>
@@ -170,6 +175,8 @@ export default {
     user: null,
     isFollower: false,
     isFollowerText: "FOLLOW",
+    followersCount: 0,
+    followingCount: 0,
     stories: [],
   }),
   mounted() {
@@ -208,7 +215,14 @@ export default {
       const followerId = this.$store.state.user.id;
       const followedId = this.$route.params.id;
       const response = await FollowService.findFollower(followerId, followedId);
-      if (response.data) {
+
+      this.followersCount = response.data.followers.count;
+      this.followingCount = response.data.following.count;
+
+      console.log('followers: ', response.data.followers)
+      console.log('following: ', response.data.following)
+
+      if (response.data.isFollowing) {
         this.isFollower = true;
         this.isFollowerText = "UNFOLLOW";
       } else {

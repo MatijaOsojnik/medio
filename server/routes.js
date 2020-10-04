@@ -137,7 +137,7 @@ module.exports = (app) => {
     app.delete('/api/bookmarks/:storyId/:userId', GeneralController.deleteBookmark),
         app.post('/api/search', GeneralController.search)
 
-    app.get('/api/likes/:storyId', GeneralController.getLikes)
+    app.get('/api/likes/:storyId/:userId', GeneralController.getLikes)
     app.post('/api/likes/:storyId/:userId', GeneralController.postLike)
     app.delete('/api/likes/:storyId/:userId', GeneralController.deleteLike),
 

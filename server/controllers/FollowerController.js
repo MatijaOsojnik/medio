@@ -3,21 +3,44 @@ const {
     Follower
 } = require('../models')
 
+const {Op} = require('sequelize')
+
 module.exports = {
     async findFollower(req, res) {
         try {
             const followerId = req.body.followerId;
             const followedId = req.body.followedId;
+
             const isFollowing = await Follower.findOne({
                 where: {
                     follower_id: followerId,
                     followed_id: followedId
                 }
             })
+            const followers = await Follower.findAndCountAll({
+                where: {
+                    follower_id: followerId,
+                    followed_id: {
+                        [Op.not]: followedId
+                    }
+                }
+            })
+            const following = await Follower.findAndCountAll({
+                where: {
+                    followed_id: followedId,
+                }
+            })
             if (isFollowing) {
-                res.send(true)
+                res.send({
+                    isFollowing: true,
+                    followers: followers,
+                    following: following
+                })
             }else{
-                res.send(null)
+                res.send({
+                    followers: followers,
+                    following: following
+                })
             }
 
         } catch (error) {

@@ -84,7 +84,6 @@
               <router-link :to="$router.currentRoute">
                 <v-icon
                   size="24px"
-                  style="z-index: 999"
                   @click="addBookmark(story.id)"
                   >{{ bookmarkIcon }}</v-icon
                 >
@@ -129,7 +128,6 @@
               <router-link :to="$router.currentRoute">
                 <v-icon
                   size="24px"
-                  style="z-index: 999"
                   @click="addBookmark(story.id)"
                   >{{ bookmarkIcon }}</v-icon
                 >
@@ -180,18 +178,24 @@
               </router-link>
 
               <div class="d-flex justify-space-between">
-                <span class="subtitle-2 mb-2 d-inline-block font-weight-light" v-html="story.Users[0].description"> </span>
+                <span
+                  class="subtitle-2 mb-2 d-inline-block font-weight-light"
+                  v-html="story.Users[0].description"
+                >
+                </span>
               </div>
               <!-- <v-icon class="mr-3">mdi-share-variant</v-icon> -->
             </div>
-            
           </v-list-item>
         </div>
       </div>
     </template>
     <template v-slot:similar>
-
-     <v-row style="z-index: 100" class="flex-sm-fill" v-if="categoryStories.length">
+      <v-row
+        style="z-index: 100"
+        class="flex-sm-fill"
+        v-if="categoryStories.length"
+      >
         <v-col
           class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12 d-flex d-sm-flex d-md-block d-lg-block d-xl-block justify-center justify-sm-center"
           v-for="story in categoryStories"
@@ -200,8 +204,6 @@
           <CardStory :story="story" />
         </v-col>
       </v-row>
-
-
     </template>
     <!-- <template v-slot:other>
 <v-row style="z-index: 100" class="flex-sm-fill" v-if="differentStories.length">
@@ -226,7 +228,6 @@ export default {
   components: {
     StoryMetadata,
     CardStory,
-
   },
   data: () => ({
     story: null,
@@ -339,6 +340,8 @@ export default {
       response.data.bookmarks.map((bookmark) => {
         if (bookmark.story_id === storyId) {
           this.bookmarkIcon = "mdi-bookmark";
+        } else {
+          this.bookmarkIcon = "mdi-bookmark-outline"
         }
       });
     },
@@ -372,11 +375,15 @@ export default {
       }
     },
     async checkLike(storyId) {
-      const response = await GeneralService.getLikes(storyId);
+      const response = await GeneralService.getLikes(this.$store.state.user.id, storyId);
       this.likesCount = response.data.likesCount.count;
+      
       response.data.likes.map((like) => {
+        
         if (like.story_id === this.story.id) {
           this.likeIcon = "mdi-heart";
+        } else {
+          this.likeIcon = "mdi-heart-outline"
         }
       });
     },

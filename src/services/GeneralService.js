@@ -28,8 +28,8 @@ export default {
     deleteLike(userId, storyId) {
         return axios.delete(`likes/${storyId}/${userId}`)
     },
-    getLikes(storyId) {
-        return axios.get(`likes/${storyId}`)
+    getLikes(userId, storyId) {
+        return axios.get(`likes/${storyId}/${userId}`)
     },
     search(content) {
         return axios.post(`search`, {

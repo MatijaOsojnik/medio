@@ -109,7 +109,14 @@
             </span>
             <div class="d-flex justify-space-between my-3">
               <span class="d-block">
-                <v-icon size="24px">{{ 'mdi-heart-outline' }}</v-icon>
+                <router-link :to="$router.currentRoute">
+                <v-icon color="red" size="22px" @click="addLike(story.id)">{{
+                  likeIcon
+                }}</v-icon>
+                <span class="mr-3" style="font-size: 14px;">
+                  {{ likesCount }}
+                </span>
+              </router-link>
               </span>
               <span class="d-block">
                 <router-link :to="$router.currentRoute">
@@ -136,7 +143,9 @@ export default {
   data: () => ({
     isOwner: false,
     imageError: false,
+    likesCount: 0,
     bookmarkIcon: "mdi-bookmark-outline",
+    likeIcon: "mdi-heart-outline",
     readingTime: 0,
 
     // formatedDate: formatDate(this.story.createdAt)
@@ -146,6 +155,7 @@ export default {
   },
   mounted() {
     this.checkBookmark();
+     this.checkLike();
     this.checkOwner();
     this.totalReadingTime(this.story.description);
   },
@@ -197,6 +207,51 @@ export default {
           );
           if (response) {
             this.bookmarkIcon = "mdi-bookmark-outline";
+          }
+        } catch (err) {
+          console.log(err);
+        }
+      }
+    },
+    async checkLike() {
+      const response = await GeneralService.getLikes(
+        this.$store.state.user.id,
+        this.story.id
+      );
+      this.likesCount = response.data.likesCount.count;
+      response.data.likes.map((like) => {
+        if (like.story_id === this.story.id) {
+          this.likeIcon = "mdi-heart";
+        } else {
+          this.likeIcon = "mdi-heart-outline";
+        }
+      });
+    },
+    async addLike(storyId) {
+      // If no like, add new like
+      if (this.likeIcon === "mdi-heart-outline") {
+        try {
+          const response = await GeneralService.postLike(
+            this.$store.state.user.id,
+            storyId
+          );
+          if (response) {
+            this.likeIcon = "mdi-heart";
+            this.likesCount++;
+          }
+        } catch (err) {
+          console.log(err);
+        }
+        // If like, remove bookmark
+      } else {
+        try {
+          const response = await GeneralService.deleteLike(
+            this.$store.state.user.id,
+            storyId
+          );
+          if (response) {
+            this.likeIcon = "mdi-heart-outline";
+            this.likesCount--;
           }
         } catch (err) {
           console.log(err);

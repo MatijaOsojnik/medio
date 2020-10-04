@@ -1,7 +1,7 @@
 <template>
   <div>
     <Header />
-    <v-toolbar
+    <!-- <v-toolbar
       dense
       elevation="0"
       style="width: 100%"
@@ -13,7 +13,7 @@
           <v-btn class="mx-2" color="white" depressed>Publication</v-btn>
         </v-slide-item>
       </v-slide-group>
-    </v-toolbar>
+    </v-toolbar> -->
     <div
       class="d-flex justify-center align-center flex-column fill-height"
       style="height: 70vh"

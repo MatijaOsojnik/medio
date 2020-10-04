@@ -8,7 +8,6 @@ import Stories from '@/views/Stories'
 import Story from '@/views/Story'
 import StoryCreate from '@/views/Story/Create'
 import StoryEdit from '@/views/Story/Edit'
-import StoryAction from '@/views/Story/Action'
 import StoryPublish from '@/views/Story/Publish'
 import User from '@/views/Users/Show'
 import Admin from '@/views/Admin'
@@ -93,14 +92,6 @@ const routes = [{
     path: '/stories/:id/edit',
     name: 'story-edit',
     component: StoryEdit,
-    meta: {
-      onlyAuthUser: true
-    }
-  },
-  {
-    path: '/stories/:id/action',
-    name: 'story-action',
-    component: StoryAction,
     meta: {
       onlyAuthUser: true
     }
