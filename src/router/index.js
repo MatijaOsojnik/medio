@@ -19,6 +19,9 @@ import AdminRoles from '@/views/Admin/Roles'
 import UserStories from '@/views/Users/Stories'
 import UserBookmarks from '@/views/Bookmarks/'
 import EditUser from '@/views/Users/Edit.vue'
+import UserFollowers from '@/views/Users/Followers.vue'
+import UserFollowing from '@/views/Users/Following.vue'
+
 
 Vue.use(VueRouter)
 
@@ -107,7 +110,7 @@ const routes = [{
   {
     path: '/users/:displayName/:id/profile/followers',
     name: 'user-followers',
-    component: User,
+    component: UserFollowers,
     meta: {
       onlyAuthUser: true
     }
@@ -115,7 +118,7 @@ const routes = [{
   {
     path: '/users/:displayName/:id/profile/following',
     name: 'user-following',
-    component: User,
+    component: UserFollowing,
     meta: {
       onlyAuthUser: true
     }
