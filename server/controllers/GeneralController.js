@@ -205,7 +205,7 @@ module.exports = {
             limit: 6,
             where: {
               display_name: {
-                [Op.like]: '%' + content + '%'
+                [Op.iLike]: '%' + content + '%'
               }
             }
           })
@@ -213,7 +213,7 @@ module.exports = {
             limit: 6,
             where: {
               title: {
-                [Op.like]: '%' + content + '%'
+                [Op.iLike]: '%' + content + '%'
               }
             }
           })

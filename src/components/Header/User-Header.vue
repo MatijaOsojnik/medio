@@ -34,6 +34,7 @@
         style="max-width: 250px"
         single-line
         v-model="keyword"
+        id="element"
       ></v-text-field>
 
       <v-menu
@@ -44,6 +45,7 @@
         transition="scroll-y-transition"
         :close-on-content-click="false"
         v-model="showMenu"
+        absolute
       >
         <v-card>
           <v-list>
@@ -254,8 +256,13 @@ export default {
 
   watch: {
     $route: "checkRoles",
-    keyword() {
+    keyword(oldKeyword) {
       this.contentSearch();
+      if(oldKeyword !== ''){
+        this.showMenu = true
+      } else {
+        this.showMenu = false
+      }
     },
   },
 
@@ -279,17 +286,14 @@ export default {
   },
   methods: {
     async contentSearch() {
-      const response = await GeneralService.search(this.keyword.toLowerCase());
-      if(response) {
-        this.showMenu = true
-        if (response.data.stories.length > 0) {
-          this.stories = response.data.stories;
-        }
-        if (response.data.users.length > 0) {
-          this.profiles = response.data.users;
-        }
-      } else {
-        this.showMenu = false
+      if(this.keyword !== ''){
+        const response = await GeneralService.search(this.keyword.toLowerCase());
+          if (response.data.stories.length > 0) {
+            this.stories = response.data.stories;
+          }
+          if (response.data.users.length > 0) {
+            this.profiles = response.data.users;
+          }
       }
     },
     logout() {
