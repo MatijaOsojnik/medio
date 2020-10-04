@@ -3,7 +3,9 @@
     <v-card class="mx-auto" tile max-width="680px">
       <v-container v-if="user">
         <v-row>
-                    <v-col class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12 d-xl-none d-lg-none d-md-none d-block">
+          <v-col
+            class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12 d-xl-none d-lg-none d-md-none d-block"
+          >
             <div>
               <v-avatar size="120" v-if="!user.icon_url">
                 <v-img src="@/assets/blue-error-background.jpg"></v-img>
@@ -46,13 +48,17 @@
                 >
                 <span
                   v-else
-                  class="d-block my-4"
+                  class="d-block my-2"
                   v-html="user.description"
                 ></span>
-                <div>
-                  <span> {{followersCount}} Following</span>
-                  <span> {{followingCount}} Followers</span>
-                  <span></span>
+                <div class="my-4">
+                  <router-link :to="{name: 'user-following', params: {userId: user.id}}" class="mr-4">
+                    <span class="font-weight-light"> {{ followersCount }} Following</span>
+                  </router-link>
+
+                  <router-link :to="{name: 'user-followers', params: {userId: user.id}}">
+                    <span class="font-weight-light"> {{ followingCount }} Followers</span>
+                  </router-link>
                 </div>
                 <span class="blue-grey--text text">
                   Medium member since {{ user.createdAt | formatUserDate }}
@@ -129,7 +135,9 @@
               </div>
             </v-container>
           </v-col>
-          <v-col class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12 d-xl-block d-lg-block d-md-block d-none">
+          <v-col
+            class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12 d-xl-block d-lg-block d-md-block d-none"
+          >
             <div>
               <v-avatar size="120" v-if="!user.icon_url">
                 <v-img src="@/assets/blue-error-background.jpg"></v-img>
@@ -148,9 +156,7 @@
     <v-card class="mx-auto my-10" tile flat max-width="680px">
       <ProfileMetadata>
         <template v-slot:userStories>
-          <span v-if="stories.length" class="d-block title"
-            >My Stories</span
-          >
+          <span v-if="stories.length" class="d-block title">My Stories</span>
           <div v-for="story in stories" :key="story.id">
             <UserStory :story="story" />
           </div>
@@ -218,9 +224,6 @@ export default {
 
       this.followersCount = response.data.followers.count;
       this.followingCount = response.data.following.count;
-
-      console.log('followers: ', response.data.followers)
-      console.log('following: ', response.data.following)
 
       if (response.data.isFollowing) {
         this.isFollower = true;
