@@ -8,20 +8,20 @@
       <span class="heading ma-4 d-block">Loading..</span>
     </slot>
     <div>
-      <span class="title ma-4 d-block">Similar stories</span>
+      <span class="title ma-4 d-block">More from Medio</span>
       <v-divider></v-divider>
       <slot name="similar">
-        <span class="heading ma-4 d-block">No similar stories found</span>
+        <span class="heading ma-4 d-block">Nothing similar found..</span>
       </slot>
     </div>
     <v-spacer />
-    <div>
+    <!-- <div>
       <span class="title ma-4 d-block">Other stories</span>
       <v-divider></v-divider>
       <slot name="other">
         <span class="heading ma-4 d-block">No other stories found</span>
       </slot>
-    </div>
+    </div> -->
   </v-container>
 </template>
 

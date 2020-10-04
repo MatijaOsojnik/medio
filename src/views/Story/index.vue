@@ -203,7 +203,7 @@
 
 
     </template>
-    <template v-slot:other>
+    <!-- <template v-slot:other>
 <v-row style="z-index: 100" class="flex-sm-fill" v-if="differentStories.length">
         <v-col
           class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12 d-flex d-sm-flex d-md-block d-lg-block d-xl-block justify-center justify-sm-center"
@@ -213,7 +213,7 @@
           <CardStory :story="story" />
         </v-col>
       </v-row>
-    </template>
+    </template> -->
   </StoryMetadata>
 </template>
 
