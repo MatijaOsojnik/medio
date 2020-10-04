@@ -86,6 +86,7 @@ module.exports = (sequelize, DataTypes) => {
     const Bookmark = sequelize.models.Bookmark
     const Topic = sequelize.models.Topic
     const Follower = sequelize.models.Follower
+    const Like = sequelize.models.Like
 
     Role.belongsToMany(User, {
         through: 'RoleUsers'
@@ -158,10 +159,10 @@ module.exports = (sequelize, DataTypes) => {
             targetKey: 'id'
         });
 
-    Topic.belongsToMany(User, {
+    Tag.belongsToMany(User, {
         through: 'StoryTags'
     })
-    User.belongsToMany(Topic, {
+    User.belongsToMany(Tag, {
         through: 'StoryTags'
     })
 
@@ -171,6 +172,17 @@ module.exports = (sequelize, DataTypes) => {
     Story.belongsToMany(Topic, {
         through: 'StoryTopics'
     })
+
+    Like.belongsTo(User, {
+        foreignKey: 'user_id',
+        targetKey: 'id'
+    });
+    Like.belongsTo(Story, {
+        foreignKey: 'story_id',
+        targetKey: 'id'
+    });
+
+
 
     return User;
 }

@@ -132,16 +132,18 @@ module.exports = (app) => {
     app.get('/api/admin/general/count', GeneralController.count)
     app.get('/api/history/:userId', GeneralController.findHistory) //TRACK USER HISTORY
     app.post('/api/history/:storyId/:userId', GeneralController.postHistory)
+    app.get('/api/bookmarks/:userId', GeneralController.getBookmarks)
     app.post('/api/bookmarks/:storyId/:userId', GeneralController.postBookmark)
     app.delete('/api/bookmarks/:storyId/:userId', GeneralController.deleteBookmark),
-        app.get('/api/bookmarks/:userId', GeneralController.getBookmarks)
-
         app.post('/api/search', GeneralController.search)
 
+    app.get('/api/likes/:storyId', GeneralController.getLikes)
+    app.post('/api/likes/:storyId/:userId', GeneralController.postLike)
+    app.delete('/api/likes/:storyId/:userId', GeneralController.deleteLike),
 
-    // FOLLOW ROUTE
+        // FOLLOW ROUTE
 
-    app.post('/api/followers/single', FollowerController.findFollower)
+        app.post('/api/followers/single', FollowerController.findFollower)
     app.get('/api/followers', FollowerController.getFollowers)
     app.post('/api/followers', FollowerController.postFollow)
     app.delete('/api/followers/:followerId/:followedId', FollowerController.deleteFollow)

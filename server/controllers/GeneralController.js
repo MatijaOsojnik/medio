@@ -5,7 +5,8 @@ const {
   Role,
   History,
   Bookmark,
-  Follower
+  Follower,
+  Like
 } = require('../models')
 
 const {
@@ -91,7 +92,6 @@ module.exports = {
               ['createdAt', 'DESC']
             ]
           })
-          console.log(bookmarks)
           res.send({bookmarks})
         } catch (err) {
           res.status(500).send({
@@ -103,7 +103,6 @@ module.exports = {
     try {
       const userId = req.params.userId
       const storyId = req.params.storyId
-      console.log(storyId, userId)
       const bookmark = await Bookmark.create({
         story_id: storyId,
         user_id: userId
@@ -120,7 +119,6 @@ module.exports = {
     try {
       const userId = req.params.userId
       const storyId = req.params.storyId
-      console.log(storyId, userId)
       const bookmark = await Bookmark.destroy({
         where: {
           story_id: storyId,
@@ -150,7 +148,6 @@ module.exports = {
           ['createdAt', 'DESC']
         ]
       })
-      console.log(followers)
       res.send({
         followers
       })
@@ -165,7 +162,6 @@ module.exports = {
       try {
         const followerId = req.body.followerId
         const followedId = req.body.followedId
-        console.log(followerId, followedId)
         const follower = await Follower.create({
           follower_id: followerId,
           followed_id: followedId
@@ -197,6 +193,72 @@ module.exports = {
           })
         }
       },
+
+        async getLikes(req, res) {
+            try {
+              const storyId = req.params.storyId
+              const likes = await Like.findAll({
+                where: {
+                  story_id: storyId
+                },
+                include: [{
+                  model: Story,
+                  include: [User]
+                }],
+                order: [
+                  ['createdAt', 'DESC']
+                ]
+              })
+              const likesCount = await Like.findAndCountAll({
+                where: {
+                  story_id: storyId
+                }
+              })
+              res.send({
+                likes: likes,
+                likesCount: likesCount
+              })
+            } catch (err) {
+              res.status(500).send({
+                error: 'an error has occured trying to fetch the likes'
+              })
+            }
+          },
+          async postLike(req, res) {
+              try {
+                const userId = req.params.userId
+                const storyId = req.params.storyId
+                const like = await Like.create({
+                  story_id: storyId,
+                  user_id: userId
+                })
+                res.send(like)
+              } catch (err) {
+                console.log(err)
+                res.status(500).send({
+                  error: 'an error has occured trying to create the like object'
+                })
+              }
+            },
+            async deleteLike(req, res) {
+              try {
+                const userId = req.params.userId
+                const storyId = req.params.storyId
+                const like = await Like.destroy({
+                  where: {
+                    story_id: storyId,
+                    user_id: userId
+                  }
+                })
+                res.send("Like removed")
+              } catch (err) {
+                console.log(err)
+                res.status(500).send({
+                  error: 'an error has occured trying to create the like object'
+                })
+              }
+            },
+
 
       async search(req, res) {
         try {
