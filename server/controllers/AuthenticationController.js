@@ -176,11 +176,49 @@ module.exports = {
         })
     },
     async facebookAuth(req, res) {
-        const user = req.user
-        const token = jwtSignUser(req.user.toJSON());
-        res.cookie('access_token', token, {
-            httpOnly: true
-        });
+        const {
+            id,
+            email,
+            first_name,
+            last_name,
+            picture,
+        } = req.body
+
+        let user = await User.findOne({
+            where: {
+                email: email
+            }
+        })
+
+        if (user) {
+            await user.update({
+                facebook_id: id
+            })
+        }
+
+        const display_name = first_name + " " + last_name
+
+        if (!user) {
+            user = await User.create({
+                display_name: display_name,
+                email: email,
+                icon_url: picture,
+                facebook_id: id
+            })
+            user.setRoles([1]).then(() => {
+                res.send({
+                    message: "User was registered successfully!"
+                });
+            }).catch(err => {
+                res.status(500).send({
+                    error: err
+                })
+            })
+        }
+        const token = jwtSignUser(user.toJSON());
+        // res.cookie('access_token', token, {
+        //     httpOnly: true
+        // });
         const authorities = []
 
         const roles = await user.getRoles()
