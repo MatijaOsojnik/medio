@@ -20,6 +20,7 @@
                     }/profile`,
                   }"
                   style="z-index: 999"
+                  class="pb-2"
                 >
                   <v-list-item-avatar size="36px" color="grey darken-3">
                     <v-img

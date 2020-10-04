@@ -7,8 +7,7 @@
         $router.history.current['name'] === 'story-create' ||
         $router.history.current['name'] === 'story-update'
           ? false
-          : true
-      "
+          : true"
     >
       <v-toolbar-title class="d-xl-block d-lg-block d-md-block d-none">
         <router-link :to="{ name: 'stories' }" class="brand-black pa-4"
@@ -24,18 +23,6 @@
 
       <v-spacer></v-spacer>
 
-      <v-text-field
-        class="d-xl-flex d-lg-flex d-md-flex d-none"
-        color="#8d93ab"
-        hide-details
-        outlined
-        dense
-        prepend-icon="mdi-magnify"
-        style="max-width: 250px"
-        single-line
-        v-model="keyword"
-        id="element"
-      ></v-text-field>
 
       <v-menu
         offset-y
@@ -45,16 +32,31 @@
         transition="scroll-y-transition"
         :close-on-content-click="false"
         v-model="showMenu"
-        absolute
+        
       >
+      <template v-slot:activator="{ attrs }">
+        <v-text-field
+        class="d-xl-flex d-lg-flex d-md-flex d-none"
+        color="#8d93ab"
+        hide-details
+        outlined
+        dense
+        prepend-icon="mdi-magnify"
+        style="max-width: 250px"
+        single-line
+        v-model="keyword"
+        v-bind="attrs"
+
+      ></v-text-field>
+      </template>
         <v-card>
           <v-list>
             <div v-if="profiles.length > 0">
               <span class="subtitle d-block pa-4 font-weight-bold">PEOPLE</span>
               <v-divider />
-              <v-list-item v-for="profile in profiles" :key="profile.id">
-                <v-card class="pa-2 flat tile">
-                  <div class="d-flex justify-lg-space-between">
+              <v-list-item v-for="profile in profiles" :key="profile.id" :to="{path: `/users/${profile.display_name.toLowerCase()
+              .replace(/\s/g, '')}/${profile.id}/profile`}">
+                  <div class="d-flex justify-space-between align-center">
                     <div>
                       <v-avatar v-if="!profile.icon_url" size="40px">
                         <v-icon>mdi-account-circle-outline</v-icon>
@@ -63,11 +65,11 @@
                         <v-img :src="profile.icon_url" />
                       </v-avatar>
                     </div>
+                    <v-spacer></v-spacer>
                     <div>
-                      <span class="d-block">{{ profile.display_name }}</span>
+                      <span class="d-block font-weight-bold align-center pa-4">{{ profile.display_name }}</span>
                     </div>
                   </div>
-                </v-card>
               </v-list-item>
             </div>
             <div v-if="stories.length > 0">
@@ -75,10 +77,21 @@
                 >STORIES</span
               >
               <v-divider />
-              <v-list-item v-for="story in stories" :key="story.id">
-                <v-list-item-content>
-                  {{ story.title }}
-                </v-list-item-content>
+              <v-list-item v-for="story in stories" :key="story.id" :to="{path: `/stories/${story.id}`}">
+                  <div class="d-flex justify-space-between align-center">
+                    <div>
+                      <v-avatar v-if="!story.thumbnail_url" tile size="40px">
+                        <v-icon>mdi-image</v-icon>
+                      </v-avatar>
+                      <v-avatar v-else tile size="40px">
+                        <v-img :src="story.thumbnail_url" />
+                      </v-avatar>
+                    </div>
+                    <v-spacer></v-spacer>
+                    <div>
+                      <span class="d-block font-weight-bold align-center pa-4">{{ story.title }}</span>
+                    </div>
+                  </div>
               </v-list-item>
             </div>
           </v-list>

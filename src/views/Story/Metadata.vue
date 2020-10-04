@@ -2,7 +2,7 @@
 
   <v-container>
     <router-link :to="{name: 'stories'}" class="back-link" style="margin-top: 20px;">
-      <v-icon dense>mdi-chevron-left</v-icon>Back to all stories
+      <!-- <v-icon dense>mdi-chevron-left</v-icon>Back to all stories -->
     </router-link>
     <slot name="story">
       <span class="heading ma-4 d-block">Loading..</span>
