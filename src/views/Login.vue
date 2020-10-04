@@ -56,6 +56,7 @@
             :onSuccess="googleAuth"
             :onFailure="onFailure"
           />
+          <div class="fb-login-button pa-4" data-size="large" data-button-type="continue_with" data-layout="default" data-auto-logout-link="false" data-use-continue-as="false" data-width=""></div>
         </div>
       </div>
       <!-- <v-btn class="mx-4" icon color="blue" :href="facebookLoginUrl">

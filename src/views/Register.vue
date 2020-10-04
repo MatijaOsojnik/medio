@@ -73,6 +73,7 @@
             :onSuccess="googleAuth"
             :onFailure="onFailure"
           />
+          <div class="fb-login-button" data-size="large" data-button-type="continue_with" data-layout="default" data-auto-logout-link="false" data-use-continue-as="false" data-width=""></div>
         </div>
       </div>
     </AuthenticationPanel>
@@ -165,6 +166,19 @@ export default {
         this.error = error.response.data.error;
         setTimeout(() => (this.error = null), 5000);
       }
+    },
+    async facebookAuth() {
+      window.FB.login(function(response) {
+      if (response.authResponse) {
+       console.log('Welcome!  Fetching your information.... ');
+       window.FB.api('/me', function(response) {
+         console.log('Good to see you, ' + response.name + '.');
+       });
+      } else {
+       console.log('User cancelled login or did not fully authorize.');
+      }
+});
+
     },
     async onFailure() {
       this.error = `Google Authentication failed.`;
