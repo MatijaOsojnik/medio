@@ -10,7 +10,7 @@ export default {
     googleAuth(user) {
         return axios.post('auth/google', user)
     },
-    facebookAuth(user) {
-        return axios.post('auth/facebook', user)
+    facebookAuth(token) {
+        return axios.post('auth/facebook', {token})
     }
 }

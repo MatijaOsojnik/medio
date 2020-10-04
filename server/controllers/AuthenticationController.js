@@ -3,6 +3,8 @@ const {
     Role,
 } = require('../models');
 
+const axios = require('axios')
+
 const {
     Op
 } = require("sequelize");
@@ -176,34 +178,42 @@ module.exports = {
         })
     },
     async facebookAuth(req, res) {
+
         const {
-            id,
-            email,
-            first_name,
-            last_name,
-            picture,
+            token
         } = req.body
 
-        let user = await User.findOne({
-            where: {
-                email: email
-            }
-        })
+      const {
+          data
+      } = await axios({
+          url: "https://graph.facebook.com/me",
+          method: "get",
+          params: {
+              fields: ["id", "email", "first_name", "last_name", "picture"].join(","),
+              access_token: token,
+          },
+      })
+
+            let user = await User.findOne({
+                where: {
+                    email: data.email
+                }
+            })
 
         if (user) {
             await user.update({
-                facebook_id: id
+                facebook_id: data.id
             })
         }
 
-        const display_name = first_name + " " + last_name
+        const display_name = data.first_name + " " + data.last_name
 
         if (!user) {
             user = await User.create({
                 display_name: display_name,
-                email: email,
-                icon_url: picture,
-                facebook_id: id
+                email: data.email,
+                icon_url: data.picture.data.url,
+                facebook_id: data.id
             })
             user.setRoles([1]).then(() => {
                 res.send({
@@ -215,7 +225,7 @@ module.exports = {
                 })
             })
         }
-        const token = jwtSignUser(user.toJSON());
+        const jsontoken = jwtSignUser(user.toJSON());
         // res.cookie('access_token', token, {
         //     httpOnly: true
         // });
@@ -229,7 +239,7 @@ module.exports = {
         res.status(200).json({
             authorities: authorities,
             user: user,
-            token: token
+            token: jsontoken
         })
     },
 

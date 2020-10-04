@@ -70,7 +70,6 @@
 import AuthenticationPanel from "@/components/Authentication-Panel/Authentication-Panel";
 import AuthenticationService from "@/services/AuthenticationService";
 import GoogleLogin from "vue-google-login";
-import axios from "axios";
 
 export default {
   components: {
@@ -84,8 +83,7 @@ export default {
     showPanel: false,
     showPassword: false,
     error: null,
-    facebookLoginUrl: "",
-    facebookAppId: process.env.VUE_APP_FACEBOOK_API_KEY,
+    facebookData: "",
     params: {
       client_id: process.env.VUE_APP_GOOGLE_API_KEY,
     },
@@ -97,7 +95,9 @@ export default {
       theme: "dark",
     },
   }),
-  mounted() {},
+  mounted() {
+    
+},
   methods: {
     async login() {
       try {
@@ -153,49 +153,34 @@ export default {
       }
     },
     async facebookAuth() {
-      window.FB.login(
-        function (response) {
-          const token = response.authResponse.accessToken;
-          async function getFacebookUserData(access_token) {
-      const { data } = await axios({
-        url: "https://graph.facebook.com/me",
-        method: "get",
-        params: {
-          fields: ["id", "email", "first_name", "last_name", "picture"].join(","),
-          access_token: access_token,
-        },
-      });
-      
-      try {
-        const response = await AuthenticationService.facebookAuth(
-          data
-        );
-
+  // window.FB.login(async function (response) {
+  //       const token = response.authResponse.accessToken;
+  //       try {
+  //       return await AuthenticationService.facebookAuth(token);
+  //       } catch (error) {
+  //         this.error = error.response.data.error;
+  //         setTimeout(() => (this.error = null), 5000);
+  //       }
+  //     });
+      const access_token = window.FB.getAccessToken()
+      const response = await AuthenticationService.facebookAuth(access_token)
         this.showPanel = true;
-
-        setTimeout(() => {
-          this.loginSuccess = true;
-        }, 1500);
-
-        if (response) {
-          setTimeout(() => {
-            this.$store.dispatch("setToken", response.data.token);
-            this.$store.dispatch("setUser", response.data.user);
-            this.$store.dispatch("setAuthorities", response.data.authorities);
-            this.loginSuccess = false;
-            this.showPanel = false;
-            this.$router.push({ name: "stories" });
-          }, 2500);
-        }
-      } catch (error) {
-        this.error = error.response.data.error;
-        setTimeout(() => (this.error = null), 5000);
-      }
-    }
-    getFacebookUserData(token);
-        },
-        { scope: "public_profile,email" }
-      );
+  
+            setTimeout(() => {
+              this.loginSuccess = true;
+            }, 1500);
+  
+            if (response) {
+              setTimeout(() => {
+                this.$store.dispatch("setToken", response.data.token);
+                this.$store.dispatch("setUser", response.data.user);
+                this.$store.dispatch("setAuthorities", response.data.authorities);
+                this.loginSuccess = false;
+                this.showPanel = false;
+                this.$router.push({ name: "stories" });
+              }, 2500);
+            }
+      
     },
     async onFailure() {
       this.error = `Google Authentication failed.`;
