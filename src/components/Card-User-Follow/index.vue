@@ -8,7 +8,8 @@
       }"
       raised
       :elevation="hover ? 8 : 2"
-      class="mx-auto pa-1" max-width="680px"
+      class="mx-auto pa-1"
+      max-width="680px"
     >
       <div class="d-flex align-center">
         <div>
@@ -39,9 +40,11 @@
               }"
               style="z-index: 999"
             >
-              <span class="font-weight-bold d-block my-4" style="font-size: 17px;">{{
-                user.display_name
-              }}</span>
+              <span
+                class="font-weight-bold d-block my-4"
+                style="font-size: 17px"
+                >{{ user.display_name }}</span
+              >
             </router-link>
           </div>
 
@@ -49,21 +52,19 @@
             <span class="font-weight-bold d-block" v-if="user.description">{{
               user.description
             }}</span>
-            <span class="d-block" v-else>Hi, I'm {{user.display_name}} </span>
+            <span class="d-block" v-else>Hi, I'm {{ user.display_name }} </span>
           </div>
           <div>
-                    <v-btn
-                      small
-                      white
-                      outlined
-                      class="my-4"
-                    
-                      
-                      @click="!isFollower ? addFollow() : deleteFollow()"
-                    >
-                      {{ isFollowerText }}
-                    </v-btn>
-                  </div>
+            <v-btn
+              small
+              white
+              outlined
+              class="my-4"
+              @click="!isFollower ? addFollow() : deleteFollow()"
+            >
+              {{ isFollowerText }}
+            </v-btn>
+          </div>
         </div>
       </div>
     </v-card>
@@ -71,7 +72,7 @@
 </template>
 
 <script>
- import FollowService from "@/services/FollowService"
+import FollowService from "@/services/FollowService";
 export default {
   data: () => ({
     user: null,
@@ -86,7 +87,7 @@ export default {
     user: Object,
   },
   methods: {
-        async isFollowing() {
+    async isFollowing() {
       const followerId = this.$store.state.user.id;
       const followedId = this.user.id;
       const response = await FollowService.findFollower(followerId, followedId);
@@ -128,7 +129,7 @@ export default {
         console.log(err);
       }
     },
-  }
+  },
 };
 </script>
 

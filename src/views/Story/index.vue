@@ -377,10 +377,8 @@ export default {
     async checkLike(storyId) {
       const response = await GeneralService.getLikes(this.$store.state.user.id, storyId);
       this.likesCount = response.data.likesCount.count;
-      
       response.data.likes.map((like) => {
-        
-        if (like.story_id === this.story.id) {
+        if (like.story_id === storyId) {
           this.likeIcon = "mdi-heart";
         } else {
           this.likeIcon = "mdi-heart-outline"
@@ -397,7 +395,7 @@ export default {
           );
           if (response) {
             this.likeIcon = "mdi-heart";
-            this.likesCount++;
+            this.checkLike(storyId)
           }
         } catch (err) {
           console.log(err);
@@ -411,7 +409,7 @@ export default {
           );
           if (response) {
             this.likeIcon = "mdi-heart-outline";
-            this.likesCount--;
+            this.checkLike(storyId)
           }
         } catch (err) {
           console.log(err);

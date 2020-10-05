@@ -3,7 +3,7 @@
     <v-card
       :to="{ path: `/stories/${story.id}` }"
       class="mx-auto"
-      raised
+      raised 
       :elevation="hover ? 8 : 2"
     >
       <div>
@@ -148,7 +148,6 @@ export default {
       );
       this.likesCount = response.data.likesCount.count;
       response.data.likes.map((like) => {
-        console.log(like);
         if (like.story_id === this.story.id) {
           this.likeIcon = "mdi-heart";
         } else {
