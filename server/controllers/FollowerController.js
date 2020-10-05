@@ -26,10 +26,7 @@ module.exports = {
 
             let following = await Follower.findAndCountAll({
                 where: {
-                    FollowerIdId: followerId,
-                    FollowedIdId: {
-                        [Op.not]: followedId
-                    }
+                    FollowerIdId: followedId,
                 },
                 include: [{
                     model: User,
@@ -79,7 +76,7 @@ module.exports = {
                 })
             }
 
-            console.log(following)
+    
 
         } catch (error) {
             console.log(error)
