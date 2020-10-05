@@ -57,10 +57,13 @@
           <div>
             <v-btn
               small
-              white
-              outlined
+             
+         flat
+              text
               class="my-4"
+              :disabled="user.id === $store.state.user.id"
               @click="!isFollower ? addFollow() : deleteFollow()"
+              :to="$router.currentRoute"
             >
               {{ isFollowerText }}
             </v-btn>
@@ -85,6 +88,9 @@ export default {
   }),
   props: {
     user: Object,
+  },
+  created() {
+    this.isFollowing()
   },
   methods: {
     async isFollowing() {
