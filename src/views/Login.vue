@@ -56,12 +56,9 @@
             :onSuccess="googleAuth"
             :onFailure="onFailure"
           />
-          <v-btn @click="facebookAuth"> FACEBOOK LOGIN </v-btn>
+          <v-btn @click="facebookAuth" color="#5890FF" dark width="240px" height="50px" class="my-3"><v-icon class="pa-3">{{'mdi-facebook'}}</v-icon> FACEBOOK LOGIN </v-btn>
         </div>
       </div>
-      <!-- <v-btn class="mx-4" icon color="blue" :href="facebookLoginUrl">
-        <v-icon size="42px">mdi-facebook</v-icon>
-      </v-btn> -->
     </AuthenticationPanel>
   </div>
 </template>
@@ -152,7 +149,7 @@ export default {
         setTimeout(() => (this.error = null), 5000);
       }
     },
-    async facebookAuth() {
+     async facebookAuth() {
   // window.FB.login(async function (response) {
   //       const token = response.authResponse.accessToken;
   //       try {
@@ -162,24 +159,35 @@ export default {
   //         setTimeout(() => (this.error = null), 5000);
   //       }
   //     });
-      const access_token = window.FB.getAccessToken()
+  try {
+    // console.log(window.FB.getAccessToken())
+    // const access_token = window.FB.getAccessToken()
+   window.FB.login((response) => {
+      window.ujwts = response.authResponse.accessToken
+    })
+    if(window.ujwts) {
+      const access_token = window.ujwts
       const response = await AuthenticationService.facebookAuth(access_token)
-        this.showPanel = true;
-  
-            setTimeout(() => {
-              this.loginSuccess = true;
-            }, 1500);
-  
-            if (response) {
+          this.showPanel = true;
+    
               setTimeout(() => {
-                this.$store.dispatch("setToken", response.data.token);
-                this.$store.dispatch("setUser", response.data.user);
-                this.$store.dispatch("setAuthorities", response.data.authorities);
-                this.loginSuccess = false;
-                this.showPanel = false;
-                this.$router.push({ name: "stories" });
-              }, 2500);
-            }
+                this.loginSuccess = true;
+              }, 1500);
+    
+              if (response) {
+                setTimeout(() => {
+                  this.$store.dispatch("setToken", response.data.token);
+                  this.$store.dispatch("setUser", response.data.user);
+                  this.$store.dispatch("setAuthorities", response.data.authorities);
+                  this.loginSuccess = false;
+                  this.showPanel = false;
+                  this.$router.push({ name: "stories" });
+                }, 2500);
+              }
+    }
+  } catch (err) {
+    console.log(err)
+  }
       
     },
     async onFailure() {

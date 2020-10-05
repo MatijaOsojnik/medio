@@ -1,6 +1,6 @@
 <template>
   <div>
-<v-overlay v-if="showPanel" absolute z-index="999" :opacity="0.1">
+    <v-overlay v-if="showPanel" absolute z-index="999" :opacity="0.1">
       <v-progress-circular
         indeterminate
         color="green"
@@ -9,7 +9,9 @@
         v-if="!loginSuccess"
       />
       <v-scroll-x-transition>
-        <v-alert type="success" v-if="loginSuccess">Registration successful!</v-alert>
+        <v-alert type="success" v-if="loginSuccess"
+          >Registration successful!</v-alert
+        >
       </v-scroll-x-transition>
     </v-overlay>
     <AuthenticationPanel
@@ -73,7 +75,7 @@
             :onSuccess="googleAuth"
             :onFailure="onFailure"
           />
-          <div class="fb-login-button" data-size="large" data-button-type="continue_with" data-layout="default" data-auto-logout-link="false" data-use-continue-as="false" data-width=""></div>
+          <v-btn @click="facebookAuth" color="#5890FF" dark width="240px" height="50px" class="my-3"><v-icon class="pa-3">{{'mdi-facebook'}}</v-icon> FACEBOOK LOGIN </v-btn>
         </div>
       </div>
     </AuthenticationPanel>
@@ -168,17 +170,31 @@ export default {
       }
     },
     async facebookAuth() {
-      window.FB.login(function(response) {
-      if (response.authResponse) {
-       console.log('Welcome!  Fetching your information.... ');
-       window.FB.api('/me', function(response) {
-         console.log('Good to see you, ' + response.name + '.');
-       });
-      } else {
-       console.log('User cancelled login or did not fully authorize.');
-      }
-});
+      try {
+        window.FB.login((response) => {
+          window.ujwts = response.authResponse.accessToken;
+        });
+        const access_token = window.ujwts;
+        const response = await AuthenticationService.facebookAuth(access_token);
+        this.showPanel = true;
 
+        setTimeout(() => {
+          this.loginSuccess = true;
+        }, 1500);
+
+        if (response) {
+          setTimeout(() => {
+            this.$store.dispatch("setToken", response.data.token);
+            this.$store.dispatch("setUser", response.data.user);
+            this.$store.dispatch("setAuthorities", response.data.authorities);
+            this.loginSuccess = false;
+            this.showPanel = false;
+            this.$router.push({ name: "stories" });
+          }, 2500);
+        }
+      } catch (err) {
+        console.log(err);
+      }
     },
     async onFailure() {
       this.error = `Google Authentication failed.`;

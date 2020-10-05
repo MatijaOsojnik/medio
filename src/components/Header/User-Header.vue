@@ -326,6 +326,9 @@ export default {
           console.log("User signed out.");
         });
       }
+      if(window.FB) {
+        window.FB.logout()
+      }
     },
     // async publish(data) {
 
