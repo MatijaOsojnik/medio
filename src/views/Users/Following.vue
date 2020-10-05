@@ -1,5 +1,7 @@
 <template>
-  <div>
+    <v-card
+  class="mx-auto my-10" tile flat max-width="680px"
+  >
       <v-card class="mx-auto" tile max-width="680px">
       <v-container v-if="user">
         <v-row>
@@ -153,12 +155,13 @@
         </v-row>
       </v-container>
     </v-card>
-        <v-row>
-      <v-col v-for="follower in followers" :key="follower.id">
+    <span class="d-block title ma-5">{{user.display_name}} is following</span>
+        <v-row >
+      <v-col class="col-12" v-for="follower in followers" :key="follower.id">
         <CardUserFollow :user="follower.FollowedId" />
       </v-col>
     </v-row>
-  </div>
+    </v-card>
 </template>
 
 <script>

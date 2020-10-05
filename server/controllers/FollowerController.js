@@ -22,8 +22,6 @@ module.exports = {
                 },
             })
 
-
-
             let following = await Follower.findAndCountAll({
                 where: {
                     FollowerIdId: followedId,
@@ -40,9 +38,6 @@ module.exports = {
             ],
                 
             });
-
-      
-
 
             let followers = await Follower.findAndCountAll({
                 where: {
