@@ -304,7 +304,7 @@ export default {
     async getStories() {
       try {
         const response = await StoryService.index();
-        this.statistics = response.data;
+        this.statistics = response.data.stories;
         this.loading = false;
       } catch (err) {
         console.log(err);
