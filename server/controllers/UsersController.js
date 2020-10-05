@@ -205,7 +205,9 @@ module.exports = {
                     err: err
                 });
             } else {
-                return console.log(data);
+                return res.json({
+                    image: data.Body
+                });
             }
         });
     }
