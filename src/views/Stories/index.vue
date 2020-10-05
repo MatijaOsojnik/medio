@@ -1,19 +1,6 @@
 <template>
   <div>
     <Header />
-    <!-- <v-toolbar
-      dense
-      elevation="0"
-      style="width: 100%"
-      color="#ffffff"
-      class="mb-3"
-    >
-      <v-slide-group show-arrows class="pa-0 ma-0">
-        <v-slide-item v-for="n in 25" :key="n">
-          <v-btn class="mx-2" color="white" depressed>Publication</v-btn>
-        </v-slide-item>
-      </v-slide-group>
-    </v-toolbar> -->
     <div
       class="d-flex justify-center align-center flex-column fill-height"
       style="height: 70vh"

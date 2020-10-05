@@ -75,7 +75,15 @@
             :onSuccess="googleAuth"
             :onFailure="onFailure"
           />
-          <v-btn @click="facebookAuth" color="#5890FF" dark width="240px" height="50px" class="my-3"><v-icon class="pa-3">{{'mdi-facebook'}}</v-icon> FACEBOOK LOGIN </v-btn>
+          <v-btn
+            @click="facebookAuth"
+            color="#5890FF"
+            dark
+            width="240px"
+            height="50px"
+            class="my-3"
+            ><v-icon class="pa-3">{{ "mdi-facebook" }}</v-icon> FACEBOOK LOGIN
+          </v-btn>
         </div>
       </div>
     </AuthenticationPanel>
@@ -98,6 +106,7 @@ export default {
     repeat_password: "",
     registerSuccess: false,
     showPanel: false,
+    loginSuccess: false,
     params: {
       client_id: process.env.VUE_APP_GOOGLE_API_KEY,
     },
@@ -174,23 +183,27 @@ export default {
         window.FB.login((response) => {
           window.ujwts = response.authResponse.accessToken;
         });
-        const access_token = window.ujwts;
-        const response = await AuthenticationService.facebookAuth(access_token);
-        this.showPanel = true;
+        if (window.ujwts) {
+          const access_token = window.ujwts;
+          const response = await AuthenticationService.facebookAuth(
+            access_token
+          );
+          this.showPanel = true;
 
-        setTimeout(() => {
-          this.loginSuccess = true;
-        }, 1500);
-
-        if (response) {
           setTimeout(() => {
-            this.$store.dispatch("setToken", response.data.token);
-            this.$store.dispatch("setUser", response.data.user);
-            this.$store.dispatch("setAuthorities", response.data.authorities);
-            this.loginSuccess = false;
-            this.showPanel = false;
-            this.$router.push({ name: "stories" });
-          }, 2500);
+            this.loginSuccess = true;
+          }, 1500);
+
+          if (response) {
+            setTimeout(() => {
+              this.$store.dispatch("setToken", response.data.token);
+              this.$store.dispatch("setUser", response.data.user);
+              this.$store.dispatch("setAuthorities", response.data.authorities);
+              this.loginSuccess = false;
+              this.showPanel = false;
+              this.$router.push({ name: "stories" });
+            }, 2500);
+          }
         }
       } catch (err) {
         console.log(err);

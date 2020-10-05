@@ -322,11 +322,14 @@ export default {
       });
       if (window.gapi) {
         const auth2 = window.gapi.auth2.getAuthInstance();
-        auth2.signOut().then(function () {
-          console.log("User signed out.");
-        });
+        if(auth2) {
+          auth2.signOut().then(function () {
+            console.log("User signed out.");
+          });
+        }
       }
       if(window.FB) {
+        if(window.ujwts)
         window.FB.logout()
       }
     },

@@ -3,7 +3,9 @@ const {
     Follower
 } = require('../models')
 
-const {Op} = require('sequelize')
+const {
+    Op
+} = require('sequelize')
 
 module.exports = {
     async findFollower(req, res) {
@@ -17,26 +19,47 @@ module.exports = {
                     followed_id: followedId
                 }
             })
-            const followers = await Follower.findAndCountAll({
+            // const user = await User.findOne({where: {id: followerId}})
+            // console.log(user.getFollowers({
+            //     joinTableAttributes: ['selfGranted']
+            // }))
+
+
+            let followers = await Follower.findAndCountAll({
+                where: {
+                    follower_id: followerId
+                },
+                include: [{
+                    model: User
+                }],
+                
+            });
+            let following = await Follower.findAndCountAll({
                 where: {
                     follower_id: followerId,
                     followed_id: {
                         [Op.not]: followedId
                     }
-                }
+                },
             })
-            const following = await Follower.findAndCountAll({
-                where: {
-                    followed_id: followedId,
+            if (!followers) {
+                followers = {
+                    count: 0
                 }
-            })
+            }
+            if (!following) {
+                following = {
+                    count: 0
+                }
+            }
+
             if (isFollowing) {
                 res.send({
                     isFollowing: true,
                     followers: followers,
                     following: following
                 })
-            }else{
+            } else {
                 res.send({
                     followers: followers,
                     following: following

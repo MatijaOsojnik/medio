@@ -150,18 +150,7 @@ export default {
       }
     },
      async facebookAuth() {
-  // window.FB.login(async function (response) {
-  //       const token = response.authResponse.accessToken;
-  //       try {
-  //       return await AuthenticationService.facebookAuth(token);
-  //       } catch (error) {
-  //         this.error = error.response.data.error;
-  //         setTimeout(() => (this.error = null), 5000);
-  //       }
-  //     });
   try {
-    // console.log(window.FB.getAccessToken())
-    // const access_token = window.FB.getAccessToken()
    window.FB.login((response) => {
       window.ujwts = response.authResponse.accessToken
     })

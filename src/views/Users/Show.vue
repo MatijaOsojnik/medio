@@ -53,11 +53,11 @@
                 ></span>
                 <div class="my-4">
                   <router-link :to="{name: 'user-following', params: {userId: user.id}}" class="mr-4">
-                    <span class="font-weight-light"> {{ followersCount }} Following</span>
+                    <span class="font-weight-light"> {{ followingCount }} Following</span>
                   </router-link>
 
                   <router-link :to="{name: 'user-followers', params: {userId: user.id}}">
-                    <span class="font-weight-light"> {{ followingCount }} Followers</span>
+                    <span class="font-weight-light"> {{ followersCount }} Followers</span>
                   </router-link>
                 </div>
                 <span class="blue-grey--text text">
@@ -188,8 +188,6 @@ export default {
   mounted() {
     this.getUser();
     this.getUserStories();
-  },
-  created() {
     this.isFollowing();
   },
   watch: {
@@ -199,6 +197,7 @@ export default {
     async getAll() {
       this.getUser();
       this.getUserStories();
+      this.isFollowing();
     },
     async getUser() {
       try {
@@ -222,6 +221,8 @@ export default {
       const followedId = this.$route.params.id;
       const response = await FollowService.findFollower(followerId, followedId);
 
+      console.log(response.data)
+
       this.followersCount = response.data.followers.count;
       this.followingCount = response.data.following.count;
 
@@ -241,6 +242,7 @@ export default {
         if (response) {
           this.isFollower = true;
           this.isFollowerText = "UNFOLLOW";
+          this.isFollowing()
         }
       } catch (err) {
         console.log(err);
@@ -257,6 +259,7 @@ export default {
         if (response.data) {
           this.isFollower = false;
           this.isFollowerText = "FOLLOW";
+          this.isFollowing();
         }
       } catch (err) {
         console.log(err);
