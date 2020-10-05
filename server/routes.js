@@ -13,22 +13,8 @@ const AuthenticationControllerPolicy = require('./policies/AuthenticationControl
 const UserControllerPolicy = require('./policies/UserControllerPolicy')
 const StoryControllerPolicy = require('./policies/StoryControllerPolicy')
 
-// const UserControllerPolicy = require('./policies/UserControllerPolicy')
-// const isAuthenticated = require('./policies/isAuthenticated')
-
-// const jwt = require('jsonwebtoken');
-
-// const config = require('./config');
-
 const multer = require('multer');
 
-// function jwtSignUser(user) {
-//     return jwt.sign({
-//         user,
-//     }, config.authentication.jwtSecret, {
-//         expiresIn: 86400
-//     })
-// }
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {

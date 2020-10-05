@@ -8,11 +8,11 @@ const fs = require('fs')
 
 const sharp = require('sharp')
 
+const AWS = require('aws-sdk')
+
 const {
     Op
 } = require("sequelize");
-
-const bcrypt = require('bcrypt')
 
 module.exports = {
     async index(req, res) {
@@ -110,31 +110,74 @@ module.exports = {
     },
     async uploadFile(req, res) {
         try {
-            await sharp(req.file.path)
-                .resize(128, 128)
-                .jpeg({
-                    quality: 80
+            if (process.env.NODE_ENV !== 'production') {
+                await sharp(req.file.path)
+                    .resize(128, 128)
+                    .jpeg({
+                        quality: 80
+                    })
+                    .toFile(`./static/${req.file.originalname}`)
+
+                const url = `http://localhost:8082/static/${req.file.originalname}`
+
+                const user = await User.findByPk(req.params.userId)
+                user.update({
+                    icon_url: url
                 })
-                .toFile(`./static/${req.file.originalname}`)
 
-            let url = ``
 
-            if (process.env.NODE_ENV === 'production') {
-                url = `https://medioapp.herokuapp.com/static/${req.file.originalname}`
+                fs.unlink(req.file.path, () => {
+                    res.json({
+                        file: `/static/${req.file.originalname}`
+                    })
+                })
             } else {
-                url = `http://localhost:8082/static/${req.file.originalname}`
-            }
+                AWS.config.update({
+                    accessKeyId: process.env.AWS3_API_KEY,
+                    secretAccessKey: process.env.AWS3_API_SECRET,
+                    region: 'eu-central-1',
+                });
+                const s3 = new AWS.S3();
 
-            const user = await User.findByPk(req.params.userId)
-            user.update({
-                icon_url: url
-            })
-
-            fs.unlink(req.file.path, () => {
-                res.json({
-                    file: `/static/${req.file.originalname}`
+                fs.readFile(req.file.path, function (err, filedata) {
+                    if (!err) {
+                        const putParams = {
+                            Bucket: 'medio-bucket',
+                            Key: req.file.originalname,
+                            Body: filedata
+                        };
+                        s3.putObject(putParams, function (err, data) {
+                            if (err) {
+                                console.log('Could nor upload the file. Error :', err);
+                                return res.send({
+                                    success: false
+                                });
+                            } else {
+                                console.log('Successfully uploaded the file');
+                                return res.send({
+                                    success: true
+                                });
+                            }
+                        });
+                    } else {
+                        console.log({
+                            'err': err
+                        });
+                    }
                 })
-            })
+                const url = `https://medio-bucket.s3.eu-central-1.amazonaws.com/${req.file.originalname}`
+
+
+
+                const user = await User.findByPk(req.params.userId)
+                user.update({
+                    icon_url: url
+                })
+
+                res.json({
+                    file: url
+                })
+            }
 
         } catch (error) {
             res.send({

@@ -342,7 +342,9 @@ export default {
         this.uploadedFile = res.data.file;
         this.uploading = false;
         setTimeout(() => (this.uploadedFile = null), 5000);
-        this.getUser();
+          const response = await UserService.show(userId);
+          this.user = response.data;
+          this.$store.dispatch("setUser", this.user);
       } catch (err) {
         this.uploading = false;
         this.errors.push(err.response.data.error);
