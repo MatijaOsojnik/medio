@@ -155,7 +155,7 @@
     </v-card>
         <v-row>
       <v-col v-for="follower in followers" :key="follower.id">
-        <CardUserFollow :user="follower.User" />
+        <CardUserFollow :user="follower.FollowedId" />
       </v-col>
     </v-row>
   </div>
@@ -227,6 +227,7 @@ export default {
         if (response) {
           this.isFollower = true;
           this.isFollowerText = "UNFOLLOW";
+          this.isFollowing()
         }
       } catch (err) {
         console.log(err);
@@ -243,6 +244,7 @@ export default {
         if (response.data) {
           this.isFollower = false;
           this.isFollowerText = "FOLLOW";
+          this.isFollowing()
         }
       } catch (err) {
         console.log(err);

@@ -141,9 +141,13 @@ module.exports = {
 
                 fs.readFile(req.file.path, function (err, filedata) {
                     if (!err) {
+                                const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
+
+                                const imageName = uniqueSuffix + '-' + req.file.originalname
+
                         const putParams = {
                             Bucket: 'medio-bucket',
-                            Key: req.file.originalname,
+                            Key: imageName,
                             Body: filedata
                         };
                         s3.putObject(putParams, function (err, data) {
@@ -155,7 +159,7 @@ module.exports = {
                             } else {
                                 console.log('Successfully uploaded the file');
                                 return res.send({
-                                    image: req.file.originalname
+                                    image: imageName
                                 });
                             }
                         });

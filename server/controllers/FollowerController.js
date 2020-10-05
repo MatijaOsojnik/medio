@@ -17,25 +17,53 @@ module.exports = {
 
             const isFollowing = await Follower.findOne({
                 where: {
-                    follower_id: followerId,
-                    followed_id: followedId
-                }
+                    FollowerIdId: followerId,
+                    FollowedIdId: followedId
+                },
             })
+
+
+
+            let following = await Follower.findAndCountAll({
+                where: {
+                    FollowerIdId: followerId,
+                    FollowedIdId: {
+                        [Op.not]: followedId
+                    }
+                },
+                include: [{
+                    model: User,
+                    as: 'FollowerId',
+                    required: true
+                }, {
+                    model: User,
+                    as: 'FollowedId',
+                    required: true
+                },
+            ],
+                
+            });
+
+      
 
 
             let followers = await Follower.findAndCountAll({
                 where: {
-                    follower_id: followerId
-                },
-                include: [{
-                    model: User
-                }],
-                
-            });
-            let following = await Follower.findAndCountAll({
-                where: {
-                    follower_id: followerId,
-                },
+                        FollowedIdId: followedId,
+                        FollowerIdId: {
+                            [Op.not]: followedId
+                        }
+                    },
+                    include: [{
+                            model: User,
+                            as: 'FollowerId',
+                            required: true
+                        }, {
+                            model: User,
+                            as: 'FollowedId',
+                            required: true
+                        },
+                    ]
             })
 
             if (isFollowing) {
@@ -51,7 +79,10 @@ module.exports = {
                 })
             }
 
+            console.log(following)
+
         } catch (error) {
+            console.log(error)
             res.status(500).send({
                 error: 'an error has occured trying to fetch the followers'
             })
@@ -93,8 +124,8 @@ module.exports = {
             const followedId = req.body.followedId
             console.log(followerId, followedId)
             const follower = await Follower.create({
-                follower_id: followerId,
-                followed_id: followedId
+                FollowerIdId: followerId,
+                FollowedIdId: followedId
             })
             res.send(follower)
         } catch (err) {
@@ -112,8 +143,8 @@ module.exports = {
             console.log(followerId, followedId)
             const follow = await Follower.destroy({
                 where: {
-                    follower_id: followerId,
-                    followed_id: followedId
+                    FollowerIdId: followerId,
+                    FollowedIdId: followedId
                 }
             })
             res.send("Follower removed")

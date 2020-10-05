@@ -151,12 +151,10 @@ module.exports = (sequelize, DataTypes) => {
     });
 
         Follower.belongsTo(User, {
-            foreignKey: 'follower_id',
-            targetKey: 'id'
+            as: 'FollowerId'
         });
         Follower.belongsTo(User, {
-            foreignKey: 'followed_id',
-            targetKey: 'id'
+            as: 'FollowedId'
         });
 
     Tag.belongsToMany(User, {

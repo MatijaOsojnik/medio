@@ -71,19 +71,19 @@
       <v-row class="flex-sm-fill">
         <v-col
           style="margin: 0"
-          class="col-xl-8 col-lg-8 col-md-8 col-sm-12 col-12d-block justify-center justify-sm-center pa-0"
+          class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12d-block justify-center justify-sm-center pa-0"
         >
           <v-col v-for="story in stories" :key="story.id">
             <StoryCardSmallComponent :story="story" />
           </v-col>
         </v-col>
-        <v-col
+        <!-- <v-col
           class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12 d-block justify-center justify-sm-center pa-0"
         >
           <v-col v-for="story in storyLimit" :key="story.id">
             <StoryCardSmallComponent :story="story" />
           </v-col>
-        </v-col>
+        </v-col> -->
       </v-row>
     </v-container>
   </div>
