@@ -59,6 +59,7 @@ module.exports = (app) => {
     app.get('/api/users/admin', UsersController.allUserInfo)
     app.get('/api/users/:userId', UsersController.show)
     app.post('/api/users/:userId/upload', upload, UsersController.uploadFile)
+    app.put('/api/users/:userId/upload/:image_name', UsersController.retrieveFile)
 
     app.use((err, req, res, next) => {
         if (err.code === "INCORRECT_FILETYPE") {
@@ -118,8 +119,8 @@ module.exports = (app) => {
 
         // FOLLOW ROUTE
 
-        app.post('/api/followers/single', FollowerController.findFollower)
-    app.get('/api/followers', FollowerController.getFollowers)
+    app.post('/api/followers/single', FollowerController.findFollower)
+    app.get('/api/followers/:followerId', FollowerController.getFollowers)
     app.post('/api/followers', FollowerController.postFollow)
     app.delete('/api/followers/:followerId/:followedId', FollowerController.deleteFollow)
 

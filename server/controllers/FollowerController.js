@@ -4,8 +4,10 @@ const {
 } = require('../models')
 
 const {
-    Op
+    Op, QueryTypes
 } = require('sequelize')
+
+const sequelize = require('sequelize')
 
 module.exports = {
     async findFollower(req, res) {
@@ -19,10 +21,6 @@ module.exports = {
                     followed_id: followedId
                 }
             })
-            // const user = await User.findOne({where: {id: followerId}})
-            // console.log(user.getFollowers({
-            //     joinTableAttributes: ['selfGranted']
-            // }))
 
 
             let followers = await Follower.findAndCountAll({
@@ -37,21 +35,8 @@ module.exports = {
             let following = await Follower.findAndCountAll({
                 where: {
                     follower_id: followerId,
-                    followed_id: {
-                        [Op.not]: followedId
-                    }
                 },
             })
-            if (!followers) {
-                followers = {
-                    count: 0
-                }
-            }
-            if (!following) {
-                following = {
-                    count: 0
-                }
-            }
 
             if (isFollowing) {
                 res.send({
@@ -75,17 +60,23 @@ module.exports = {
     async getFollowers(req, res) {
         try {
             const userId = req.params.followerId
-            const followers = await Follower.findAll({
-                where: {
-                    follower_id: userId
-                },
-                include: [{
-                    include: [User]
-                }],
-                order: [
-                    ['createdAt', 'DESC']
-                ]
-            })
+            const followers = await sequelize.query("SELECT * FROM `Users`", {
+                type: QueryTypes.SELECT
+            });
+            // const user = await User.findOne({
+            //     where: {
+            //         id: userId
+            //     }
+            // })
+            // const followers = await Follower.findAll({
+            //     where: {
+            //         follower_id: userId
+            //     },
+                
+            //         include: [{model: U}]
+             
+            // })
+            console.log(followers)
             res.send({
                 followers
             })

@@ -14,10 +14,8 @@ export default {
         })
     },
     deleteFollow(followerId, followedId) {
-        return axios.delete(`followers/${followerId}/${followedId}`, {
-            
-        })
-        },
+        return axios.delete(`followers/${followerId}/${followedId}`,)
+    },
     getFollowers(followerId) {
         return axios.get(`followers/${followerId}`)
     },

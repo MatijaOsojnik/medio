@@ -110,28 +110,28 @@ module.exports = {
     },
     async uploadFile(req, res) {
         try {
-            if (process.env.NODE_ENV !== 'production') {
-                await sharp(req.file.path)
-                    .resize(128, 128)
-                    .jpeg({
-                        quality: 80
-                    })
-                    .toFile(`./static/${req.file.originalname}`)
+            // if (process.env.NODE_ENV !== 'production') {
+            //     await sharp(req.file.path)
+            //         .resize(128, 128)
+            //         .jpeg({
+            //             quality: 80
+            //         })
+            //         .toFile(`./static/${req.file.originalname}`)
 
-                const url = `http://localhost:8082/static/${req.file.originalname}`
+            //     const url = `http://localhost:8082/static/${req.file.originalname}`
 
-                const user = await User.findByPk(req.params.userId)
-                user.update({
-                    icon_url: url
-                })
+            //     const user = await User.findByPk(req.params.userId)
+            //     user.update({
+            //         icon_url: url
+            //     })
 
 
-                fs.unlink(req.file.path, () => {
-                    res.json({
-                        file: `/static/${req.file.originalname}`
-                    })
-                })
-            } else {
+            //     fs.unlink(req.file.path, () => {
+            //         res.json({
+            //             file: `/static/${req.file.originalname}`
+            //         })
+            //     })
+            // } else {
                 AWS.config.update({
                     accessKeyId: process.env.AWS3_API_KEY,
                     secretAccessKey: process.env.AWS3_API_SECRET,
@@ -155,7 +155,7 @@ module.exports = {
                             } else {
                                 console.log('Successfully uploaded the file');
                                 return res.send({
-                                    success: true
+                                    image: req.file.originalname
                                 });
                             }
                         });
@@ -165,24 +165,43 @@ module.exports = {
                         });
                     }
                 })
-                const url = `https://medio-bucket.s3.eu-central-1.amazonaws.com/${req.file.originalname}`
+                // const url = `https://medio-bucket.s3.eu-central-1.amazonaws.com/${req.file.originalname}`
 
 
 
-                const user = await User.findByPk(req.params.userId)
-                user.update({
-                    icon_url: url
-                })
+                // const user = await User.findByPk(req.params.userId)
+                // user.update({
+                //     icon_url: url
+                // })
 
-                res.json({
-                    file: url
-                })
-            }
+                // res.json({
+                //     file: url
+                // })
+            // }
 
         } catch (error) {
             res.send({
                 err: error
             })
         }
+    },
+    async retrieveFile(req, res) {
+        const getParams = {
+            Bucket: 'medio-bucket',
+            Key: req.params.image_name
+        };
+
+        const s3 = new AWS.S3();
+
+        s3.getObject(getParams, function (err, data) {
+            if (err) {
+                return res.status(400).send({
+                    success: false,
+                    err: err
+                });
+            } else {
+                return console.log(data);
+            }
+        });
     }
 }

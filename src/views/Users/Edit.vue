@@ -339,7 +339,12 @@ export default {
       formData.append("file", this.file);
       try {
         const res = await FileService.index(userId, formData);
-        this.uploadedFile = res.data.file;
+        if(res){
+          const imageName = res.data.image
+          const imageResponse = await FileService.profileImage(userId, imageName)
+        this.uploadedFile = imageResponse.data;
+          }
+
         this.uploading = false;
         setTimeout(() => (this.uploadedFile = null), 5000);
           const response = await UserService.show(userId);
