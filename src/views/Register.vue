@@ -129,7 +129,6 @@ export default {
           email: this.email,
           password: this.password,
           repeat_password: this.repeat_password,
-          roles: ['Admin']
         });
         this.showPanel = true;
 
