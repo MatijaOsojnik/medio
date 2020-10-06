@@ -1,24 +1,24 @@
-# medio
+# Medio
 
-## Project setup
-```
-yarn install
-```
+A Medium like clone, created in Vue + Vuetify & ExpressJS
 
-### Compiles and hot-reloads for development
-```
-yarn serve
-```
 
-### Compiles and minifies for production
-```
-yarn build
-```
+# Getting Started
 
-### Lints and fixes files
-```
-yarn lint
-```
+        Download the project
+        Write: "npm install"
+        Create a database in PostgreSQL
+        Alter the file server/routes/connect.js to connect your database
+        Run 2 different CMDs to run npm run dev && npm run serve
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+# Prerequisites
+
+    NodeJS
+    Some kind of a PostgreSQL server
+
+# Built With
+
+    Vue
+    Express
+    Vuetify
+    A bunch of other npm libraries
