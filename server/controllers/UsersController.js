@@ -132,57 +132,45 @@ module.exports = {
             //         })
             //     })
             // } else {
-                AWS.config.update({
-                    accessKeyId: process.env.AWS3_API_KEY,
-                    secretAccessKey: process.env.AWS3_API_SECRET,
-                    region: 'eu-central-1',
-                });
-                const s3 = new AWS.S3();
+            AWS.config.update({
+                accessKeyId: process.env.AWS3_API_KEY,
+                secretAccessKey: process.env.AWS3_API_SECRET,
+                region: 'eu-central-1',
+            });
+            const s3 = new AWS.S3();
 
-                let imageName = ''
+            let imageName = ''
 
-                fs.readFile(req.file.path, function (err, filedata) {
-                    if (!err) {
-                                const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
+            fs.readFile(req.file.path, function (err, filedata) {
+                if (!err) {
+                    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
 
-                                imageName = uniqueSuffix + '-' + req.file.originalname
+                    imageName = uniqueSuffix + '-' + req.file.originalname
 
-                        const putParams = {
-                            Bucket: 'medio-bucket',
-                            Key: imageName,
-                            Body: filedata
-                        };
-                        s3.putObject(putParams, function (err, data) {
-                            if (err) {
-                                console.log('Could not upload the file. Error :', err);
-                                return res.send({
-                                    success: false
-                                });
-                            } else {
-                                console.log('Successfully uploaded the file');
-                                return res.send({
-                                    image: imageName
-                                });
-                            }
-                        });
-                    } else {
-                        console.log({
-                            'err': err
-                        });
-                    }
-                })
-
-
-
-                const user = await User.findByPk(req.params.userId)
-                user.update({
-                    icon_url: imageName
-                })
-
-                res.json({
-                    success: true
-                })
-            
+                    const putParams = {
+                        Bucket: 'medio-bucket',
+                        Key: imageName,
+                        Body: filedata
+                    };
+                    s3.putObject(putParams, function (err, data) {
+                        if (err) {
+                            console.log('Could not upload the file. Error :', err);
+                            return res.send({
+                                success: false
+                            });
+                        } else {
+                            console.log('Successfully uploaded the file');
+                            return res.send({
+                                image: imageName
+                            });
+                        }
+                    });
+                } else {
+                    console.log({
+                        'err': err
+                    });
+                }
+            })
 
         } catch (error) {
             res.send({
@@ -200,12 +188,12 @@ module.exports = {
 
         s3.getObject(getParams, function (err, data) {
             if (err) {
-                return res.status(400).send({
+                res.status(400).send({
                     success: false,
                     err: err
                 });
             } else {
-                return res.json({
+                res.send({
                     image: data.Body
                 });
             }

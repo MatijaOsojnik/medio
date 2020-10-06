@@ -174,6 +174,7 @@ module.exports = {
             })
             res.send(req.body)
         } catch (error) {
+            console.log(error)
             res.status(500).send({
                 error: `An error has occured trying to update a story`
             })

@@ -4,7 +4,7 @@
       <v-flex xs12 justify="center" align="center">
         <v-card class="mx-auto">
           <v-toolbar flat color="#617BE3" dark>
-            <v-toolbar-title>Edit Story</v-toolbar-title>
+            <v-toolbar-title>Post Story</v-toolbar-title>
           </v-toolbar>
           <v-card-text>
             <v-form lazy-validation>
@@ -140,49 +140,6 @@ export default {
       this.story.short_description = this.$store.state.currentStory.JSON.content[1].content[0].text;
       this.story.description = this.$store.state.currentStory.HTML;
     },
-    // addTip() {
-    //   const areAllFieldsFilledIn = Object.keys(this.tip).every(
-    //     key => !!this.tip[key]
-    //   );
-    //   if (!areAllFieldsFilledIn) {
-    //     this.errors.push("Please fill in all the fields.");
-    //     setTimeout(() => {
-    //       this.errors = [];
-    //       this.waitBeforeClick = false;
-    //     }, 3000);
-    //     return;
-    //   }
-    // this.story.Tips.push(this.tip);
-    // this.tip = {
-    //   title: ``,
-    //   content: ``
-    // };
-    // },
-    // removeTip(index) {
-    //   this.story.Tips.splice(index, 1);
-    // },
-    // addSentence() {
-    //   const areAllFieldsFilledIn = Object.keys(this.sentence).every(
-    //     key => !!this.sentence[key]
-    //   );
-    //   if (!areAllFieldsFilledIn) {
-    //     this.errors.push("Please fill in all the fields.");
-    //     setTimeout(() => {
-    //       this.errors = [];
-    //       this.waitBeforeClick = false;
-    //     }, 3000);
-    //     return;
-    //   }
-    //   this.story.Sentences.push(this.sentence);
-    //   this.sentence = {
-    //     slovene_sentence: ``,
-    //     english_sentence: ``,
-    //     pronounciation_url: ``
-    //   };
-    // },
-    // removeSentence(index) {
-    //   this.story.Sentences.splice(index, 1);
-    // },
     async createStory() {
       this.waitBeforeClick = true;
       const areAllFieldsFilledIn = Object.keys(this.story).every(
@@ -200,6 +157,8 @@ export default {
         const userId = this.$store.state.user.id;
         const response = await StoryService.post(this.story, userId);
         if (response) {
+                this.$store.dispatch("setCurrentStoryHTML", ``);
+      this.$store.dispatch("setCurrentStoryJSON", null);
           this.successfulStoryPost = true;
           setTimeout(() => {
             this.successfulStoryPost = false;

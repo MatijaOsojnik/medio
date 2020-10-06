@@ -15,13 +15,6 @@
       </slot>
     </div>
     <v-spacer />
-    <!-- <div>
-      <span class="title ma-4 d-block">Other stories</span>
-      <v-divider></v-divider>
-      <slot name="other">
-        <span class="heading ma-4 d-block">No other stories found</span>
-      </slot>
-    </div> -->
   </v-container>
 </template>
 

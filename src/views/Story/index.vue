@@ -255,6 +255,7 @@ export default {
     async getStory() {
       try {
         const storyId = this.$route.params.id;
+        this.$store.dispatch("setCurrentStoryId", this.$route.params.id)
         const responseStory = await StoryService.show(storyId);
 
         const responseSimilarStories = await StoryService.showSimilar(
@@ -423,7 +424,11 @@ export default {
 };
 </script>
 
-<style scoped>
+<style >
+img {
+    max-width: 680px;
+  border-radius: 3px;
+}
 .back-link {
   font-size: 15px;
   color: #52616b;

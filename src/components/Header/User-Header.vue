@@ -7,7 +7,8 @@
         $router.history.current['name'] === 'story-create' ||
         $router.history.current['name'] === 'story-update'
           ? false
-          : true"
+          : true
+      "
     >
       <v-toolbar-title class="d-xl-block d-lg-block d-md-block d-none">
         <router-link :to="{ name: 'stories' }" class="brand-black pa-4"
@@ -23,53 +24,60 @@
 
       <v-spacer></v-spacer>
 
-
       <v-menu
         offset-y
         v-if="
           currentRouteName !== 'story-create' &&
-          currentRouteName !== 'story-edit'"
+          currentRouteName !== 'story-edit'
+        "
         transition="scroll-y-transition"
         :close-on-content-click="false"
         v-model="showMenu"
-        
       >
-      <template v-slot:activator="{ attrs }">
-        <v-text-field
-        class="d-xl-flex d-lg-flex d-md-flex d-none"
-        color="#8d93ab"
-        hide-details
-        outlined
-        dense
-        prepend-icon="mdi-magnify"
-        style="max-width: 250px"
-        single-line
-        v-model="keyword"
-        v-bind="attrs"
-
-      ></v-text-field>
-      </template>
+        <template v-slot:activator="{ attrs }">
+          <v-text-field
+            class="d-xl-flex d-lg-flex d-md-flex d-none"
+            color="#8d93ab"
+            hide-details
+            outlined
+            dense
+            prepend-icon="mdi-magnify"
+            style="max-width: 250px"
+            single-line
+            v-model="keyword"
+            v-bind="attrs"
+          ></v-text-field>
+        </template>
         <v-card>
           <v-list>
             <div v-if="profiles.length > 0">
               <span class="subtitle d-block pa-4 font-weight-bold">PEOPLE</span>
               <v-divider />
-              <v-list-item v-for="profile in profiles" :key="profile.id" :to="{path: `/users/${profile.display_name.toLowerCase()
-              .replace(/\s/g, '')}/${profile.id}/profile`}">
-                  <div class="d-flex justify-space-between align-center">
-                    <div>
-                      <v-avatar v-if="!profile.icon_url" size="40px">
-                        <v-icon>mdi-account-circle-outline</v-icon>
-                      </v-avatar>
-                      <v-avatar v-else size="40px">
-                        <v-img :src="profile.icon_url" />
-                      </v-avatar>
-                    </div>
-                    <v-spacer></v-spacer>
-                    <div>
-                      <span class="d-block font-weight-bold align-center pa-4">{{ profile.display_name }}</span>
-                    </div>
+              <v-list-item
+                v-for="profile in profiles"
+                :key="profile.id"
+                :to="{
+                  path: `/users/${profile.display_name
+                    .toLowerCase()
+                    .replace(/\s/g, '')}/${profile.id}/profile`,
+                }"
+              >
+                <div class="d-flex justify-space-between align-center">
+                  <div>
+                    <v-avatar v-if="!profile.icon_url" size="40px">
+                      <v-icon>mdi-account-circle-outline</v-icon>
+                    </v-avatar>
+                    <v-avatar v-else size="40px">
+                      <v-img :src="profile.icon_url" />
+                    </v-avatar>
                   </div>
+                  <v-spacer></v-spacer>
+                  <div>
+                    <span class="d-block font-weight-bold align-center pa-4">{{
+                      profile.display_name
+                    }}</span>
+                  </div>
+                </div>
               </v-list-item>
             </div>
             <div v-if="stories.length > 0">
@@ -77,21 +85,27 @@
                 >STORIES</span
               >
               <v-divider />
-              <v-list-item v-for="story in stories" :key="story.id" :to="{path: `/stories/${story.id}`}">
-                  <div class="d-flex justify-space-between align-center">
-                    <div>
-                      <v-avatar v-if="!story.thumbnail_url" tile size="40px">
-                        <v-icon>mdi-image</v-icon>
-                      </v-avatar>
-                      <v-avatar v-else tile size="40px">
-                        <v-img :src="story.thumbnail_url" />
-                      </v-avatar>
-                    </div>
-                    <v-spacer></v-spacer>
-                    <div>
-                      <span class="d-block font-weight-bold align-center pa-4">{{ story.title }}</span>
-                    </div>
+              <v-list-item
+                v-for="story in stories"
+                :key="story.id"
+                :to="{ path: `/stories/${story.id}` }"
+              >
+                <div class="d-flex justify-space-between align-center">
+                  <div>
+                    <v-avatar v-if="!story.thumbnail_url" tile size="40px">
+                      <v-icon>mdi-image</v-icon>
+                    </v-avatar>
+                    <v-avatar v-else tile size="40px">
+                      <v-img :src="story.thumbnail_url" />
+                    </v-avatar>
                   </div>
+                  <v-spacer></v-spacer>
+                  <div>
+                    <span class="d-block font-weight-bold align-center pa-4">{{
+                      story.title
+                    }}</span>
+                  </div>
+                </div>
               </v-list-item>
             </div>
           </v-list>
@@ -99,13 +113,24 @@
       </v-menu>
 
       <v-btn
-        v-else
+        v-if="currentRouteName === 'story-create'"
         :disabled="$store.state.currentStory.JSON.content.length <= 2"
         small
         white
         outlined
         class="inline-block"
         :to="{ path: `/stories/publish/${$store.state.user.id}` }"
+      >
+        PUBLISH
+      </v-btn>
+
+      <v-btn
+        v-if="currentRouteName === 'story-edit'"
+        small
+        white
+        outlined
+        class="inline-block"
+        :to="{ path: `/stories/${$store.state.currentStory.id}/edit/publish` }"
       >
         PUBLISH
       </v-btn>
@@ -271,10 +296,10 @@ export default {
     $route: "checkRoles",
     keyword(oldKeyword) {
       this.contentSearch();
-      if(oldKeyword !== ''){
-        this.showMenu = true
+      if (oldKeyword !== "") {
+        this.showMenu = true;
       } else {
-        this.showMenu = false
+        this.showMenu = false;
       }
     },
   },
@@ -299,21 +324,23 @@ export default {
   },
   methods: {
     async contentSearch() {
-      if(this.keyword !== ''){
-        const response = await GeneralService.search(this.keyword.toLowerCase());
-          if (response.data.stories.length > 0) {
-            this.stories = response.data.stories;
-          }
-          if (response.data.users.length > 0) {
-            this.profiles = response.data.users;
-          }
+      if (this.keyword !== "") {
+        const response = await GeneralService.search(
+          this.keyword.toLowerCase()
+        );
+        if (response.data.stories.length > 0) {
+          this.stories = response.data.stories;
+        }
+        if (response.data.users.length > 0) {
+          this.profiles = response.data.users;
+        }
       }
     },
     logout() {
       this.$store.dispatch("setToken", null);
       this.$store.dispatch("setUser", null);
       this.$store.dispatch("setAuthorities", null);
-      this.$store.dispatch("setCurrentStoryHTML", null);
+      this.$store.dispatch("setCurrentStoryHTML", ``);
       this.$store.dispatch("setCurrentStoryJSON", null);
       this.permissions = false;
       this.adminPermissions = false;
@@ -322,15 +349,14 @@ export default {
       });
       if (window.gapi) {
         const auth2 = window.gapi.auth2.getAuthInstance();
-        if(auth2) {
+        if (auth2) {
           auth2.signOut().then(function () {
             console.log("User signed out.");
           });
         }
       }
-      if(window.FB) {
-        if(window.ujwts)
-        window.FB.logout()
+      if (window.FB) {
+        if (window.ujwts) window.FB.logout();
       }
     },
     // async publish(data) {

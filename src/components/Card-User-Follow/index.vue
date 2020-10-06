@@ -57,8 +57,7 @@
           <div>
             <v-btn
               small
-             
-         flat
+              flat
               text
               class="my-4"
               :disabled="user.id === $store.state.user.id"

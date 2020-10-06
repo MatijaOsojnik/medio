@@ -59,7 +59,7 @@ module.exports = (app) => {
     app.get('/api/users/admin', UsersController.allUserInfo)
     app.get('/api/users/:userId', UsersController.show)
     app.post('/api/users/:userId/upload', upload, UsersController.uploadFile)
-    app.put('/api/users/:userId/upload/:image_name', UsersController.retrieveFile)
+    app.get('/api/upload/:image_name', UsersController.retrieveFile)
 
     app.use((err, req, res, next) => {
         if (err.code === "INCORRECT_FILETYPE") {

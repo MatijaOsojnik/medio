@@ -1,5 +1,5 @@
 <template>
-  <div class="editor">
+  <div class="editor" v-if="story">
     <editor-floating-menu :editor="editor" v-slot="{ commands, menu }">
       <div
         class="editor__floating-menu"
@@ -150,6 +150,8 @@
 </template>
 
 <script>
+import StoryService from "@/services/StoryService";
+
 import {
   Editor,
   EditorContent,
@@ -159,7 +161,6 @@ import {
 import Doc from "./Doc";
 import Title from "./Title";
 import {
-  Image,
   Blockquote,
   BulletList,
   CodeBlock,
@@ -171,6 +172,7 @@ import {
   TodoList,
   Bold,
   Code,
+  Image,
   Italic,
   Link,
   Strike,
@@ -186,6 +188,7 @@ export default {
   },
   data() {
     return {
+      story: null,
       story_content: ``,
       title: ``,
       short_description: ``,
@@ -193,60 +196,81 @@ export default {
       thumbnail_url: ``,
       category_id: ``,
       keepInBounds: true,
-      editor: new Editor({
-        extensions: [
-          new Image(),
-          new Blockquote(),
-          new BulletList(),
-          new CodeBlock(),
-          new HardBreak(),
-          new Heading({ levels: [1, 2, 3] }),
-          new ListItem(),
-          new OrderedList(),
-          new TodoItem(),
-          new TodoList(),
-          new Link(),
-          new Bold(),
-          new Code(),
-          new Italic(),
-          new Strike(),
-          new Underline(),
-          new History(),
-          new Doc(),
-          new Title(),
-          new Placeholder({
-            showOnlyCurrent: false,
-            emptyNodeText: (node) => {
-              if (node.type.name === "title") {
-                return "Title";
-              }
-              return "Tell your story...";
-            },
-          }),
-        ],
-        onUpdate: ({ getJSON, getHTML }) => {
-          this.$store.dispatch("setCurrentStoryJSON", getJSON());
-          this.$store.dispatch("setCurrentStoryHTML", getHTML());
-        },
-        content: this.$store.state.currentStory.HTML,
-        autoFocus: true,
-      }),
+      editor: null,
       linkUrl: null,
       linkMenuIsActive: false,
     };
   },
-  // props: {
-  //   story: Object,
-  // },
-  created() {},
+  mounted() {
+    this.checkContent();
+  },
+
   methods: {
-    // async upload(file) {
-    //   let formData = new FormData();
-    //   formData.append("file", file);
-    //   console.log(formData)
-    //   const response = await FileService.uploadImage(formData);
-    //   return response.data.src;
-    // },
+    async checkContent() {
+      try {
+        const storyId = this.$route.params.id;
+        const response = await StoryService.show(storyId);
+        if (response.data === undefined || !response.data) {
+          this.$router.push({
+            name: "stories",
+          });
+        } else {
+          if (this.$store.state.user) {
+            if (response.data.Users[0].id === this.$store.state.user.id) {
+              this.isOwner = true;
+              this.story = response.data;
+              if(this.$store.state.updatedStory.HTML === '')
+              this.$store.dispatch("setUpdatedStoryHTML", response.data.description);
+              this.editor = await new Editor({
+                extensions: [
+                  new Image(),
+                  new Blockquote(),
+                  new BulletList(),
+                  new CodeBlock(),
+                  new HardBreak(),
+                  new Heading({ levels: [1, 2, 3] }),
+                  new ListItem(),
+                  new OrderedList(),
+                  new TodoItem(),
+                  new TodoList(),
+                  new Link(),
+                  new Bold(),
+                  new Code(),
+                  new Italic(),
+                  new Strike(),
+                  new Underline(),
+                  new History(),
+                  new Doc(),
+                  new Title(),
+                  new Placeholder({
+                    showOnlyCurrent: false,
+                    emptyNodeText: (node) => {
+                      if (node.type.name === "title") {
+                        return "Title";
+                      }
+                      return "Tell your story...";
+                    },
+                  }),
+                ],
+                onUpdate: ({ getJSON, getHTML }) => {
+                  this.$store.dispatch("setUpdatedStoryJSON", getJSON());
+                  this.$store.dispatch("setUpdatedStoryHTML", getHTML());
+                },
+                content: this.$store.state.updatedStory.HTML,
+                autoFocus: true,
+              });
+            } else {
+              this.$router.push({
+                name: "stories",
+              });
+            }
+          }
+        }
+      } catch (err) {
+        this.errors = err.response.data;
+        setTimeout(() => (this.errors = []), 5000);
+      }
+    },
     showLinkMenu(attrs) {
       this.linkUrl = attrs.href;
       this.linkMenuIsActive = true;
@@ -271,6 +295,7 @@ export default {
   },
   beforeDestroy() {
     this.editor.destroy();
+    this.$store.dispatch("setUpdatedStoryJSON", null);
   },
 };
 </script>

@@ -22,8 +22,13 @@ export default new Vuex.Store({
     authorities: null,
     bookmarks: null,
     currentStory: {
+      id: 0,
       HTML: ``,
-      JSON: null
+      JSON: null,
+    },
+    updatedStory: {
+      HTML: ``,
+      JSON: null,
     },
     isUserLoggedIn: false
   },
@@ -47,11 +52,16 @@ export default new Vuex.Store({
     setCurrentStoryJSON(state, story) {
       state.currentStory.JSON = story
     },
+    setCurrentStoryId(state, story) {
+      state.currentStory.id = story
+    },
+    setUpdatedStoryHTML(state, story) {
+      state.updatedStory.HTML = story
+    },
+    setUpdatedStoryJSON(state, story) {
+      state.updatedStory.JSON = story
+    },
 
-
-    // setItems(state, {resource, items}) {
-    //   state[resource].items = items
-    // }
   },
   actions: {
     setToken({
@@ -83,6 +93,21 @@ export default new Vuex.Store({
       commit
     }, story) {
       commit('setCurrentStoryHTML', story)
+    },
+    setCurrentStoryId({
+      commit
+    }, story) {
+      commit('setCurrentStoryId', story)
+    },
+    setUpdatedStoryHTML({
+      commit
+    }, story) {
+      commit('setUpdatedStoryHTML', story)
+    },
+    setUpdatedStoryJSON({
+      commit
+    }, story) {
+      commit('setUpdatedStoryJSON', story)
     }
   },
 

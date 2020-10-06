@@ -338,18 +338,20 @@ export default {
       const formData = new FormData();
       formData.append("file", this.file);
       try {
-        const res = await FileService.index(userId, formData);
-        if(res){
-          const imageName = res.data.image
-          const imageResponse = await FileService.profileImage(userId, imageName)
-        this.uploadedFile = imageResponse.data;
-          }
+        const wait = await FileService.index(userId, formData);  
+        if(wait) {
+          this.uploading = false;
+            const response = await UserService.show(userId);
+            if(response){
+              this.user = response.data;
+               const imageResponse = await FileService.profileImage(this.user.icon_url)
+               console.log(imageResponse)
+              //  this.user.icon_url = imageResponse.data.image
+              this.$store.dispatch("setUser", this.user);
+            }
+            
+        }
 
-        this.uploading = false;
-        setTimeout(() => (this.uploadedFile = null), 5000);
-          const response = await UserService.show(userId);
-          this.user = response.data;
-          this.$store.dispatch("setUser", this.user);
       } catch (err) {
         this.uploading = false;
         this.errors.push(err.response.data.error);

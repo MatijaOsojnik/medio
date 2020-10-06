@@ -4,7 +4,10 @@ export default {
     index(userId, file) {
         return axios.post(`users/${userId}/upload`, file)
     },
-    profileImage(userId, imagename) {
-        return axios.put(`users/${userId}/upload/${imagename}`,)
+    profileImage(imagename) {
+        return axios.get(`/upload/${imagename}`)
+    },
+    uploadImage(file) { 
+        return axios.post(`upload`, file)
     }
 }
