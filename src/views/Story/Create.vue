@@ -1,44 +1,12 @@
 <template>
   <div>
     <v-flex xs12 justify="center" align="center">
-          <v-toolbar flat color="#617BE3" dark>
-            <v-toolbar-title>General Information</v-toolbar-title>
-          </v-toolbar>
-          <v-card-text>
-            <v-form lazy-validation>
-              <label for="title">Title</label>
-              <v-text-field
-                id="title"
-                label="Enter a title for your story"
-                maxlength="30"
-                :rules="[rules.min]"
-                counter
-                solo
-                aria-autocomplete="false"
-                v-model="story.title"
-              />
-
-              <label for="shortDescription">Short Description</label>
-              <v-text-field
-                id="shortDescription"
-                :rules="[rules.short_description]"
-                label="Write your short description here"
-                solo
-                clearable
-                counter
-                maxlength="60"
-                hint="This description will be used on the Story card before the user clicks on it."
-                aria-autocomplete="false"
-                v-model="story.short_description"
-              />
-              <label for="description">Description</label>
-            </v-form>
-          </v-card-text>
+      
       <div class="text-editor-container">
         <TextEditor />
       </div>
 
-
+      
     </v-flex>
   </div>
 </template>
@@ -56,6 +24,7 @@ export default {
   data: () => ({
     rules: {
       short_description: (text) => text.length <= 60 || "Max 60 characters",
+      description: (text) => text.length <= 300 || "Max 300 characters",
       file: (value) =>
         !value ||
         value.size < 2000000 ||
@@ -88,7 +57,6 @@ export default {
       }
       try {
         const userId = this.$route.params.id;
-        console.log()
         const response = await StoryService.post(this.story, userId);
         if (response) {
           this.successfulStoryPost = true;
