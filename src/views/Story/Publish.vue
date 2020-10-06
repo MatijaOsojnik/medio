@@ -85,13 +85,7 @@
               @click="createStory"
               >SUBMIT</v-btn
             >
-            <v-btn
-              color="#ff6363"
-              large
-              :disabled="waitBeforeClick"
-              @click="dialog = false"
-              >CLOSE</v-btn
-            >
+
           </v-card-actions>
         </v-card>
       </v-flex>
@@ -142,17 +136,17 @@ export default {
     },
     async createStory() {
       this.waitBeforeClick = true;
-      const areAllFieldsFilledIn = Object.keys(this.story).every(
-        (key) => !!this.story[key]
-      );
-      if (!areAllFieldsFilledIn) {
-        this.errors.push("Please fill in all the fields.");
-        setTimeout(() => {
-          this.errors = [];
-          this.waitBeforeClick = false;
-        }, 3000);
-        return;
-      }
+      // const areAllFieldsFilledIn = Object.keys(this.story).every(
+      //   (key) => !!this.story[key]
+      // );
+      // if (!areAllFieldsFilledIn) {
+      //   this.errors.push("Please fill in all the fields.");
+      //   setTimeout(() => {
+      //     this.errors = [];
+      //     this.waitBeforeClick = false;
+      //   }, 3000);
+      //   return;
+      // }
       try {
         const userId = this.$store.state.user.id;
         const response = await StoryService.post(this.story, userId);
