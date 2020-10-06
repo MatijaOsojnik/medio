@@ -137,7 +137,7 @@ export default {
   methods: {
     fillStoryData() {
       this.story.title = this.$store.state.currentStory.JSON.content[0].content[0].text;
-      this.story.short_description = this.$store.state.currentStory.JSON.content[1].content[0].text;
+      this.story.short_description = this.$store.state.currentStory.JSON.content[1].content[0].text.slice(0, 50) +  '...'
       this.story.description = this.$store.state.currentStory.HTML;
     },
     async createStory() {
