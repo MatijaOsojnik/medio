@@ -131,7 +131,12 @@ export default {
   methods: {
     fillStoryData() {
       this.story.title = this.$store.state.currentStory.JSON.content[0].content[0].text;
-      this.story.short_description = this.$store.state.currentStory.JSON.content[1].content[0].text.slice(0, 50) +  '...'
+      if(this.$store.state.currentStory.JSON.content[1].content[0].text){
+        this.story.short_description = this.$store.state.currentStory.JSON.content[1].content[0].text
+      } else {
+        this.story.short_description = 'This is just a short description'
+      }
+      // console.log(this.$store.state.currentStory.HTML)
       this.story.description = this.$store.state.currentStory.HTML;
     },
     async createStory() {
