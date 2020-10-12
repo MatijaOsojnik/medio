@@ -81,7 +81,7 @@
             <v-spacer />
             <span class="d-block">
               <router-link :to="$router.currentRoute">
-                <v-icon color="red" size="22px" @click="addLike(story.id)">{{
+                <v-icon :disabled="story.Users[0].id == $store.state.user.id" color="red" size="22px" @click="addLike(story.id)">{{
                   likeIcon
                 }}</v-icon>
                 <span class="mr-3" style="font-size: 14px;">

@@ -112,6 +112,7 @@
             <div class="d-flex align-center justify-center">
               <router-link :to="$router.currentRoute">
                 <v-icon
+                  :disabled="story.Users[0].id == $store.state.user.id"
                   size="24px"
                   color="red"
                   style="z-index: 999"
@@ -375,14 +376,17 @@ export default {
         }
       }
     },
-    async checkLike(storyId) {
-      const response = await GeneralService.getLikes(this.$store.state.user.id, storyId);
+    async checkLike() {
+      const response = await GeneralService.getLikes(
+        this.$store.state.user.id,
+        this.story.id
+      );
       this.likesCount = response.data.likesCount.count;
       response.data.likes.map((like) => {
-        if (like.story_id === storyId) {
+        if (like.story_id === this.story.id) {
           this.likeIcon = "mdi-heart";
         } else {
-          this.likeIcon = "mdi-heart-outline"
+          this.likeIcon = "mdi-heart-outline";
         }
       });
     },
@@ -396,7 +400,7 @@ export default {
           );
           if (response) {
             this.likeIcon = "mdi-heart";
-            this.checkLike(storyId)
+            this.checkLike()
           }
         } catch (err) {
           console.log(err);
@@ -410,7 +414,7 @@ export default {
           );
           if (response) {
             this.likeIcon = "mdi-heart-outline";
-            this.checkLike(storyId)
+            this.checkLike()
           }
         } catch (err) {
           console.log(err);
