@@ -189,6 +189,7 @@
                   :loading="uploading"
                   v-model="file"
                 ></v-file-input>
+                <!-- <vue-dropzone ref="myVueDropzone" id="dropzone" :options="dropzoneOptions" @vdropzone-complete="submit"></vue-dropzone> -->
                 <v-scroll-x-transition>
                   <v-alert type="success" mode="out-in" v-if="uploadedFile">
                     <span>You successfuly changed your avatar.</span>
@@ -283,6 +284,8 @@
 <script>
 import UserService from "@/services/UserService.js";
 import FileService from "@/services/FileService.js";
+// import vue2Dropzone from 'vue2-dropzone'
+// import 'vue2-dropzone/dist/vue2Dropzone.min.css'
 import {
   TiptapVuetify,
   Bold,
@@ -294,7 +297,8 @@ import {
 
 export default {
   components: {
-    TiptapVuetify
+    TiptapVuetify,
+      // vueDropzone: vue2Dropzone,
   },
   data: () => ({
     rules: {
@@ -313,6 +317,15 @@ export default {
       phone_num: ``,
       date_birth: null
     },
+      //     dropzoneOptions: {
+      //     url: 'https://httpbin.org/post',
+      //     maxFiles: 1,
+      //     acceptedFiles: ".jpg, .jpeg, .png",
+      //     addRemoveLinks: false,
+      //     thumbnailWidth: 150,
+      //     maxFilesize: 2,
+      //     headers: { "My-Awesome-Header": "header value" }
+      // },
     extensions: [Bold, Italic, Paragraph, History, HardBreak],
     date: new Date("December 31, 2002 00:00:00").toISOString().substr(0, 10),
     file: null,

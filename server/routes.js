@@ -89,6 +89,7 @@ module.exports = (app) => {
 
     app.put('/api/stories/:storyId', StoryControllerPolicy.update, StoriesController.put)
     app.post('/api/stories/:userId', StoryControllerPolicy.update, StoriesController.post)
+    app.post('/api/stories/:storyid/upload', upload, StoriesController.imageUpload)
     app.delete('/api/stories/:storyId', StoriesController.delete)
 
     // CATEGORY ROUTES

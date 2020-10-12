@@ -8,7 +8,7 @@ if(process.env.NODE_ENV === 'production'){
 
 const axiosInstance = axios.create({
     baseURL: baseurl,
-    timeout: 3000
+    timeout: 10000
 })
 
 axiosInstance.interceptors.request.use((config) => {

@@ -6,8 +6,6 @@ const {
 
 const fs = require('fs')
 
-const sharp = require('sharp')
-
 const aws = require('aws-sdk')
 
 const {
@@ -110,28 +108,6 @@ module.exports = {
     },
     async uploadFile(req, res) {
         try {
-            // if (process.env.NODE_ENV !== 'production') {
-            //     await sharp(req.file.path)
-            //         .resize(128, 128)
-            //         .jpeg({
-            //             quality: 80
-            //         })
-            //         .toFile(`./static/${req.file.originalname}`)
-
-            //     const url = `http://localhost:8082/static/${req.file.originalname}`
-
-            //     const user = await User.findByPk(req.params.userId)
-            //     user.update({
-            //         icon_url: url
-            //     })
-
-
-            //     fs.unlink(req.file.path, () => {
-            //         res.json({
-            //             file: `/static/${req.file.originalname}`
-            //         })
-            //     })
-            // } else {
             aws.config.setPromisesDependency();
             aws.config.update({
                 accessKeyId: process.env.AWS3_API_KEY,
@@ -188,7 +164,7 @@ module.exports = {
             Key: req.params.image_name
         };
 
-        const s3 = new AWS.S3();
+        const s3 = new aws.S3();
 
         s3.getObject(getParams, function (err, data) {
             if (err) {

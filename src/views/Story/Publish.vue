@@ -7,7 +7,7 @@
             <v-toolbar-title>Post Story</v-toolbar-title>
           </v-toolbar>
           <v-card-text>
-            <v-form lazy-validation>
+            <v-form enctype="multipart/form-data" lazy-validation>
               <!-- <label>Description</label>
                         <p v-html="$store.state.currentStory.HTML"></p>
                         <label>Title</label>
@@ -38,14 +38,25 @@
                 v-model="story.short_description"
               />
 
-              <label for="thumbnailURL">Thumbnail URL</label>
+              <!-- <label for="thumbnailURL">Thumbnail</label>
               <v-text-field
                 id="thumbnailURL"
-                label="Enter Thumbnail URL"
+                label="Upload"
                 solo
                 aria-autocomplete="false"
                 v-model="story.thumbnail_url"
-              />
+              /> -->
+
+              <label for="avatar">Thumbnail</label>
+              <v-file-input
+                :rules="rules.file"
+                accept="image/png, image/jpeg, image/bmp"
+                placeholder="Pick an image"
+                prepend-icon="mdi-camera"
+                label="Story thumbnail"
+                solo
+                v-model="file"
+              ></v-file-input>
 
               <label for="category">Category</label>
               <v-select
@@ -59,11 +70,7 @@
               ></v-select>
             </v-form>
             <v-scroll-x-transition>
-              <v-alert
-                type="success"
-                mode="out-in"
-                v-if="successfulStoryPost"
-              >
+              <v-alert type="success" mode="out-in" v-if="successfulStoryPost">
                 <span>You successfuly posted a story</span>
               </v-alert>
             </v-scroll-x-transition>
@@ -85,7 +92,6 @@
               @click="createStory"
               >SUBMIT</v-btn
             >
-
           </v-card-actions>
         </v-card>
       </v-flex>
@@ -111,10 +117,12 @@ export default {
     rules: {
       short_description: (text) => text.length <= 60 || "Max 60 characters",
       description: (text) => text.length <= 300 || "Max 300 characters",
-      file: (value) =>
-        !value ||
-        value.size < 2000000 ||
-        "Thumbnail size should be less than 2 MB!",
+      file: [
+        (value) =>
+          !value ||
+          value.size < 2000000 ||
+          "Thumbnail size should be less than 2 MB!",
+      ],
       required: (value) => !!value || "Required.",
       min: (v) => v.length >= 8 || "Min 8 characters",
     },
@@ -122,6 +130,8 @@ export default {
     successfulStoryPost: false,
     errors: [],
     categories: [],
+    file: null,
+    uploadedFile: null,
   }),
   mounted() {
     this.findCategories();
@@ -131,10 +141,10 @@ export default {
   methods: {
     fillStoryData() {
       this.story.title = this.$store.state.currentStory.JSON.content[0].content[0].text;
-      if(this.$store.state.currentStory.JSON.content[1].content[0].text){
-        this.story.short_description = this.$store.state.currentStory.JSON.content[1].content[0].text
+      if (this.$store.state.currentStory.JSON.content[1].content[0].text) {
+        this.story.short_description = this.$store.state.currentStory.JSON.content[1].content[0].text;
       } else {
-        this.story.short_description = 'This is just a short description'
+        this.story.short_description = "This is just a short description";
       }
       // console.log(this.$store.state.currentStory.HTML)
       this.story.description = this.$store.state.currentStory.HTML;
@@ -153,11 +163,17 @@ export default {
       //   return;
       // }
       try {
+        const formData = new FormData();
+        formData.append("file", this.file);
         const userId = this.$store.state.user.id;
-        const response = await StoryService.post(this.story, userId);
+
+        const uploadResponse = await StoryService.imageUpload(userId, formData)
+        if(uploadResponse) {
+          this.story.thumbnail_url = uploadResponse.data.file
+          const response = await StoryService.post(this.story, userId);
         if (response) {
-                this.$store.dispatch("setCurrentStoryHTML", ``);
-      this.$store.dispatch("setCurrentStoryJSON", null);
+          this.$store.dispatch("setCurrentStoryHTML", ``);
+          this.$store.dispatch("setCurrentStoryJSON", null);
           this.successfulStoryPost = true;
           setTimeout(() => {
             this.successfulStoryPost = false;
@@ -167,6 +183,8 @@ export default {
             });
           }, 3000);
         }
+        }
+        
       } catch (err) {
         this.errors = err.response.data;
         setTimeout(() => (this.waitBeforeClick = false), 3000);
@@ -188,12 +206,11 @@ export default {
           });
         }
       }
-    if(this.$store.state.currentStory.JSON.content.length <= 2) {
-          this.$router.push({
-            name: "stories",
-          });
-    }
-
+      if (this.$store.state.currentStory.JSON.content.length <= 2) {
+        this.$router.push({
+          name: "stories",
+        });
+      }
     },
   },
 };

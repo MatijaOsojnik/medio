@@ -16,6 +16,9 @@ export default {
     showDifferent(categoryId, storyId) {
         return axios.get(`stories/categories/other/${categoryId}/${storyId}`)
     },
+    imageUpload(storyId, data) {
+        return axios.post(`stories/${storyId}/upload`, data)
+    },
     user(userId){
         return axios.get(`stories/users/${userId}`)
     },
