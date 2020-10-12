@@ -340,6 +340,7 @@ export default {
       try {
         const res = await FileService.index(userId, formData);
         this.uploadedFile = res.data.file;
+        console.log(res.data.file)
         this.uploading = false;
         setTimeout(() => (this.uploadedFile = null), 5000);
         this.getUser();
