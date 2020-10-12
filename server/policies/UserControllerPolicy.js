@@ -60,13 +60,29 @@ module.exports = {
                     'string.max': `Description can contain only 300 characters`
                 }),
             facebook_url: Joi.string()
-                .allow('', null),
+                .pattern(new RegExp('^((https?)\:\/\/)(([a-z0-9])+\.)*(facebook\.com)'))
+                .allow('', null)
+                .messages({
+                    'string.pattern.base': `Invalid Facebook URL`
+                }),
             twitter_url: Joi.string()
-                .allow('', null),
+                .pattern(new RegExp('^((https?)\:\/\/)(([a-z0-9])+\.)*(twitter\.com)'))
+                .allow('', null)
+                .messages({
+                    'string.pattern.base': `Invalid Twitter URL`
+                }),
             instagram_url: Joi.string()
-                .allow('', null),
+                .pattern(new RegExp('^((https?)\:\/\/)(([a-z0-9])+\.)*(instagram\.com)'))
+                .allow('', null)
+                .messages({
+                    'string.pattern.base': `Invalid Instagram URL`
+                }),
             linkedin_url: Joi.string()
-                .allow('', null),
+                .pattern(new RegExp('^((https?)\:\/\/)(([a-z0-9])+\.)*(linkedin\.com)'))
+                .allow('', null)
+                .messages({
+                    'string.pattern.base': `Invalid LinkedIn URL`
+                }),
             roles: Joi.any()
         })
 

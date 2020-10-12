@@ -377,11 +377,18 @@ export default {
             this.waitBeforeClick = false;
           }, 4000);
           this.date = this.user.birth_date;
+        } else {
+          setTimeout(() => {
+            this.waitBeforeClick = false
+          }, 2000)
         }
         this.getUser();
       } catch (err) {
         this.errors = err.response.data;
         setTimeout(() => (this.errors = []), 5000);
+                  setTimeout(() => {
+            this.waitBeforeClick = false
+          }, 2000)
       }
     },
     async updateSocial() {
@@ -400,11 +407,18 @@ export default {
             this.successfulSocialUpdate = false;
             this.waitBeforeClick = false;
           }, 4000);
+        } else {
+          setTimeout(() => {
+            this.waitBeforeClick = false
+          }, 2000)
         }
         this.getUser();
       } catch (err) {
         this.errors = err.response.data;
         setTimeout(() => (this.errors = []), 5000);
+                  setTimeout(() => {
+            this.waitBeforeClick = false
+          }, 2000)
       }
     },
     async updateEmail() {
@@ -420,11 +434,18 @@ export default {
             this.successfulEmailUpdate = false;
             this.waitBeforeClick = false;
           }, 4000);
+        } else {
+          setTimeout(() => {
+            this.waitBeforeClick = false
+          }, 2000)
         }
         this.getUser();
       } catch (err) {
         this.errors = err.response.data;
         setTimeout(() => (this.errors = []), 5000);
+                  setTimeout(() => {
+            this.waitBeforeClick = false
+          }, 2000)
       }
     },
     async updatePassword() {
@@ -441,6 +462,10 @@ export default {
             this.successfulPasswordUpdate = false;
             this.waitBeforeClick = false;
           }, 4000);
+        } else {
+          setTimeout(() => {
+            this.waitBeforeClick = false
+          }, 2000)
         }
         this.newPassword = "";
         this.repeatPassword = "";
@@ -448,6 +473,10 @@ export default {
       } catch (err) {
         this.errors = err.response.data;
         setTimeout(() => (this.errors = []), 5000);
+                  setTimeout(() => {
+            this.waitBeforeClick = false
+          }, 2000)
+        
       }
     },
     async getUser() {

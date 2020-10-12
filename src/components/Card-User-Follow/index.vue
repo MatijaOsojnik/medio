@@ -77,7 +77,6 @@
 import FollowService from "@/services/FollowService";
 export default {
   data: () => ({
-    user: null,
     isFollower: false,
     isFollowerText: "FOLLOW",
     followersCount: 0,
@@ -91,11 +90,19 @@ export default {
   created() {
     this.isFollowing()
   },
+  mounted: {
+
+  },
   methods: {
     async isFollowing() {
       const followerId = this.$store.state.user.id;
       const followedId = this.user.id;
       const response = await FollowService.findFollower(followerId, followedId);
+
+      
+
+      // this.$store.dispatch('setFollowersCount', response.data.followers.count)
+      // this.$store.dispatch('setFollowingCount', response.data.following.count)
 
       if (response.data.isFollowing) {
         this.isFollower = true;
@@ -113,6 +120,8 @@ export default {
         if (response) {
           this.isFollower = true;
           this.isFollowerText = "UNFOLLOW";
+          this.$router.go()
+       
         }
       } catch (err) {
         console.log(err);
@@ -129,6 +138,8 @@ export default {
         if (response.data) {
           this.isFollower = false;
           this.isFollowerText = "FOLLOW";
+          this.$router.go()
+          
         }
       } catch (err) {
         console.log(err);

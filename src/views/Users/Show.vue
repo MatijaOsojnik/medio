@@ -196,7 +196,6 @@ export default {
       this.getUser();
       this.getUserStories();
       this.isFollowing();
-      // this.getFollowers();
     },
     async getUser() {
       try {
@@ -222,9 +221,6 @@ export default {
 
       this.followersCount = response.data.followers.count;
       this.followingCount = response.data.following.count;
-
-      console.log(response.data.following)
-      console.log(response.data.followers)
 
       if (response.data.isFollowing) {
         this.isFollower = true;
@@ -260,7 +256,7 @@ export default {
           followerId,
           followedId
         );
-        if (response.data) {
+        if (response) {
           this.isFollower = false;
           this.isFollowerText = "FOLLOW";
           this.isFollowing();

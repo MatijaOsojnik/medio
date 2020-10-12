@@ -21,6 +21,10 @@ export default new Vuex.Store({
     user: null,
     authorities: null,
     bookmarks: null,
+    followCount: {
+      followers: 0,
+      following: 0,
+    },
     currentStory: {
       id: 0,
       HTML: ``,
@@ -61,6 +65,12 @@ export default new Vuex.Store({
     setUpdatedStoryJSON(state, story) {
       state.updatedStory.JSON = story
     },
+        setFollowersCount(state, followerCount) {
+            state.follower.followers = followerCount
+          },
+          setFollowingCount(state, followingCount) {
+            state.follower.following = followingCount
+          },
 
   },
   actions: {
@@ -108,7 +118,17 @@ export default new Vuex.Store({
       commit
     }, story) {
       commit('setUpdatedStoryJSON', story)
-    }
+    },
+        setFollowersCount({
+          commit
+        }, followerCount) {
+          commit('setFollowersCount', followerCount)
+        },
+            setFollowingCount({
+              commit
+            }, followingCount) {
+              commit('setFollowingCount', followingCount)
+            }
   },
 
 })

@@ -177,16 +177,13 @@ export default {
     user: null,
     isFollower: false,
     isFollowerText: "FOLLOW",
+    followers: null,
     followersCount: 0,
     followingCount: 0,
-    followers: null,
     stories: [],
   }),
   mounted() {
-    this.getUser();
-  },
-  created() {
-    this.isFollowing();
+    this.getAll();
   },
   watch: {
     $route: "getAll",
@@ -194,6 +191,7 @@ export default {
   methods: {
     async getAll() {
       this.getUser();
+      this.isFollowing();
     },
     async getUser() {
       try {
@@ -209,7 +207,7 @@ export default {
       const followedId = this.$route.params.id;
       const response = await FollowService.findFollower(followerId, followedId);
 
-      this.followersCount = response.data.followers.count;
+     this.followersCount = response.data.followers.count;
       this.followingCount = response.data.following.count;
 
       this.followers = response.data.following.rows;
