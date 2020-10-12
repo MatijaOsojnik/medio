@@ -120,8 +120,8 @@ export default {
       file: [
         (value) =>
           !value ||
-          value.size < 2000000 ||
-          "Thumbnail size should be less than 2 MB!",
+          value.size < 5000000 ||
+          "Thumbnail size should be less than 5 MB!",
       ],
       required: (value) => !!value || "Required.",
       min: (v) => v.length >= 8 || "Min 8 characters",

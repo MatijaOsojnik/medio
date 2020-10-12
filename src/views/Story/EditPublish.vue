@@ -14,7 +14,7 @@
                 </ul>
               </v-alert>
             </v-scroll-x-transition>
-            <v-form lazy-validation>
+            <v-form enctype="multipart/form-data" lazy-validation>
                <label for="title">Title</label>
               <v-text-field
                 id="title"
@@ -52,14 +52,16 @@
                 />
               </div> -->
 
-              <label for="thumbnailURL">Thumbnail URL</label>
-              <v-text-field
-                id="thumbnailURL"
-                label="Enter Thumbnail URL"
+              <label for="avatar">Thumbnail</label>
+              <v-file-input
+                :rules="rules.file"
+                accept="image/png, image/jpeg, image/bmp"
+                placeholder="Pick an image"
+                prepend-icon="mdi-camera"
+                label="Story thumbnail"
                 solo
-                aria-autocomplete="false"
-                v-model="story.thumbnail_url"
-              />
+                v-model="file"
+              ></v-file-input>
 
               <label for="category">Category</label>
               <v-select
@@ -105,13 +107,16 @@ export default {
 
   data: () => ({
     rules: {
-      short_description: text => text.length <= 80 || "Max 80 characters",
-      file: value =>
-        !value ||
-        value.size < 2000000 ||
-        "Thumbnail size should be less than 2 MB!",
-      required: value => !!value || "Required.",
-            min: v => v.length >= 8 || "Min 8 characters"
+      short_description: (text) => text.length <= 60 || "Max 60 characters",
+      description: (text) => text.length <= 300 || "Max 300 characters",
+      file: [
+        (value) =>
+          !value ||
+          value.size < 5000000 ||
+          "Thumbnail size should be less than 5 MB!",
+      ],
+      required: (value) => !!value || "Required.",
+      min: (v) => v.length >= 8 || "Min 8 characters",
     },
     story: {
       title: ``,
@@ -120,6 +125,7 @@ export default {
       thumbnail_url: ``,
       category_id: ``,
     },
+    file: null,
     successfulStoryUpdate: false,
     waitBeforeClick: false,
     isOwner: false,
@@ -135,23 +141,33 @@ export default {
     async updateStory() {
       this.waitBeforeClick = true;
       try {
-        const storyId = this.$route.params.id;
-        const response = await StoryService.put(this.story);
-        if (response) {
-          this.successfulStoryUpdate = true;
-          this.$store.dispatch("setUpdatedStoryJSON", null);
-          this.$store.dispatch("setUpdatedStoryHTML", '');
-          setTimeout(() => {
-            this.successfulStoryUpdate = false;
-            this.waitBeforeClick = false;
-            this.$router.push({
-              name: "story",
-              params: {
-                id: storyId
-              }
-            });
-          }, 3000);
+        const formData = new FormData();
+        formData.append("file", this.file);
+        const userId = this.$store.state.user.id;
+
+        const uploadResponse = await StoryService.imageUpload(userId, formData)
+
+        if(uploadResponse) {
+          const storyId = this.$route.params.id;
+          this.story.thumbnail_url = uploadResponse.data.file
+          const response = await StoryService.put(this.story);
+          if (response) {
+            this.successfulStoryUpdate = true;
+            this.$store.dispatch("setUpdatedStoryJSON", null);
+            this.$store.dispatch("setUpdatedStoryHTML", '');
+            setTimeout(() => {
+              this.successfulStoryUpdate = false;
+              this.waitBeforeClick = false;
+              this.$router.push({
+                name: "story",
+                params: {
+                  id: storyId
+                }
+              });
+            }, 3000);
+          }
         }
+
       } catch (err) {
         console.log(err)
         this.errors = err.response.data;

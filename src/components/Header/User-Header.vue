@@ -7,8 +7,7 @@
         $router.history.current['name'] === 'story-create' ||
         $router.history.current['name'] === 'story-update'
           ? false
-          : true
-      "
+          : true"
     >
       <v-toolbar-title class="d-xl-block d-lg-block d-md-block d-none">
         <router-link :to="{ name: 'stories' }" class="brand-black pa-4"
@@ -28,8 +27,7 @@
         offset-y
         v-if="
           currentRouteName !== 'story-create' &&
-          currentRouteName !== 'story-edit'
-        "
+          currentRouteName !== 'story-edit'"
         transition="scroll-y-transition"
         :close-on-content-click="false"
         v-model="showMenu"
@@ -130,7 +128,7 @@
         white
         outlined
         class="inline-block"
-        :to="{ path: `/stories/${$store.state.currentStory.id}/edit/publish` }"
+        :to="{ path: `/stories/${$route.params.id}/edit/publish` }"
       >
         PUBLISH
       </v-btn>
