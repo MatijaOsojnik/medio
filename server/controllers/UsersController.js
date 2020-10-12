@@ -8,7 +8,7 @@ const fs = require('fs')
 
 const sharp = require('sharp')
 
-const AWS = require('aws-sdk')
+const aws = require('aws-sdk')
 
 const {
     Op
@@ -132,55 +132,50 @@ module.exports = {
             //         })
             //     })
             // } else {
-                AWS.config.update({
-                    accessKeyId: process.env.AWS3_API_KEY,
-                    secretAccessKey: process.env.AWS3_API_SECRET,
-                    region: 'eu-central-1',
-                });
-                const s3 = new AWS.S3();
+            aws.config.setPromisesDependency();
+            aws.config.update({
+                accessKeyId: process.env.AWS3_API_KEY,
+                secretAccessKey: process.env.AWS3_API_SECRET,
+                region: 'eu-central-1',
+            });
+            const s3 = new aws.S3();
 
-                let imageName = ''
+            const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
 
-                fs.readFile(req.file.path, function (err, filedata) {
-                    if (!err) {
-                                const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
+            const imageName = uniqueSuffix + '-' + req.file.originalname
 
-                                imageName = uniqueSuffix + '-' + req.file.originalname
-
-                        const putParams = {
-                            Bucket: 'medio-bucket',
-                            Key: imageName,
-                            Body: filedata
-                        };
-                        s3.putObject(putParams, async function (err, data) {
-                            if (err) {
-                                console.log('Could not upload the file. Error :', err);
-                                return res.send({
-                                    success: false
-                                });
-                            } else {
-                                
-                                console.log('Successfully uploaded the file');
-                                
-                                                const user = await User.findByPk(req.params.userId)
-                                                user.update({
-                                                    icon_url: imageName
-                                                })
-                                                if(user) {
-                                                    return res.send({
-                                                        image: imageName
-                                                    });
-                                                }
-                            
-                            }
+            const params = {
+                ACL: 'public-read',
+                Bucket: process.env.BUCKET_NAME,
+                Body: fs.createReadStream(req.file.path),
+                Key: imageName
+            };
+            s3.upload(params, async (err, data) => {
+                if (err) {
+                    console.log('Error occured while trying to upload to S3 bucket', err);
+                }
+                if (data) {
+                    fs.unlinkSync(req.file.path); // Empty temp folder
+                    const locationUrl = data.Location;
+                    console.log('File uploaded to AWS Bucket!')
+                    const user = await User.update({
+                        icon_url: locationUrl
+                    }, {
+                        where: {
+                            id: req.params.userId
+                        }
+                    })
+                    if (user) {
+                        res.json({
+                            file: locationUrl
                         });
                     } else {
-                        console.log({
-                            'err': err
-                        });
+                        res.send({
+                            err: 'User File Upload Error'
+                        })
                     }
-                })
-
+                }
+            });
         } catch (error) {
             res.send({
                 err: error

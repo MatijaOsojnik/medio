@@ -338,26 +338,19 @@ export default {
       const formData = new FormData();
       formData.append("file", this.file);
       try {
-        const wait = await FileService.index(userId, formData);  
-        if(wait) {
-          this.uploading = false;
-            const response = await UserService.show(userId);
-            if(response){
-              this.user = response.data;
-               const imageResponse = await FileService.profileImage(this.user.icon_url)
-               console.log(imageResponse)
-              //  this.user.icon_url = imageResponse.data.image
-              this.$store.dispatch("setUser", this.user);
-            }
-            
-        }
-
+        const res = await FileService.index(userId, formData);
+        this.uploadedFile = res.data.file;
+        this.uploading = false;
+        setTimeout(() => (this.uploadedFile = null), 5000);
+        this.getUser();
       } catch (err) {
+        this.getUser();
         this.uploading = false;
         this.errors.push(err.response.data.error);
         setTimeout(() => (this.errors = []), 5000);
       }
-    },
+
+      },
     async updateInfo() {
       try {
         this.waitBeforeClick = true;
