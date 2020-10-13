@@ -4,9 +4,11 @@ module.exports = {
     update(req, res, next) {
         const schema = Joi.object({
             display_name: Joi.string()
+                .pattern(new RegExp('^[a-zA-Z0-9_ ]*$'))
                 .min(3)
                 .max(30)
                 .messages({
+                    'string.pattern.base': `Display name can only contain alpha-numeric characters `,
                     'string.alphanum': 'Display name should only contain alpha-numeric characters',
                     'string.base': 'Display name should be a type of text',
                     'string.empty': `Please enter a name`,
@@ -53,6 +55,7 @@ module.exports = {
                 }),
             title: Joi.string()
                 .allow('', null),
+                
             description: Joi.string()
                 .allow('', null)
                 .max(300)

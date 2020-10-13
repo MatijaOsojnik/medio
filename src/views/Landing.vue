@@ -221,15 +221,9 @@ a {
   display: flex;
   flex-direction: column;
   justify-content: center;
-}
-/* .content-image-container {
   position: relative;
-  right: 40px;
-  bottom: 40px;
-  height: 100px;
-  width: 150px;
-  background-color: aquamarine;
-} */
+  max-width: 100%;
+}
 .content-image {
   width: 75%;
 }
@@ -242,9 +236,6 @@ a {
   font-weight: 300;
   letter-spacing: 1.4px;
   display: block;
-}
-.content-container {
-  position: relative;
 }
 .tab {
   margin: 0 2px;
